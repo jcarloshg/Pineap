@@ -20,7 +20,19 @@ class _FormCreateAcountState extends State<FormCreateAcount> {
           },
           icon: const Icon(Icons.arrow_back),
         ),
-        title: const Text("VALE CHETOS"),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: const <Widget>[
+            Text(
+              "Hola coma",
+              style: TextStyle(
+                fontSize: 48.0,
+              ),
+            ),
+            Text("Hola coma"),
+          ],
+        ),
+        // title: const Text("VALE CHETOS"),
       ),
     );
   }
