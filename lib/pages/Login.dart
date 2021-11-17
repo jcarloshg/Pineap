@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:pineap/pages/Register/FormCreateAcount.dart';
+import 'package:pineap/pages/Register/form_create_acount.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
