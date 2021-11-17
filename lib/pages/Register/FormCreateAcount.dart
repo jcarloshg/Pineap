@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:pineap/styles/Styles.dart';
 import 'package:pineap/styles/SubTitle.dart';
 import 'package:pineap/styles/TitleWidget.dart';
 
@@ -41,6 +40,8 @@ class FormAcount extends StatefulWidget {
 }
 
 class _FormAcountState extends State<FormAcount> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -48,13 +49,60 @@ class _FormAcountState extends State<FormAcount> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const <Widget>[
-              TitleWidget(title: "Crear una cuenta"),
-              SubTitle(subtitle: "Ingrese datos en todos los campos"),
-              
-            ],
+          const TitleWidget(title: "Crear una cuenta"),
+          const SubTitle(subtitle: "Ingrese datos en todos los campos"),
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const Divider(color: Colors.white),
+                const Divider(color: Colors.white),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Apellidos"),
+                  validator: (String? value) {
+                    return value == null ? 'Please enter some text' : null;
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Nombre"),
+                  validator: (String? value) {
+                    return value == null ? 'Please enter some text' : null;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Fecha nacimiento",
+                    suffixIcon: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.calendar_today),
+                    ),
+                  ),
+                  validator: (String? value) {
+                    return value == null ? 'Please enter some text' : null;
+                  },
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: "Correo electronico"),
+                  validator: (String? value) {
+                    return value == null ? 'Please enter some text' : null;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "contraseña",
+                    suffixIcon: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.remove_red_eye),
+                    ),
+                  ),
+                  validator: (String? value) {
+                    return value == null ? 'Please enter some text' : null;
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
