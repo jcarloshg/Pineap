@@ -12,7 +12,10 @@ class TitleBlockForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title_block_form.toUpperCase(),
-      style: const TextStyle(fontWeight: FontWeight.bold),
+      style: const TextStyle(
+        fontSize: 12.0,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }

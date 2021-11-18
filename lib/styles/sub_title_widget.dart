@@ -14,7 +14,7 @@ class SubTitle extends StatelessWidget {
       child: Text(
         subtitle,
         style: const TextStyle(
-          fontSize: 13.0,
+          fontSize: 14.0,
         ),
       ),
     );

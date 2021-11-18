@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:pineap/pages/Register/code_verification.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -17,6 +18,7 @@ class _FormCreateAcountState extends State<FormCreateAcount> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
           backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
@@ -58,7 +60,7 @@ class _FormAcountState extends State<FormAcount> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const Divider(color: Colors.white),
+                  const SizedBox(height: 32),
                   const TitleBlockForm(
                       title_block_form: "Información personal"),
                   TextFormField(
@@ -85,7 +87,7 @@ class _FormAcountState extends State<FormAcount> {
                       return value == null ? 'Please enter some text' : null;
                     },
                   ),
-                  const Divider(color: Colors.white),
+                  const SizedBox(height: 16),
                   const TitleBlockForm(title_block_form: "Información usuario"),
                   TextFormField(
                     decoration:
@@ -106,7 +108,7 @@ class _FormAcountState extends State<FormAcount> {
                       return value == null ? 'Please enter some text' : null;
                     },
                   ),
-                  const Divider(color: Colors.white),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -123,12 +125,15 @@ class _FormAcountState extends State<FormAcount> {
                       const Text("Aceptar terminos y condiciones"),
                     ],
                   ),
-                  const Divider(color: Colors.white),
+                  const SizedBox(height: 32),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const CodeVerification()));
+                    },
                     child: const Text('Registrarse'),
                   ),
                 ],
