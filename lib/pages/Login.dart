@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -78,6 +79,8 @@ class _LoginFormState extends State<LoginForm> {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: ElevatedButton(
               onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const HomePageClient()));
                 if (_formKey.currentState!.validate()) {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
