@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
+import 'package:pineap/pages/Register/register_shops/form_create_acount_shops.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.center,
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            height: 325,
+            height: 400,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
               color: Colors.white70,
@@ -110,6 +111,19 @@ class _LoginFormState extends State<LoginForm> {
                 child: const Text("Crea una cuenta aquí"),
               )
             ],
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: const TextStyle(
+                decoration: TextDecoration.underline,
+                color: Colors.brown,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const FormCreateAcountShops()));
+            },
+            child: const Text("Crear una cuenta como negocio"),
           )
         ],
       ),
