@@ -30,7 +30,8 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   String email = "";
   String pass = "";
   // data from user
-  String name = "";
+  String nameShop = "";
+  String addresShop = "";
   String typeShop = "";
 
   @override
@@ -138,6 +139,37 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                           const SizedBox(height: 16),
                           const TitleBlockForm(
                               title_block_form: "Información Negocio"),
+                          TextFormField(
+                            onSaved: (value) => nameShop = value!,
+                            decoration:
+                                const InputDecoration(labelText: "Nombre"),
+                            validator: (String? value) {
+                              return Validator().validate_name(value!)
+                                  ? null
+                                  : 'Ingresa solo caracteres';
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (value) => typeShop = value!,
+                            decoration:
+                                const InputDecoration(labelText: "Tipo"),
+                          ),
+                          TextFormField(
+                            onSaved: (value) => addresShop = value!,
+                            onTap: () {},
+                            decoration: InputDecoration(
+                              labelText: "Dirección de local",
+                              suffixIcon: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.location_city),
+                              ),
+                            ),
+                            validator: (String? value) {
+                              return value == null
+                                  ? 'Please enter some text'
+                                  : null;
+                            },
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
