@@ -3,15 +3,14 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/helpers/validator.dart';
+import 'package:pineap/models/person.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
+import 'package:provider/provider.dart';
 
 class CodeVerificationShop extends StatefulWidget {
-  const CodeVerificationShop({Key? key, required this.username})
-      : super(key: key);
-
-  final String username;
+  const CodeVerificationShop({Key? key}) : super(key: key);
 
   @override
   _CodeVerificationShopState createState() => _CodeVerificationShopState();
@@ -89,8 +88,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                     ),
                   ),
                   onPressed: () {
-                    // ignore: avoid_print
-                    _resent_code(widget.username);
+                    _resent_code(Provider.of<Person>(context).getEmail);
                   },
                   child: const Text("Reenvia tu codigo"),
                 ),
@@ -104,7 +102,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                   // ignore: avoid_print
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    _send_code_AWS(widget.username);
+                    _send_code_AWS(Provider.of<Person>(context).getEmail);
                   }
                 },
                 child: const Text('Ingresar'),

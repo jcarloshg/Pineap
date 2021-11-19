@@ -3,10 +3,12 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/helpers/validator.dart';
+import 'package:pineap/models/person.dart';
 import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
+import 'package:provider/provider.dart';
 
 class FormCreateAcountShops extends StatefulWidget {
   const FormCreateAcountShops({Key? key}) : super(key: key);
@@ -154,7 +156,21 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                _register_a_user();
+
+                                Provider.of<Person>(context, listen: false)
+                                    .setData(
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        birthday: "123-123-123",
+                                        email: email,
+                                        password: pass,
+                                        role: "CLIENTE");
+
+                                // _register_a_user();
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        CodeVerificationShop()));
                               }
                             },
                             child: const Text('Registrarse'),
@@ -188,8 +204,6 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
         setState(() {
           isSignUpComplete = res.isSignUpComplete;
         });
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CodeVerificationShop(username: email)));
       } on AuthException catch (e) {
         // ignore: avoid_print
         print(e.message);

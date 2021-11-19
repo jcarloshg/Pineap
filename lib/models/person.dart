@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 
 class Person extends ChangeNotifier {
-  String lastName   = "";
-  String firstName  = "";
-  String birthday   = "";
-  String role       = "";
-  String email      = "";
-  String password   = "";
+  String lastName = "";
+  String firstName = "";
+  String birthday = "";
+  String role = "";
+  String email = "";
+  String password = "";
 
   Person();
+
+  @override
+  String toString() {
+    return " lastName : $lastName"
+        " firstName : $firstName"
+        " birthday : $birthday"
+        " role : $role"
+        " email : $email"
+        " password : $password";
+  }
 
   void setData({
     required String lastName,
