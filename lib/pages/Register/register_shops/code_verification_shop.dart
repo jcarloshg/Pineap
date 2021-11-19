@@ -1,7 +1,9 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
-import 'package:pineap/pages/helpers/validator.dart';
+import 'package:pineap/Widgets/show_loading.dart';
+import 'package:pineap/helpers/validator.dart';
+import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
 
@@ -15,38 +17,17 @@ class CodeVerificationShop extends StatefulWidget {
   _CodeVerificationShopState createState() => _CodeVerificationShopState();
 }
 
-class _CodeVerificationShopState extends State<CodeVerificationShop>
-    with TickerProviderStateMixin {
+class _CodeVerificationShopState extends State<CodeVerificationShop>{
   // data to form
   final _formKey = GlobalKey<FormState>();
   // data from user
   bool isSignUpComplete = false;
   int codeVerification = -1;
-  // animation loading
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..addListener(() {
-        setState(() {});
-      });
-    controller.repeat(reverse: false);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return isSignUpComplete
-        ? _show_loading()
+        ? ShowLoading(message: "Verificando código...",)
         : Scaffold(
             appBar: AppBar(
               elevation: 0.0,
@@ -66,26 +47,6 @@ class _CodeVerificationShopState extends State<CodeVerificationShop>
               child: _show_form(),
             ),
           );
-  }
-
-  // ignore: non_constant_identifier_names
-  Widget _show_loading() {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const SubTitle(subtitle: "Verificando código..."),
-            CircularProgressIndicator(
-              value: controller.value,
-              semanticsLabel: 'Linear progress indicator',
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   // ignore: non_constant_identifier_names
@@ -155,6 +116,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop>
     setState(() {
       isSignUpComplete = true;
     });
+    print("[codeVerification]" + codeVerification.toString());
     try {
       SignUpResult res = await Amplify.Auth.confirmSignUp(
         username: username,
@@ -162,7 +124,12 @@ class _CodeVerificationShopState extends State<CodeVerificationShop>
       );
       setState(() {
         isSignUpComplete = res.isSignUpComplete;
+        print("----------------------------------->" +
+            isSignUpComplete.toString());
       });
+
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomePageClient()));
     } on AuthException catch (e) {
       // ignore: avoid_print
       print("[_send_code_AWS ]" + e.message);

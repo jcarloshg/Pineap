@@ -1,8 +1,8 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
+import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
-import 'package:pineap/pages/helpers/validator.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -14,16 +14,36 @@ class FormCreateAcountShops extends StatefulWidget {
   _FormCreateAcountShopsState createState() => _FormCreateAcountShopsState();
 }
 
-class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
+class _FormCreateAcountShopsState extends State<FormCreateAcountShops>
+    with TickerProviderStateMixin {
   // data to form
   final _formKey = GlobalKey<FormState>();
-
+  // animation loading
+  late AnimationController controller;
   // data from user
   bool isChecked = false;
   String lastName = "";
   String firstName = "";
   String email = "";
   String pass = "";
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..addListener(() {
+        setState(() {});
+      });
+    controller.repeat(reverse: false);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +197,14 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
       } on AuthException catch (e) {
         // ignore: avoid_print
         print(e.message);
+        if (e.message == "Username already exists in the system.") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('El correo ya fue registrado'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
