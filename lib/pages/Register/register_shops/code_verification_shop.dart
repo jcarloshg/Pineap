@@ -17,17 +17,21 @@ class CodeVerificationShop extends StatefulWidget {
   _CodeVerificationShopState createState() => _CodeVerificationShopState();
 }
 
-class _CodeVerificationShopState extends State<CodeVerificationShop>{
+class _CodeVerificationShopState extends State<CodeVerificationShop> {
   // data to form
   final _formKey = GlobalKey<FormState>();
   // data from user
   bool isSignUpComplete = false;
   int codeVerification = -1;
+  // controllers =
+  final codeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return isSignUpComplete
-        ? ShowLoading(message: "Verificando código...",)
+        ? ShowLoading(
+            message: "Verificando código...",
+          )
         : Scaffold(
             appBar: AppBar(
               elevation: 0.0,
@@ -63,6 +67,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop>{
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
+                controller: codeController,
                 maxLength: 6,
                 keyboardType: TextInputType.number,
                 onSaved: (value) => codeVerification = int.parse(value!),
@@ -116,7 +121,6 @@ class _CodeVerificationShopState extends State<CodeVerificationShop>{
     setState(() {
       isSignUpComplete = true;
     });
-    print("[codeVerification]" + codeVerification.toString());
     try {
       SignUpResult res = await Amplify.Auth.confirmSignUp(
         username: username,
@@ -124,8 +128,6 @@ class _CodeVerificationShopState extends State<CodeVerificationShop>{
       );
       setState(() {
         isSignUpComplete = res.isSignUpComplete;
-        print("----------------------------------->" +
-            isSignUpComplete.toString());
       });
 
       Navigator.of(context).push(
