@@ -76,6 +76,8 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                       },
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.datetime,
+                      onTap: () {},
                       decoration: InputDecoration(
                         labelText: "Fecha nacimiento",
                         suffixIcon: IconButton(
@@ -143,9 +145,6 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                           _formKey.currentState!.save();
                           _register_a_user();
                         }
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         const CodeVerificationShop()));
                       },
                       child: const Text('Registrarse'),
                     ),
@@ -159,27 +158,33 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   void _register_a_user() async {
     if (isChecked) {
-      print(lastName);
-      print(firstName);
-      print(email);
-      print(pass);
       try {
         Map<String, String> userAttributes = {
           'email': email,
           // additional attributes as needed
         };
+        // ignore: unused_local_variable
         SignUpResult res = await Amplify.Auth.signUp(
-            username: email,
-            password: pass,
-            options: CognitoSignUpOptions(userAttributes: userAttributes));
-        print("TODO CHIDOOOOOOOO");
+          username: email,
+          password: pass,
+          options: CognitoSignUpOptions(userAttributes: userAttributes),
+        );
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CodeVerificationShop(username: email)));
       } on AuthException catch (e) {
+        // ignore: avoid_print
         print(e.message);
       }
     } else {
-      print("aslñdfjasñkldfjalñsdfjalñsdjflñasdjflñaskjdflñañ");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Debes aceptar terminos y condiciones'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
