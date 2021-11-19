@@ -20,10 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // amplify plugins
-  final AmplifyAPI _apiPlugin = AmplifyAPI();
-  final AmplifyAuthCognito _authPlugin = AmplifyAuthCognito();
-
   @override
   void initState() {
     _configureAmplify();
@@ -32,8 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _configureAmplify() async {
     try {
-      await Amplify.addPlugins([_apiPlugin, _authPlugin]);
-      Amplify.addPlugin(AmplifyAuthCognito());
+      // amplify plugins
+      await Amplify.addPlugin(AmplifyAPI());
+      await Amplify.addPlugin(AmplifyAuthCognito());
       // configure Amplify - note that Amplify cannot be configured more than once!
       await Amplify.configure(amplifyconfig);
     } catch (e) {
