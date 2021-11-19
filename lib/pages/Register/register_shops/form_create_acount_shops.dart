@@ -112,7 +112,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                       validator: (String? value) {
                         return Validator().validate_pass(value!)
                             ? null
-                            : 'Debe ser alfanumerico y mayor a 4 caracteres';
+                            : 'Debe ser alfanumerico y mayor a 8 caracteres';
                       },
                     ),
                     const SizedBox(height: 16),
@@ -165,19 +165,19 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
       print(firstName);
       print(email);
       print(pass);
-      // try {
-      //   Map<String, String> userAttributes = {
-      //     'email': 'email@domain.com',
-      //     'phone_number': '+15559101234',
-      //     // additional attributes as needed
-      //   };
-      //   SignUpResult res = await Amplify.Auth.signUp(
-      //       username: 'myusername',
-      //       password: 'mysupersecurepassword',
-      //       options: CognitoSignUpOptions(userAttributes: userAttributes));
-      // } on AuthException catch (e) {
-      //   print(e.message);
-      // }
+      try {
+        Map<String, String> userAttributes = {
+          'email': email,
+          // additional attributes as needed
+        };
+        SignUpResult res = await Amplify.Auth.signUp(
+            username: email,
+            password: pass,
+            options: CognitoSignUpOptions(userAttributes: userAttributes));
+        print("TODO CHIDOOOOOOOO");
+      } on AuthException catch (e) {
+        print(e.message);
+      }
     } else {
       print("aslñdfjasñkldfjalñsdfjalñsdjflñasdjflñaskjdflñañ");
     }

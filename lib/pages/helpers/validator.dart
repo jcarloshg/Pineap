@@ -17,7 +17,7 @@ class Validator {
 
   bool validate_pass(String pass) {
     if (pass.isEmpty) return false;
-    if (pass.length < 4) return false;
+    if (pass.length < 8) return false;
 
     RegExp validate = RegExp(r'^[a-zA-Z0-9]+$');
     return validate.hasMatch(pass);
