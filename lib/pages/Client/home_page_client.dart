@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pineap/pages/Client/profile.dart';
 import 'package:pineap/pages/Client/reservations.dart';
 import 'package:pineap/pages/Client/shops.dart';
-import 'package:pineap/styles/sub_title_widget.dart';
-import 'package:pineap/styles/title_widget.dart';
 
 class HomePageClient extends StatefulWidget {
   const HomePageClient({Key? key}) : super(key: key);
@@ -15,9 +13,9 @@ class HomePageClient extends StatefulWidget {
 class _HomePageClientState extends State<HomePageClient> {
   int currentIndex = 0;
   final screens = [
-    Shops(),
-    Reservations(),
-    Profile(),
+    const Shops(),
+    const Reservations(),
+    const Profile(),
   ];
 
   @override

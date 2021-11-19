@@ -12,16 +12,17 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: const <Widget>[
-            TitleWidget(title: "Profile"),
-            SubTitle(subtitle: "Profile"),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const <Widget>[
+              TitleWidget(title: "Profile"),
+              SubTitle(subtitle: "Profile"),
+            ],
+          ),
         ),
       ),
     );
