@@ -1,5 +1,24 @@
-type Todo @model {
+type Person @model {
+  id: ID!
+  last_name: String!
+  first_name: String!
+  birthday: AWSDateTime 
+  role: String! 
+}
+
+type Shop @model {
   id: ID!
   name: String!
-  description: String
+  id_photo: String!
+  type: String!
+  schedule: [Day] @connection(name: "fk_shop_day")
 }
+
+type Day @model {
+  id: ID!
+  hour_open: String!
+  hour_close: String!
+  isOpen: Boolean! 
+  shop: Shop @connection(name: "fk_shop_day")
+}
+
