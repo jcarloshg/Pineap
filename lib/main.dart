@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:pineap/models/person.dart';
+import 'package:pineap/models/person_model.dart';
+import 'package:pineap/models/shop_model.dart';
 import 'package:pineap/pages/Login.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => Person(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(MultiProvider(
+    providers: [
+      Provider<PersonModel>(create: (_) => PersonModel()),
+      Provider<ShopModel>(create: (_) => ShopModel()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

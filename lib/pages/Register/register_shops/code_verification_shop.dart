@@ -3,7 +3,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/helpers/validator.dart';
-import 'package:pineap/models/person.dart';
+import 'package:pineap/models/person_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -57,6 +57,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        TitleWidget(title: Provider.of<PersonModel>(context).toString()),
         const TitleWidget(title: "Código verificación"),
         const SubTitle(subtitle: "Tu código debe tener 6 carácteres"),
         const SizedBox(height: 32),
@@ -88,7 +89,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                     ),
                   ),
                   onPressed: () {
-                    _resent_code(Provider.of<Person>(context).getEmail);
+                    _resent_code(Provider.of<PersonModel>(context).getEmail);
                   },
                   child: const Text("Reenvia tu codigo"),
                 ),
@@ -100,10 +101,13 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                 ),
                 onPressed: () {
                   // ignore: avoid_print
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    _send_code_AWS(Provider.of<Person>(context).getEmail);
-                  }
+                  print(Provider.of<PersonModel>(context).toString());
+
+                  // ignore: avoid_print
+                  // if (_formKey.currentState!.validate()) {
+                  //   _formKey.currentState!.save();
+                  //   _send_code_AWS(Provider.of<PersonModel>(context).getEmail);
+                  // }
                 },
                 child: const Text('Ingresar'),
               )

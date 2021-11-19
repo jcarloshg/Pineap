@@ -3,7 +3,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/helpers/validator.dart';
-import 'package:pineap/models/person.dart';
+import 'package:pineap/models/person_model.dart';
 import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
@@ -157,7 +157,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
 
-                                Provider.of<Person>(context, listen: false)
+                                Provider.of<PersonModel>(context, listen: false)
                                     .setData(
                                         firstName: firstName,
                                         lastName: lastName,
@@ -170,7 +170,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
 
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                        CodeVerificationShop()));
+                                        const CodeVerificationShop()));
                               }
                             },
                             child: const Text('Registrarse'),

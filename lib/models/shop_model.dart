@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Shop extends ChangeNotifier {
+class ShopModel extends ChangeNotifier {
   String name = "";
   String idPhoto = "";
   String typeShop = "";
 
-  Shop();
+  ShopModel();
 
   void setDate({required name, required idPhoto, required typeShop}) {
     this.name = name;

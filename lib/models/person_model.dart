@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Person extends ChangeNotifier {
+class PersonModel extends ChangeNotifier {
   String lastName = "";
   String firstName = "";
   String birthday = "";
@@ -8,7 +8,7 @@ class Person extends ChangeNotifier {
   String email = "";
   String password = "";
 
-  Person();
+  PersonModel();
 
   @override
   String toString() {

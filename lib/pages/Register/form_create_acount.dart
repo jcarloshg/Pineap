@@ -1,12 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:pineap/models/person.dart';
 import 'package:pineap/pages/Register/code_verification.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
-import 'package:provider/provider.dart';
 
 class FormCreateAcount extends StatefulWidget {
   const FormCreateAcount({Key? key}) : super(key: key);
