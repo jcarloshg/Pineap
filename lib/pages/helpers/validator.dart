@@ -2,7 +2,8 @@ class Validator {
   bool validate_name(String name) {
     if (name.isEmpty) return false;
 
-    RegExp validate = RegExp(r'^[a-zA-Z]+$');
+    RegExp validate = RegExp(
+        r'^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$');
     return validate.hasMatch(name);
   }
 

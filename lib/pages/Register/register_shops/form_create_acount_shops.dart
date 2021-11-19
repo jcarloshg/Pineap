@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
 import 'package:pineap/pages/helpers/validator.dart';
@@ -13,8 +15,15 @@ class FormCreateAcountShops extends StatefulWidget {
 }
 
 class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
+  // data to form
   final _formKey = GlobalKey<FormState>();
+
+  // data from user
   bool isChecked = false;
+  String lastName = "";
+  String firstName = "";
+  String email = "";
+  String pass = "";
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +58,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                     const TitleBlockForm(
                         title_block_form: "Información personal del titular"),
                     TextFormField(
+                      onSaved: (value) => lastName = value!,
                       decoration: const InputDecoration(labelText: "Apellidos"),
                       validator: (String? value) {
                         return Validator().validate_name(value!)
@@ -57,6 +67,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                       },
                     ),
                     TextFormField(
+                      onSaved: (value) => firstName = value!,
                       decoration: const InputDecoration(labelText: "Nombre"),
                       validator: (String? value) {
                         return Validator().validate_name(value!)
@@ -80,6 +91,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                     const TitleBlockForm(
                         title_block_form: "Información usuario"),
                     TextFormField(
+                      onSaved: (value) => email = value!,
                       decoration: const InputDecoration(
                           labelText: "correo electronico"),
                       validator: (String? value) {
@@ -89,6 +101,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                       },
                     ),
                     TextFormField(
+                      onSaved: (value) => pass = value!,
                       decoration: InputDecoration(
                         labelText: "contraseña",
                         suffixIcon: IconButton(
@@ -126,7 +139,10 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                         textStyle: const TextStyle(fontSize: 20),
                       ),
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {}
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          _register_a_user();
+                        }
                         // Navigator.of(context).push(MaterialPageRoute(
                         //     builder: (context) =>
                         //         const CodeVerificationShop()));
@@ -141,6 +157,30 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
         ),
       ),
     );
+  }
+
+  void _register_a_user() async {
+    if (isChecked) {
+      print(lastName);
+      print(firstName);
+      print(email);
+      print(pass);
+      // try {
+      //   Map<String, String> userAttributes = {
+      //     'email': 'email@domain.com',
+      //     'phone_number': '+15559101234',
+      //     // additional attributes as needed
+      //   };
+      //   SignUpResult res = await Amplify.Auth.signUp(
+      //       username: 'myusername',
+      //       password: 'mysupersecurepassword',
+      //       options: CognitoSignUpOptions(userAttributes: userAttributes));
+      // } on AuthException catch (e) {
+      //   print(e.message);
+      // }
+    } else {
+      print("aslñdfjasñkldfjalñsdfjalñsdjflñasdjflñaskjdflñañ");
+    }
   }
 
   Color getColor(Set<MaterialState> states) {
