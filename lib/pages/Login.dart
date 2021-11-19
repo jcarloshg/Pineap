@@ -1,9 +1,16 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
 import 'package:pineap/pages/Register/register_shops/form_create_acount_shops.dart';
+
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_flutter/amplify.dart';
+// dart async library we will refer to when setting up real time updates
+import 'dart:async';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,6 +20,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // amplify plugins
+  final AmplifyAPI _apiPlugin = AmplifyAPI();
+  final AmplifyAuthCognito _authPlugin = AmplifyAuthCognito();
+
+  @override
+  void initState() {
+    _configureAmplify();
+    super.initState();
+  }
+
+  Future<void> _configureAmplify() async {
+    try {
+      await Amplify.addPlugins([_apiPlugin, _authPlugin]);
+      Amplify.addPlugin(AmplifyAuthCognito());
+      // configure Amplify - note that Amplify cannot be configured more than once!
+      await Amplify.configure(amplifyconfig);
+    } catch (e) {
+      // ignore: avoid_print
+      print('[_configureAmplify] + $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

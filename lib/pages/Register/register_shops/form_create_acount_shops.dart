@@ -12,7 +12,7 @@ class FormCreateAcountShops extends StatefulWidget {
 }
 
 class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
   @override

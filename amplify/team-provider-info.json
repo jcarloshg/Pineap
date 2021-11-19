@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-datesapp-dev-160610-authRole",
+      "UnauthRoleArn": "arn:aws:iam::111421882477:role/amplify-datesapp-dev-160610-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::111421882477:role/amplify-datesapp-dev-160610-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-datesapp-dev-160610-deployment",
+      "UnauthRoleName": "amplify-datesapp-dev-160610-unauthRole",
+      "StackName": "amplify-datesapp-dev-160610",
+      "StackId": "arn:aws:cloudformation:us-east-2:111421882477:stack/amplify-datesapp-dev-160610/bf181ff0-4404-11ec-b8e3-0ae5245e98da",
+      "AmplifyAppId": "d1ecg3cr1n94xl"
+    },
+    "categories": {
+      "auth": {
+        "datesapp5e798625": {}
+      }
+    }
+  }
+}
