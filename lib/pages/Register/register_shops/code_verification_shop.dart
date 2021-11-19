@@ -57,7 +57,6 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        TitleWidget(title: Provider.of<PersonModel>(context).toString()),
         const TitleWidget(title: "Código verificación"),
         const SubTitle(subtitle: "Tu código debe tener 6 carácteres"),
         const SizedBox(height: 32),

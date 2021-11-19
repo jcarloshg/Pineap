@@ -22,12 +22,16 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   final _formKey = GlobalKey<FormState>();
   // to show show_loading
   bool isSignUpComplete = false;
-  // data from user
+  // data from person
   bool isChecked = false;
   String lastName = "";
   String firstName = "";
+  // data from user
   String email = "";
   String pass = "";
+  // data from user
+  String name = "";
+  String typeShop = "";
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +135,9 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             },
                           ),
                           const SizedBox(height: 16),
+                          const SizedBox(height: 16),
+                          const TitleBlockForm(
+                              title_block_form: "Información Negocio"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
