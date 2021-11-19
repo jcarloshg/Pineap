@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:pineap/pages/Client/profile.dart';
+
 import 'package:pineap/pages/Client/reservations.dart';
+
 import 'package:pineap/pages/Client/shops.dart';
+
 import 'package:pineap/styles/sub_title_widget.dart';
+
 import 'package:pineap/styles/title_widget.dart';
 
 class HomePageClient extends StatefulWidget {
