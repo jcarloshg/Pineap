@@ -10,7 +10,6 @@ import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 class FormCreateAcountShops extends StatefulWidget {
   const FormCreateAcountShops({Key? key}) : super(key: key);
@@ -25,6 +24,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   // to show show_loading
   bool isSignUpComplete = false;
   bool isChecked = false;
+  final birthdayController = TextEditingController();
   // data from person
   String lastName = "";
   String firstName = "";
@@ -95,9 +95,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             },
                           ),
                           TextFormField(
-                            initialValue: DateFormat('yyyy MMMM dd').format(
-                                Provider.of<PersonModel>(context).getBirthday),
-                            keyboardType: TextInputType.datetime,
+                            controller: birthdayController,
                             decoration: InputDecoration(
                               labelText: "Fecha nacimiento",
                               suffixIcon: IconButton(
@@ -233,7 +231,10 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
             initialDate: DateTime.now(),
             firstDate: DateTime(1900),
             lastDate: DateTime(2222))
-        .then((value) => birthday = value!);
+        .then((value) {
+      birthday = value!;
+      birthdayController.text = DateFormat('yyyy MMMM dd').format(value);
+    });
   }
 
   // ignore: non_constant_identifier_names
