@@ -24,6 +24,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   // to show show_loading
   bool isSignUpComplete = false;
   bool isChecked = false;
+  bool showPass = false;
   final birthdayController = TextEditingController();
   // data from person
   String lastName = "";
@@ -96,6 +97,8 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                           ),
                           TextFormField(
                             controller: birthdayController,
+                            readOnly: true,
+                            onTap: () => _showDataPicker(),
                             decoration: InputDecoration(
                               labelText: "Fecha nacimiento",
                               suffixIcon: IconButton(
@@ -123,12 +126,19 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             },
                           ),
                           TextFormField(
+                            obscureText: !showPass,
                             onSaved: (value) => pass = value!,
                             decoration: InputDecoration(
                               labelText: "contraseña",
                               suffixIcon: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.remove_red_eye),
+                                onPressed: () {
+                                  setState(() {
+                                    showPass = !showPass;
+                                  });
+                                },
+                                icon: Icon(showPass
+                                    ? Icons.remove_red_eye
+                                    : Icons.remove_red_eye_outlined),
                               ),
                             ),
                             validator: (String? value) {
