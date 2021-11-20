@@ -1,6 +1,7 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/person_model.dart';
@@ -9,6 +10,7 @@ import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class FormCreateAcountShops extends StatefulWidget {
   const FormCreateAcountShops({Key? key}) : super(key: key);
@@ -22,10 +24,11 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   final _formKey = GlobalKey<FormState>();
   // to show show_loading
   bool isSignUpComplete = false;
-  // data from person
   bool isChecked = false;
+  // data from person
   String lastName = "";
   String firstName = "";
+  DateTime birthday = DateTime.now();
   // data from user
   String email = "";
   String pass = "";
@@ -92,12 +95,13 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             },
                           ),
                           TextFormField(
+                            initialValue: DateFormat('yyyy MMMM dd').format(
+                                Provider.of<PersonModel>(context).getBirthday),
                             keyboardType: TextInputType.datetime,
-                            onTap: () {},
                             decoration: InputDecoration(
                               labelText: "Fecha nacimiento",
                               suffixIcon: IconButton(
-                                onPressed: () {},
+                                onPressed: () => _showDataPicker(),
                                 icon: const Icon(Icons.calendar_today),
                               ),
                             ),
@@ -107,7 +111,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                                   : null;
                             },
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 32),
                           const TitleBlockForm(
                               title_block_form: "Información usuario"),
                           TextFormField(
@@ -135,8 +139,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                                   : 'Debe ser alfanumerico y mayor a 8 caracteres';
                             },
                           ),
-                          const SizedBox(height: 16),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 32),
                           const TitleBlockForm(
                               title_block_form: "Información Negocio"),
                           TextFormField(
@@ -200,7 +203,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                                     .setData(
                                         firstName: firstName,
                                         lastName: lastName,
-                                        birthday: "123-123-123",
+                                        birthday: birthday,
                                         email: email,
                                         password: pass,
                                         role: "CLIENTE");
@@ -222,6 +225,15 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
               ),
             ),
           );
+  }
+
+  _showDataPicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2222))
+        .then((value) => birthday = value!);
   }
 
   // ignore: non_constant_identifier_names
