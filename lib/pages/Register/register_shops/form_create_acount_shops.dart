@@ -3,8 +3,10 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/Widgets/show_loading.dart';
+import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/person_model.dart';
+import 'package:pineap/models/shop_model.dart';
 import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
@@ -203,26 +205,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-
-                                Provider.of<PersonModel>(context, listen: false)
-                                    .setData(
-                                        firstName: firstName,
-                                        lastName: lastName,
-                                        birthday: birthday,
-                                        email: email,
-                                        password: pass,
-                                        role: "CLIENTE");
-
-                                // _register_a_user();
-
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CodeVerificationShop()));
-                              }
-                            },
+                            onPressed: () => _onPressed_registred(),
                             child: const Text('Registrarse'),
                           ),
                         ],
@@ -249,45 +232,71 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
 
   // ignore: non_constant_identifier_names
   void _register_a_user() async {
-    if (isChecked) {
-      try {
-        setState(() {
-          isSignUpComplete = true;
-        });
-        Map<String, String> userAttributes = {
-          'email': email,
-          // additional attributes as needed
-        };
-        SignUpResult res = await Amplify.Auth.signUp(
-          username: email,
-          password: pass,
-          options: CognitoSignUpOptions(userAttributes: userAttributes),
-        );
-        setState(() {
-          isSignUpComplete = res.isSignUpComplete;
-        });
-      } on AuthException catch (e) {
-        // ignore: avoid_print
-        print(e.message);
-        if (e.message == "Username already exists in the system.") {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('El correo ya fue registrado'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-        setState(() {
-          isSignUpComplete = true;
-        });
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debes aceptar terminos y condiciones'),
-          backgroundColor: Colors.red,
-        ),
+    try {
+      setState(() {
+        isSignUpComplete = true;
+      });
+      Map<String, String> userAttributes = {
+        'email': email,
+        // additional attributes as needed
+      };
+      SignUpResult res = await Amplify.Auth.signUp(
+        username: email,
+        password: pass,
+        options: CognitoSignUpOptions(userAttributes: userAttributes),
       );
+      setState(() {
+        isSignUpComplete = res.isSignUpComplete;
+      });
+    } on AuthException catch (e) {
+      // ignore: avoid_print
+      print(e.message);
+      if (e.message == "Username already exists in the system.") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('El correo ya fue registrado'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      setState(() {
+        isSignUpComplete = true;
+      });
+    }
+  }
+
+  void _onPressed_registred() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      Provider.of<PersonModel>(context, listen: false).setData(
+          firstName: firstName,
+          lastName: lastName,
+          birthday: birthday,
+          email: email,
+          password: pass,
+          role: Constants().MANAGER);
+
+      Provider.of<ShopModel>(context, listen: false).setDate(
+          name: nameShop,
+          idPhoto: "adsd",
+          addres: addresShop,
+          typeShop: typeShop);
+
+      if (!isChecked) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Debes aceptar terminos y condiciones'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // _register_a_user();
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const CodeVerificationShop()));
     }
   }
 
