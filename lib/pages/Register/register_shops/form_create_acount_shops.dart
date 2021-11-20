@@ -38,7 +38,17 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   // data from user
   String nameShop = "";
   String addresShop = "";
-  String typeShop = "";
+  String typeShop = 'Restaurante';
+
+  // auxiliares
+  String dropdownValue = 'Restaurante';
+  List<String> typoshops = [
+    'Restaurante',
+    'Barberias',
+    'Dentista',
+    'Lavanderia',
+    'Otro'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -162,10 +172,31 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                                   : 'Ingresa solo caracteres';
                             },
                           ),
-                          TextFormField(
-                            onSaved: (value) => typeShop = value!,
-                            decoration:
-                                const InputDecoration(labelText: "Tipo"),
+                          Row(
+                            children: <Widget>[
+                              Text(dropdownValue),
+                              DropdownButton<String>(
+                                // value: dropdownValue,
+                                alignment: Alignment.bottomRight,
+                                icon: const Icon(Icons.arrow_downward),
+                                underline: Container(
+                                  height: 1,
+                                  color: Colors.grey,
+                                ),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                },
+                                items: typoshops.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
                           ),
                           TextFormField(
                             onSaved: (value) => addresShop = value!,
@@ -232,6 +263,9 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
 
   // ignore: non_constant_identifier_names
   void _register_a_user() async {
+    setState(() {
+      isSignUpComplete = false;
+    });
     try {
       setState(() {
         isSignUpComplete = true;
@@ -259,10 +293,10 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
           ),
         );
       }
-      setState(() {
-        isSignUpComplete = true;
-      });
     }
+    setState(() {
+      isSignUpComplete = true;
+    });
   }
 
   void _onPressed_registred() {
@@ -293,7 +327,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
         return;
       }
 
-      // _register_a_user();
+      _register_a_user();
 
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const CodeVerificationShop()));
