@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/helpers/validator.dart';
+import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/pages/Client/home_page_client.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
+import 'package:provider/provider.dart';
 
 class CodeVerification extends StatefulWidget {
   const CodeVerification({Key? key}) : super(key: key);
@@ -10,8 +16,20 @@ class CodeVerification extends StatefulWidget {
 }
 
 class _CodeVerificationState extends State<CodeVerification> {
+  // data to form
+  final _formKey = GlobalKey<FormState>();
+  // data from user
+  bool isSignUpComplete = false;
+  int codeVerification = -1;
+  // controllers =
+  final codeController = TextEditingController();
+
+  late PersonModel personModel;
+
   @override
   Widget build(BuildContext context) {
+    personModel = Provider.of<PersonModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -35,18 +53,21 @@ class _CodeVerificationState extends State<CodeVerification> {
             const SubTitle(subtitle: "Tu código debe tener 6 carácteres"),
             const SizedBox(height: 32),
             Form(
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: "Ingresa tu código"),
-                    validator: (String? value) {
-                      return value == null ? 'Please enter some text' : null;
-                    },
-                  ),
+                      controller: codeController,
+                      maxLength: 6,
+                      keyboardType: TextInputType.number,
+                      onSaved: (value) => codeVerification = int.parse(value!),
+                      decoration:
+                          const InputDecoration(labelText: "Ingresa tu código"),
+                      validator: (String? value) =>
+                          Validator.validate_code_verification(value!)),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.centerLeft,
                     child: TextButton(
                       style: TextButton.styleFrom(
                         textStyle: const TextStyle(
@@ -54,10 +75,10 @@ class _CodeVerificationState extends State<CodeVerification> {
                           color: Colors.brown,
                         ),
                       ),
-                      onPressed: () {
-                        // ignore: avoid_print
-                        print("codigo reenviado");
-                      },
+                      onPressed: () => Cognito.resentCode(
+                        username: personModel.getEmail,
+                        context: context,
+                      ),
                       child: const Text("Reenvia tu codigo"),
                     ),
                   ),
@@ -66,10 +87,12 @@ class _CodeVerificationState extends State<CodeVerification> {
                     style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20),
                     ),
-                    onPressed: () {
-                      // ignore: avoid_print
-                      print("Login");
-                    },
+                    onPressed: onPressedIngresar,
+                    // ignore: avoid_print
+                    // if (_formKey.currentState!.validate()) {
+                    //   _formKey.currentState!.save();
+                    //   sendCodeAWS(Provider.of<PersonModel>(context).getEmail);
+                    // }
                     child: const Text('Ingresar'),
                   )
                 ],
@@ -79,5 +102,30 @@ class _CodeVerificationState extends State<CodeVerification> {
         ),
       ),
     );
+  }
+
+  Future<void> onPressedIngresar() async {
+    setState(() {
+      isSignUpComplete = true;
+    });
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
+          username: personModel.getEmail,
+          codeVerification: codeVerification,
+          context: context);
+
+      if (isSignUpCompleteResponse) {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const HomePageClient()));
+      } else {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Error al verificar el código');
+      }
+    }
+    setState(() {
+      isSignUpComplete = false;
+    });
   }
 }

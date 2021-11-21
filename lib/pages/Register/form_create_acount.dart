@@ -3,11 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/aws/cognito.dart';
-import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
-import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
+import 'package:pineap/pages/Register/code_verification.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
@@ -202,7 +201,7 @@ class _FormAcountState extends State<FormAcount> {
 
       if (isSignUpCompleteResponse) {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CodeVerificationShop()));
+            builder: (context) => const CodeVerification()));
       } else {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'El correo ya fue registrado');

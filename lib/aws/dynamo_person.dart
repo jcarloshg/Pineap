@@ -5,7 +5,6 @@ import 'package:pineap/models_class/person_model.dart';
 
 class DynamoPerson {
   static Future<String?> uploadPerson(PersonModel personModel) async {
-    
     Person person = Person(
         last_name: personModel.lastName,
         first_name: personModel.firstName,
