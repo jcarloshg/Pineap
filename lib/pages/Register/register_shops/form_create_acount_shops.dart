@@ -24,7 +24,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   // data to form
   final _formKey = GlobalKey<FormState>();
   // to show show_loading
-  bool isSignUpComplete = false;
+  bool showLoading = false;
   bool isChecked = false;
   bool showPass = false;
   // controles
@@ -52,7 +52,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
     personModel = Provider.of<PersonModel>(context);
     shopModel = Provider.of<ShopModel>(context);
 
-    return isSignUpComplete
+    return showLoading
         ? ShowLoading(message: "Registrando perfil...")
         : Scaffold(
             appBar: AppBar(
@@ -251,7 +251,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
 
   void onPressedregistred() async {
     setState(() {
-      isSignUpComplete = false;
+      showLoading = true;
     });
 
     if (_formKey.currentState!.validate()) {
@@ -273,7 +273,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
             context: context, message: 'Debes aceptar terminos y condiciones');
         return;
       }
-      
+
       bool isSignUpComplete = await Cognito.uploadInfoUserToCognito(
           context: context, email: email, pass: pass);
 
@@ -287,7 +287,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
     }
 
     setState(() {
-      isSignUpComplete = true;
+      showLoading = false;
     });
   }
 

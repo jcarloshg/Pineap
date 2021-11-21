@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
@@ -127,14 +129,28 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
           username: personModel.getEmail,
           codeVerification: codeVerification,
           context: context);
-
       if (isSignUpCompleteResponse) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const HomePageClient()));
-      } else {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');
+        return;
       }
+
+      final uploadPersonResponse = await DynamoPerson.uploadPerson(personModel);
+      if (uploadPersonResponse == null) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Error al registrar info del usuario');
+        return;
+      }
+
+      final uploadShopResponse = await DynamoShop.uploadShop(shopModel);
+      if (uploadShopResponse == null) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Error al registrar info del negocio');
+        return;
+      }
+
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomePageClient()));
     }
     setState(() {
       isSignUpComplete = false;
