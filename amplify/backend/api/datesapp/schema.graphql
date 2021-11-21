@@ -21,4 +21,3 @@ type Day @model {
   isOpen: Boolean! 
   shop: Shop @connection(name: "fk_shop_day")
 }
-
