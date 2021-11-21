@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/aws/cognito.dart';
@@ -7,6 +5,7 @@ import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/person_model.dart';
 import 'package:pineap/models/shop_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
 import 'package:provider/provider.dart';
@@ -55,13 +54,12 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: _show_form(),
+              child: showForm(),
             ),
           );
   }
 
-  // ignore: non_constant_identifier_names
-  Widget _show_form() {
+  Widget showForm() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -91,8 +89,10 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                       color: Colors.brown,
                     ),
                   ),
-                  onPressed: () =>
-                      Cognito.resentCode(personModel.getEmail, context),
+                  onPressed: () => Cognito.resentCode(
+                    username: personModel.getEmail,
+                    context: context,
+                  ),
                   child: const Text("Reenvia tu codigo"),
                 ),
               ),
@@ -101,16 +101,12 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                 style: ElevatedButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 20),
                 ),
-                onPressed: () {
-                  print(personModel.toString());
-                  print(shopModel.addres);
-
-                  // ignore: avoid_print
-                  // if (_formKey.currentState!.validate()) {
-                  //   _formKey.currentState!.save();
-                  //   sendCodeAWS(Provider.of<PersonModel>(context).getEmail);
-                  // }
-                },
+                onPressed: onPressedIngresar,
+                // ignore: avoid_print
+                // if (_formKey.currentState!.validate()) {
+                //   _formKey.currentState!.save();
+                //   sendCodeAWS(Provider.of<PersonModel>(context).getEmail);
+                // }
                 child: const Text('Ingresar'),
               )
             ],
@@ -120,33 +116,28 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
     );
   }
 
-  void sendCodeAWS(String username) async {
+  void onPressedIngresar() async {
     setState(() {
       isSignUpComplete = true;
     });
-    try {
-      SignUpResult res = await Amplify.Auth.confirmSignUp(
-        username: username,
-        confirmationCode: codeVerification.toString(),
-      );
-      setState(() {
-        isSignUpComplete = res.isSignUpComplete;
-      });
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomePageClient()));
-    } on AuthException catch (e) {
-      // ignore: avoid_print
-      print("[sendCodeAWS ]" + e.message);
-      setState(() {
-        isSignUpComplete = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error al verificar el código'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
+          username: personModel.getEmail,
+          codeVerification: codeVerification,
+          context: context);
+
+      if (isSignUpCompleteResponse) {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const HomePageClient()));
+      } else {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Error al verificar el código');
+      }
     }
+    setState(() {
+      isSignUpComplete = false;
+    });
   }
 }

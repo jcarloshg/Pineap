@@ -4,12 +4,12 @@
 //
 // IMPORTANT !!!
 //
-// this clase only contains fuctions that they are validators
+// this clase only contains fuctions that they are validators,
 // each validator return...
 //
-//          - if is empty return [FIELD_EMPTY]
-//          - if not hasMatch return a message
-//          - if is not empty and hasMatch return a null
+//          - if is empty                   return [FIELD_EMPTY]
+//          - if not hasMatch               return a message
+//          - if is not empty and hasMatch  return a null
 //
 // ==============================================================
 // ==============================================================
@@ -52,7 +52,9 @@ class Validator {
     const String message = 'Debe ser alfanumerico y mayor a 8 caracteres';
 
     String? response = isEmpty(pass);
-    if (response != null || pass.length < 8) return response;
+    if (response != null) return response;
+
+    if (pass.length < 8) return message;
 
     return validate.hasMatch(pass) ? null : message;
   }
@@ -62,19 +64,23 @@ class Validator {
     RegExp validate = RegExp(r'^(\d{6})?$');
 
     String? response = isEmpty(codeVerification);
-    if (response != null || codeVerification.length < 7) return response;
+    if (response != null) return response;
 
-    return validate.hasMatch(codeVerification) ? null : "Deben ser 6 digitos";
+    String message = "Deben ser 6 digitos";
+    if (codeVerification.length < 6) return message;
+
+    return validate.hasMatch(codeVerification) ? null : message;
   }
 
   static String? validateAddress(String address) {
     RegExp validate = RegExp(r'^[#.0-9a-zA-ZÀ-ÿ\u00f1\u00d1\s,-]+$');
 
     String? response = isEmpty(address);
-    if (response != null || address.length < 7) return response;
+    if (response != null) return response;
 
-    return validate.hasMatch(address)
-        ? null
-        : 'Debe ingresar caracteres, números, ';
+    String message = 'Debe ingresar caracteres y números';
+    if (address.length < 7) return message;
+
+    return validate.hasMatch(address) ? null : message;
   }
 }

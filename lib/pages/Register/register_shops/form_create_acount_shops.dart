@@ -3,6 +3,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/Widgets/show_loading.dart';
+import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/person_model.dart';
@@ -32,19 +33,26 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   TextEditingController typeShopController = TextEditingController();
 
   // data from person
-  String lastName = "Huert Garcia";
-  String firstName = "Jose Carlos";
+  String lastName = "";
+  String firstName = "";
   DateTime birthday = DateTime.now();
   // data from user
-  String email = "carlosj12336@gmail.com";
-  String pass = "qazwsx123";
+  String email = "";
+  String pass = "";
   // data from user
-  String nameShop = "Holaaaa";
-  String addresShop = "C. Vicente Guerrero #40, Col. Rosas del Tepeyeac";
+  String nameShop = "";
+  String addresShop = "";
   String typeShop = 'Restaurante';
+
+  // model
+  late PersonModel personModel;
+  late ShopModel shopModel;
 
   @override
   Widget build(BuildContext context) {
+    personModel = Provider.of<PersonModel>(context);
+    shopModel = Provider.of<ShopModel>(context);
+
     return isSignUpComplete
         ? ShowLoading(message: "Registrando perfil...")
         : Scaffold(
@@ -247,34 +255,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
       isSignUpComplete = false;
     });
 
-    try {
-      setState(() {
-        isSignUpComplete = true;
-      });
-      Map<String, String> userAttributes = {
-        'email': email,
-        // additional attributes as needed
-      };
-      SignUpResult res = await Amplify.Auth.signUp(
-        username: email,
-        password: pass,
-        options: CognitoSignUpOptions(userAttributes: userAttributes),
-      );
-      setState(() {
-        isSignUpComplete = res.isSignUpComplete;
-      });
-    } on AuthException catch (e) {
-      // ignore: avoid_print
-      print(e.message);
-      if (e.message == "Username already exists in the system.") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('El correo ya fue registrado'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
+    Cognito.uploadInfoUserToCognito(context: context, email: email, pass: pass);
 
     setState(() {
       isSignUpComplete = true;
@@ -282,67 +263,35 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   }
 
   void onPressedregistred() {
-    // if (_formKey.currentState!.validate()) {
-    //   _formKey.currentState!.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-    //   Provider.of<PersonModel>(context, listen: false).setData(
-    //       firstName: firstName,
-    //       lastName: lastName,
-    //       birthday: birthday,
-    //       email: email,
-    //       password: pass,
-    //       role: Constants.manager);
+      Provider.of<PersonModel>(context, listen: false).setData(
+          firstName: firstName,
+          lastName: lastName,
+          birthday: birthday,
+          email: email,
+          password: pass,
+          role: Constants.manager);
 
-    //   Provider.of<ShopModel>(context, listen: false).setDate(
-    //       name: nameShop,
-    //       idPhoto: "adsd",
-    //       addres: addresShop,
-    //       typeShop: typeShop);
+      Provider.of<ShopModel>(context, listen: false).setDate(
+          name: nameShop, idPhoto: "", addres: addresShop, typeShop: typeShop);
 
-    //   if (!isChecked) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(
-    //         content: Text('Debes aceptar terminos y condiciones'),
-    //         backgroundColor: Colors.red,
-    //       ),
-    //     );
-    //     return;
-    //   }
+      if (!isChecked) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Debes aceptar terminos y condiciones'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
 
-    //   uploadInfoUserToCognito();
+      uploadInfoUserToCognito();
 
-    //   Navigator.of(context).push(MaterialPageRoute(
-    //       builder: (context) => const CodeVerificationShop()));
-    // }
-
-    Provider.of<PersonModel>(context, listen: false).setData(
-        firstName: "Huert Garcia",
-        lastName: "Jose Carlos",
-        birthday: DateTime.now(),
-        email: "carlosj12336@gmail.com",
-        password: "qazwsx123",
-        role: Constants.manager);
-
-    Provider.of<ShopModel>(context, listen: false).setDate(
-        name: "Holaaaa",
-        idPhoto: "adsd",
-        addres: "C. Vicente Guerrero #40, Col. Rosas del Tepeyeac",
-        typeShop: 'qazwsx123');
-
-    if (!isChecked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Debes aceptar terminos y condiciones'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const CodeVerificationShop()));
     }
-
-    // uploadInfoUserToCognito();
-
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const CodeVerificationShop()));
   }
 
   Color getColor(Set<MaterialState> states) {
