@@ -1,50 +1,25 @@
-import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models_class/person_model.dart';
 
 class DynamoPerson {
-  static Future<String> uploadPerson(PersonModel personModel) async {
-
+  static Future<String?> uploadPerson(PersonModel personModel) async {
     
+    Person person = Person(
+        last_name: personModel.lastName,
+        first_name: personModel.firstName,
+        birthday: TemporalDateTime(personModel.birthday),
+        role: personModel.role);
 
-    String resultado = "";
     try {
-      String graphQLDocument = '''
-mutation createPersonModel(\$input: CreatePersonInput) {
-  createPerson(input: \$input) {
-    last_name
-    first_name
-    birthday
-    role
-  }
-}
-          ''';
-
-      final variable = {
-        "input": {
-          'last_name': personModel.lastName,
-          'first_name': personModel.firstName,
-          'birthday': personModel.birthday.toString(),
-          // 'role': personModel.role,
-        }
-      };
-
-      var operation = Amplify.API.mutate(
-        request: GraphQLRequest<String>(
-          document: graphQLDocument,
-          variables: variable,
-        ),
-      );
-
-      var response = await operation.response;
-      resultado = response.data;
-
-      print('Mutation result: ' + resultado);
-      
-    } on ApiException catch (e) {
-      print('Mutation failed: $e');
+      await Amplify.DataStore.save(person);
+    } catch (e) {
+      // ignore: avoid_print
+      print("[uploadPerson]" + e.toString());
+      return null;
     }
-    return resultado;
+    return person.toString();
   }
 }
 

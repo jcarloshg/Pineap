@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:amplify_datastore/amplify_datastore.dart';
-import 'package:amplify_datastore/amplify_datastore_stream_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/models/ModelProvider.dart';

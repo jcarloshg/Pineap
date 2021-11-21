@@ -2,10 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -177,47 +180,34 @@ class _FormAcountState extends State<FormAcount> {
       isSignUpComplete = false;
     });
 
-    Provider.of<PersonModel>(context, listen: false).setData(
-      firstName: 'firstName',
-      lastName: 'lastName',
-      birthday: DateTime.now(),
-      email: 'email',
-      password: 'pass',
-      role: Constants.client,
-    );
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-    String resultado = await DynamoPerson.uploadPerson(personModel);
-    // ignore: avoid_print
-    print('the result is... ' + resultado);
+      Provider.of<PersonModel>(context, listen: false).setData(
+          firstName: firstName,
+          lastName: lastName,
+          birthday: birthday,
+          email: email,
+          password: pass,
+          role: Constants.client);
 
-    // if (_formKey.currentState!.validate()) {
-    //   _formKey.currentState!.save();
+      if (!isChecked) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Debes aceptar terminos y condiciones');
+        return;
+      }
 
-    //   Provider.of<PersonModel>(context, listen: false).setData(
-    //       firstName: firstName,
-    //       lastName: lastName,
-    //       birthday: birthday,
-    //       email: email,
-    //       password: pass,
-    //       role: Constants.client);
+      bool isSignUpCompleteResponse = await Cognito.uploadInfoUserToCognito(
+          context: context, email: email, pass: pass);
 
-    //   if (!isChecked) {
-    //     Messages.scaffoldMessengerWidget(
-    //         context: context, message: 'Debes aceptar terminos y condiciones');
-    //     return;
-    //   }
-
-    //   bool isSignUpCompleteResponse = await Cognito.uploadInfoUserToCognito(
-    //       context: context, email: email, pass: pass);
-
-    //   if (isSignUpCompleteResponse) {
-    //     Navigator.of(context).push(MaterialPageRoute(
-    //         builder: (context) => const CodeVerificationShop()));
-    //   } else {
-    //     Messages.scaffoldMessengerWidget(
-    //         context: context, message: 'El correo ya fue registrado');
-    //   }
-    // }
+      if (isSignUpCompleteResponse) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const CodeVerificationShop()));
+      } else {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'El correo ya fue registrado');
+      }
+    }
 
     setState(() {
       isSignUpComplete = true;
