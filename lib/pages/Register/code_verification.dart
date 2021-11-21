@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
@@ -115,14 +116,21 @@ class _CodeVerificationState extends State<CodeVerification> {
           username: personModel.getEmail,
           codeVerification: codeVerification,
           context: context);
-
-      if (isSignUpCompleteResponse) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const HomePageClient()));
-      } else {
+      if (!isSignUpCompleteResponse) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');
+        return;
       }
+
+      final uploadPersonResponse = await DynamoPerson.uploadPerson(personModel);
+      if (uploadPersonResponse == null) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Error al registrar info del usuario');
+        return;
+      }
+
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomePageClient()));
     }
     setState(() {
       isSignUpComplete = false;

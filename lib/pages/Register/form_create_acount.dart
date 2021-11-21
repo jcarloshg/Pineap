@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/aws/cognito.dart';
@@ -183,12 +181,13 @@ class _FormAcountState extends State<FormAcount> {
       _formKey.currentState!.save();
 
       Provider.of<PersonModel>(context, listen: false).setData(
-          firstName: firstName,
-          lastName: lastName,
-          birthday: birthday,
-          email: email,
-          password: pass,
-          role: Constants.client);
+        firstName: firstName,
+        lastName: lastName,
+        birthday: birthday,
+        email: email,
+        password: pass,
+        role: Constants.client,
+      );
 
       if (!isChecked) {
         Messages.scaffoldMessengerWidget(
@@ -200,8 +199,8 @@ class _FormAcountState extends State<FormAcount> {
           context: context, email: email, pass: pass);
 
       if (isSignUpCompleteResponse) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CodeVerification()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const CodeVerification()));
       } else {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'El correo ya fue registrado');

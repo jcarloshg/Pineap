@@ -21,19 +21,3 @@ class DynamoPerson {
     return person.toString();
   }
 }
-
-
-
-      // mutation createPersonModel(
-      //   \$last_name: String!,
-      //   \$first_name: String!,
-      //   \$birthday: AWSDateTime,
-      //   \$role: String!
-      //   ) {
-      //     createPerson(input: {last_name: \$last_name, first_name: \$first_name, birthday: \$birthday, role: \$role}) {
-      //       last_name
-      //       first_name
-      //       birthday
-      //       role
-      //     }
-      // }
