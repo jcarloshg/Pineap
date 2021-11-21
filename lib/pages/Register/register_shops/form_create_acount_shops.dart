@@ -27,7 +27,9 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   bool isSignUpComplete = false;
   bool isChecked = false;
   bool showPass = false;
-  final birthdayController = TextEditingController();
+  // controles
+  TextEditingController birthdayController = TextEditingController();
+  TextEditingController typeShopController = TextEditingController();
   // data from person
   String lastName = "";
   String firstName = "";
@@ -39,16 +41,6 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   String nameShop = "";
   String addresShop = "";
   String typeShop = 'Restaurante';
-
-  // auxiliares
-  String dropdownValue = 'Restaurante';
-  List<String> typoshops = [
-    'Restaurante',
-    'Barberias',
-    'Dentista',
-    'Lavanderia',
-    'Otro'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -91,38 +83,29 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             onSaved: (value) => lastName = value!,
                             decoration:
                                 const InputDecoration(labelText: "Apellidos"),
-                            validator: (String? value) {
-                              return Validator().validate_name(value!)
-                                  ? null
-                                  : 'Ingresa solo caracteres';
-                            },
+                            validator: (String? value) =>
+                                Validator.validate_name(value!),
                           ),
                           TextFormField(
                             onSaved: (value) => firstName = value!,
                             decoration:
                                 const InputDecoration(labelText: "Nombre"),
-                            validator: (String? value) {
-                              return Validator().validate_name(value!)
-                                  ? null
-                                  : 'Ingresa solo caracteres';
-                            },
+                            validator: (String? value) =>
+                                Validator.validate_name(value!),
                           ),
                           TextFormField(
                             controller: birthdayController,
                             readOnly: true,
-                            onTap: () => _showDataPicker(),
+                            onTap: _showDataPicker,
                             decoration: InputDecoration(
                               labelText: "Fecha nacimiento",
                               suffixIcon: IconButton(
-                                onPressed: () => _showDataPicker(),
+                                onPressed: _showDataPicker,
                                 icon: const Icon(Icons.calendar_today),
                               ),
                             ),
-                            validator: (String? value) {
-                              return value == null
-                                  ? 'Please enter some text'
-                                  : null;
-                            },
+                            validator: (String? value) =>
+                                Validator.isEmpty(value!),
                           ),
                           const SizedBox(height: 32),
                           const TitleBlockForm(
@@ -131,34 +114,27 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             onSaved: (value) => email = value!,
                             decoration: const InputDecoration(
                                 labelText: "correo electronico"),
-                            validator: (String? value) {
-                              return Validator().validate_email(value!)
-                                  ? null
-                                  : 'Debe tener la estructura "example@email.com"';
-                            },
+                            validator: (String? value) =>
+                                Validator.validate_email(value!),
                           ),
                           TextFormField(
-                            obscureText: !showPass,
-                            onSaved: (value) => pass = value!,
-                            decoration: InputDecoration(
-                              labelText: "contraseña",
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    showPass = !showPass;
-                                  });
-                                },
-                                icon: Icon(showPass
-                                    ? Icons.remove_red_eye
-                                    : Icons.remove_red_eye_outlined),
+                              obscureText: !showPass,
+                              onSaved: (value) => pass = value!,
+                              decoration: InputDecoration(
+                                labelText: "contraseña",
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showPass = !showPass;
+                                    });
+                                  },
+                                  icon: Icon(showPass
+                                      ? Icons.remove_red_eye
+                                      : Icons.remove_red_eye_outlined),
+                                ),
                               ),
-                            ),
-                            validator: (String? value) {
-                              return Validator().validate_pass(value!)
-                                  ? null
-                                  : 'Debe ser alfanumerico y mayor a 8 caracteres';
-                            },
-                          ),
+                              validator: (String? value) =>
+                                  Validator.validate_pass(value!)),
                           const SizedBox(height: 32),
                           const TitleBlockForm(
                               title_block_form: "Información Negocio"),
@@ -166,53 +142,45 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             onSaved: (value) => nameShop = value!,
                             decoration:
                                 const InputDecoration(labelText: "Nombre"),
-                            validator: (String? value) {
-                              return Validator().validate_name(value!)
-                                  ? null
-                                  : 'Ingresa solo caracteres';
-                            },
+                            validator: (String? value) =>
+                                Validator.validate_name(value!),
                           ),
-                          Row(
-                            children: <Widget>[
-                              Text(dropdownValue),
-                              DropdownButton<String>(
-                                // value: dropdownValue,
-                                alignment: Alignment.bottomRight,
-                                icon: const Icon(Icons.arrow_downward),
-                                underline: Container(
-                                  height: 1,
-                                  color: Colors.grey,
-                                ),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    dropdownValue = newValue!;
-                                  });
+                          TextFormField(
+                            onSaved: (value) => addresShop = value!,
+                            controller: typeShopController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              labelText: "Tipo negocio",
+                              suffixIcon: PopupMenuButton(
+                                onSelected: _setTypeShop,
+                                icon: const Icon(Icons.arrow_drop_down),
+                                itemBuilder: (context) {
+                                  return Constants.typesShops.map(
+                                    (String _selectvalue) {
+                                      return PopupMenuItem<String>(
+                                        value: _selectvalue,
+                                        child: Text(_selectvalue),
+                                      );
+                                    },
+                                  ).toList();
                                 },
-                                items: typoshops.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
                               ),
-                            ],
+                            ),
+                            validator: (String? value) =>
+                                Validator.isEmpty(value!),
                           ),
                           TextFormField(
                             onSaved: (value) => addresShop = value!,
                             onTap: () {},
                             decoration: InputDecoration(
-                              labelText: "Dirección de local",
+                              labelText: "Dirección del local",
                               suffixIcon: IconButton(
                                 onPressed: () {},
-                                icon: const Icon(Icons.location_city),
+                                icon: const Icon(Icons.place),
                               ),
                             ),
-                            validator: (String? value) {
-                              return value == null
-                                  ? 'Please enter some text'
-                                  : null;
-                            },
+                            validator: (String? value) =>
+                                Validator.validateAddress(value!),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -236,7 +204,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(fontSize: 20),
                             ),
-                            onPressed: () => _onPressed_registred(),
+                            onPressed: () => onPressedregistred(),
                             child: const Text('Registrarse'),
                           ),
                         ],
@@ -257,8 +225,20 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
             lastDate: DateTime(2222))
         .then((value) {
       birthday = value!;
-      birthdayController.text = DateFormat('yyyy MMMM dd').format(value);
+      birthdayController.text = DateFormat('MMMM dd, yyyy').format(value);
     });
+  }
+
+  _setTypeShop(String value) {
+    String typeShop = "";
+    if (Constants.restauranteSHOP == value) {
+      typeShop = Constants.restauranteSHOP;
+    }
+    if (Constants.barberiaSHOP == value) typeShop = Constants.barberiaSHOP;
+    if (Constants.dentistaSHOP == value) typeShop = Constants.dentistaSHOP;
+    if (Constants.lavanderiaSHOP == value) typeShop = Constants.lavanderiaSHOP;
+    if (Constants.otroSHOP == value) typeShop = Constants.otroSHOP;
+    typeShopController.text = typeShop;
   }
 
   // ignore: non_constant_identifier_names
@@ -299,7 +279,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
     });
   }
 
-  void _onPressed_registred() {
+  void onPressedregistred() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -309,7 +289,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
           birthday: birthday,
           email: email,
           password: pass,
-          role: Constants().MANAGER);
+          role: Constants.manager);
 
       Provider.of<ShopModel>(context, listen: false).setDate(
           name: nameShop,

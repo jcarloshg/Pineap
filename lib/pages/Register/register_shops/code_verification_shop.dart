@@ -66,18 +66,14 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
-                controller: codeController,
-                maxLength: 6,
-                keyboardType: TextInputType.number,
-                onSaved: (value) => codeVerification = int.parse(value!),
-                decoration:
-                    const InputDecoration(labelText: "Ingresa tu código"),
-                validator: (String? value) {
-                  return Validator().validate_code_verification(value!)
-                      ? null
-                      : "El código deben ser 6 digitos";
-                },
-              ),
+                  controller: codeController,
+                  maxLength: 6,
+                  keyboardType: TextInputType.number,
+                  onSaved: (value) => codeVerification = int.parse(value!),
+                  decoration:
+                      const InputDecoration(labelText: "Ingresa tu código"),
+                  validator: (String? value) =>
+                      Validator.validate_code_verification(value!)),
               Align(
                 alignment: Alignment.topLeft,
                 child: TextButton(
@@ -105,7 +101,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                   // ignore: avoid_print
                   // if (_formKey.currentState!.validate()) {
                   //   _formKey.currentState!.save();
-                  //   _send_code_AWS(Provider.of<PersonModel>(context).getEmail);
+                  //   sendCodeAWS(Provider.of<PersonModel>(context).getEmail);
                   // }
                 },
                 child: const Text('Ingresar'),
@@ -117,8 +113,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  void _send_code_AWS(String username) async {
+  void sendCodeAWS(String username) async {
     setState(() {
       isSignUpComplete = true;
     });
@@ -135,7 +130,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
           MaterialPageRoute(builder: (context) => const HomePageClient()));
     } on AuthException catch (e) {
       // ignore: avoid_print
-      print("[_send_code_AWS ]" + e.message);
+      print("[sendCodeAWS ]" + e.message);
       setState(() {
         isSignUpComplete = false;
       });
