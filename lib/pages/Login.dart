@@ -3,8 +3,8 @@
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
+import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
-import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
 import 'package:pineap/pages/Register/register_shops/form_create_acount_shops.dart';
 
@@ -22,6 +22,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // variables to form
+  final _formKey = GlobalKey<FormState>();
+  bool showPass = false;
+  // variables to login
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
+
   @override
   void initState() {
     _configureAmplify();
@@ -65,107 +72,97 @@ class _LoginScreenState extends State<LoginScreen> {
               // border: Border.all(color: Colors.black87),
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
-            child: const LoginForm(),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const Center(
+                    child: Text(
+                      "Pineap",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(labelText: "user"),
+                    validator: (value) => Validator.validate_email(value!),
+                  ),
+                  TextFormField(
+                    controller: passController,
+                    obscureText: !showPass,
+                    decoration: InputDecoration(
+                      labelText: "contraseña",
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() => showPass = !showPass);
+                        },
+                        icon: Icon(showPass
+                            ? Icons.remove_red_eye
+                            : Icons.remove_red_eye_outlined),
+                      ),
+                    ),
+                    validator: (String? value) =>
+                        Validator.validate_pass(value!),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: onPressedLogIn,
+                      child: const Text('Log in'),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text("Aún no te has registrado? "),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.brown,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const FormCreateAcount()));
+                        },
+                        child: const Text("Crea una cuenta aquí"),
+                      )
+                    ],
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.brown,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const FormCreateAcountShops()));
+                    },
+                    child: const Text("Crear una cuenta como negocio"),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
-}
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
-
-  @override
-  _LoginFormState createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const Center(
-            child: Text(
-              "Pineap",
-              style: TextStyle(
-                fontSize: 24.0,
-              ),
-            ),
-          ),
-          TextFormField(
-            decoration: const InputDecoration(labelText: "user"),
-            validator: (value) => _validate_username(value),
-          ),
-          TextFormField(
-            decoration: const InputDecoration(labelText: "password"),
-            validator: (value) => _validate_password(value),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const HomePageClient()));
-                if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                }
-              },
-              child: const Text('Log in'),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text("Aún no te has registrado? "),
-              TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: const TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.brown,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const FormCreateAcount()));
-                },
-                child: const Text("Crea una cuenta aquí"),
-              )
-            ],
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: const TextStyle(
-                decoration: TextDecoration.underline,
-                color: Colors.brown,
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const FormCreateAcountShops()));
-            },
-            child: const Text("Crear una cuenta como negocio"),
-          )
-        ],
-      ),
-    );
+  void onPressedLogIn() {
+    if (_formKey.currentState!.validate()) {
+      print(emailController.text);
+      print(passController.text);
+    } else {
+      print('No jala nada compa D:');
+    }
+    // Navigator.of(context).push(
+    //     MaterialPageRoute(builder: (context) => const FormCreateAcountShops()));
   }
-
-  // ignore: non_constant_identifier_names
-  String? _validate_username(value) => (value == null || value?.isEmpty)
-      ? 'Introduce tu nombre de usuario'
-      : null;
-
-  // ignore: non_constant_identifier_names
-  String? _validate_password(value) =>
-      (value == null || value?.isEmpty) ? 'Introduce tu contraseña' : null;
 }

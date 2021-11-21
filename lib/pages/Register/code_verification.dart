@@ -132,7 +132,10 @@ class _CodeVerificationState extends State<CodeVerification> {
         return;
       }
 
-      setState(() => showLoading = false);
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomePageClient()));
     }
+
+    setState(() => showLoading = false);
   }
 }

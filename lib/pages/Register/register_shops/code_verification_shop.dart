@@ -7,6 +7,7 @@ import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
+import 'package:pineap/pages/Manager/home_manager.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -150,13 +151,13 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       if (uploadShopResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del negocio');
-            
+
         setState(() => isSignUpComplete = false);
         return;
       }
 
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomePageClient()));
+          MaterialPageRoute(builder: (context) => const HomeManagerPage()));
     }
 
     setState(() => isSignUpComplete = false);
