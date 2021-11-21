@@ -20,7 +20,7 @@ class _CodeVerificationState extends State<CodeVerification> {
   // data to form
   final _formKey = GlobalKey<FormState>();
   // data from user
-  bool isSignUpComplete = false;
+  bool showLoading = false;
   int codeVerification = -1;
   // controllers =
   final codeController = TextEditingController();
@@ -106,9 +106,8 @@ class _CodeVerificationState extends State<CodeVerification> {
   }
 
   Future<void> onPressedIngresar() async {
-    setState(() {
-      isSignUpComplete = true;
-    });
+    setState(() => showLoading = true);
+
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -119,6 +118,8 @@ class _CodeVerificationState extends State<CodeVerification> {
       if (!isSignUpCompleteResponse) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');
+
+        setState(() => showLoading = false);
         return;
       }
 
@@ -126,14 +127,12 @@ class _CodeVerificationState extends State<CodeVerification> {
       if (uploadPersonResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del usuario');
+
+        setState(() => showLoading = false);
         return;
       }
 
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomePageClient()));
+      setState(() => showLoading = false);
     }
-    setState(() {
-      isSignUpComplete = false;
-    });
   }
 }

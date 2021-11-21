@@ -265,25 +265,24 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
           password: pass,
           role: Constants.manager);
 
-      Provider.of<ShopModel>(context, listen: false).setDate(
-          name: nameShop, idPhoto: "", addres: addresShop, typeShop: typeShop);
-
       if (!isChecked) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Debes aceptar terminos y condiciones');
-        return;
+        setState(() => showLoading = false);
       }
+
+      Provider.of<ShopModel>(context, listen: false).setDate(
+          name: nameShop, idPhoto: "", addres: addresShop, typeShop: typeShop);
 
       bool isSignUpComplete = await Cognito.uploadInfoUserToCognito(
           context: context, email: email, pass: pass);
-
-      if (isSignUpComplete) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CodeVerificationShop()));
-      } else {
+      if (!isSignUpComplete) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'El correo ya fue registrado');
       }
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const CodeVerificationShop()));
     }
 
     setState(() {

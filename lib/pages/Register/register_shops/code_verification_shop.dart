@@ -132,6 +132,8 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       if (isSignUpCompleteResponse) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');
+
+        setState(() => isSignUpComplete = false);
         return;
       }
 
@@ -139,6 +141,8 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       if (uploadPersonResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del usuario');
+
+        setState(() => isSignUpComplete = false);
         return;
       }
 
@@ -146,14 +150,15 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       if (uploadShopResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del negocio');
+            
+        setState(() => isSignUpComplete = false);
         return;
       }
 
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomePageClient()));
     }
-    setState(() {
-      isSignUpComplete = false;
-    });
+
+    setState(() => isSignUpComplete = false);
   }
 }

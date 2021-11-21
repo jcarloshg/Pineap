@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
@@ -50,7 +51,7 @@ class _FormAcountState extends State<FormAcount> {
   // data to form
   final _formKey = GlobalKey<FormState>();
   // to show show_loading
-  bool isSignUpComplete = false;
+  bool showLoading = false;
   bool isChecked = false;
   bool showPass = false;
   // controles
@@ -70,112 +71,117 @@ class _FormAcountState extends State<FormAcount> {
   Widget build(BuildContext context) {
     personModel = Provider.of<PersonModel>(context);
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            const TitleWidget(title: "Crear una cuenta"),
-            const SubTitle(subtitle: "Ingrese datos en todos los campos"),
-            Form(
-              key: _formKey,
+    return showLoading
+        ? ShowLoading(message: "Registrando perfil...")
+        : SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(height: 32),
-                  const TitleBlockForm(
-                      title_block_form: "Información personal"),
-                  TextFormField(
-                    onSaved: (value) => lastName = value!,
-                    decoration: const InputDecoration(labelText: "Apellidos"),
-                    validator: (String? value) =>
-                        Validator.validate_name(value!),
-                  ),
-                  TextFormField(
-                    onSaved: (value) => firstName = value!,
-                    decoration: const InputDecoration(labelText: "Nombre"),
-                    validator: (String? value) =>
-                        Validator.validate_name(value!),
-                  ),
-                  TextFormField(
-                    controller: birthdayController,
-                    readOnly: true,
-                    onTap: _showDataPicker,
-                    decoration: InputDecoration(
-                      labelText: "Fecha nacimiento",
-                      suffixIcon: IconButton(
-                        onPressed: _showDataPicker,
-                        icon: const Icon(Icons.calendar_today),
-                      ),
-                    ),
-                    validator: (String? value) => Validator.isEmpty(value!),
-                  ),
-                  const SizedBox(height: 32),
-                  const TitleBlockForm(title_block_form: "Información usuario"),
-                  TextFormField(
-                    onSaved: (value) => email = value!,
-                    decoration:
-                        const InputDecoration(labelText: "correo electronico"),
-                    validator: (String? value) =>
-                        Validator.validate_email(value!),
-                  ),
-                  TextFormField(
-                      obscureText: !showPass,
-                      onSaved: (value) => pass = value!,
-                      decoration: InputDecoration(
-                        labelText: "contraseña",
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              showPass = !showPass;
-                            });
-                          },
-                          icon: Icon(showPass
-                              ? Icons.remove_red_eye
-                              : Icons.remove_red_eye_outlined),
+                  const TitleWidget(title: "Crear una cuenta"),
+                  const SubTitle(subtitle: "Ingrese datos en todos los campos"),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(
+                            title_block_form: "Información personal"),
+                        TextFormField(
+                          onSaved: (value) => lastName = value!,
+                          decoration:
+                              const InputDecoration(labelText: "Apellidos"),
+                          validator: (String? value) =>
+                              Validator.validate_name(value!),
                         ),
-                      ),
-                      validator: (String? value) =>
-                          Validator.validate_pass(value!)),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Checkbox(
-                        checkColor: Colors.white,
-                        fillColor: MaterialStateProperty.resolveWith(getColor),
-                        value: isChecked,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isChecked = !isChecked;
-                          });
-                        },
-                      ),
-                      const Text("Aceptar terminos y condiciones"),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
+                        TextFormField(
+                          onSaved: (value) => firstName = value!,
+                          decoration:
+                              const InputDecoration(labelText: "Nombre"),
+                          validator: (String? value) =>
+                              Validator.validate_name(value!),
+                        ),
+                        TextFormField(
+                          controller: birthdayController,
+                          readOnly: true,
+                          onTap: _showDataPicker,
+                          decoration: InputDecoration(
+                            labelText: "Fecha nacimiento",
+                            suffixIcon: IconButton(
+                              onPressed: _showDataPicker,
+                              icon: const Icon(Icons.calendar_today),
+                            ),
+                          ),
+                          validator: (String? value) =>
+                              Validator.isEmpty(value!),
+                        ),
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(
+                            title_block_form: "Información usuario"),
+                        TextFormField(
+                          onSaved: (value) => email = value!,
+                          decoration: const InputDecoration(
+                              labelText: "correo electronico"),
+                          validator: (String? value) =>
+                              Validator.validate_email(value!),
+                        ),
+                        TextFormField(
+                            obscureText: !showPass,
+                            onSaved: (value) => pass = value!,
+                            decoration: InputDecoration(
+                              labelText: "contraseña",
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    showPass = !showPass;
+                                  });
+                                },
+                                icon: Icon(showPass
+                                    ? Icons.remove_red_eye
+                                    : Icons.remove_red_eye_outlined),
+                              ),
+                            ),
+                            validator: (String? value) =>
+                                Validator.validate_pass(value!)),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith(getColor),
+                              value: isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isChecked = !isChecked;
+                                });
+                              },
+                            ),
+                            const Text("Aceptar terminos y condiciones"),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            textStyle: const TextStyle(fontSize: 20),
+                          ),
+                          onPressed: onPressedregistred,
+                          child: const Text('Registrarse'),
+                        ),
+                      ],
                     ),
-                    onPressed: onPressedregistred,
-                    child: const Text('Registrarse'),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   void onPressedregistred() async {
-    setState(() {
-      isSignUpComplete = false;
-    });
+    setState(() => showLoading = true);
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -192,6 +198,8 @@ class _FormAcountState extends State<FormAcount> {
       if (!isChecked) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Debes aceptar terminos y condiciones');
+
+        setState(() => showLoading = false);
         return;
       }
 
@@ -207,9 +215,7 @@ class _FormAcountState extends State<FormAcount> {
       }
     }
 
-    setState(() {
-      isSignUpComplete = true;
-    });
+    setState(() => showLoading = false);
   }
 
   _showDataPicker() {
