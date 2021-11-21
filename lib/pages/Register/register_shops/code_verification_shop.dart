@@ -2,8 +2,10 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
+import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/person_model.dart';
+import 'package:pineap/models/shop_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -25,8 +27,14 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
   // controllers =
   final codeController = TextEditingController();
 
+  late PersonModel personModel;
+  late ShopModel shopModel;
+
   @override
   Widget build(BuildContext context) {
+    personModel = Provider.of<PersonModel>(context);
+    shopModel = Provider.of<ShopModel>(context);
+
     return isSignUpComplete
         ? ShowLoading(
             message: "Verificando código...",
@@ -75,7 +83,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                   validator: (String? value) =>
                       Validator.validate_code_verification(value!)),
               Align(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.centerLeft,
                 child: TextButton(
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(
@@ -83,9 +91,8 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                       color: Colors.brown,
                     ),
                   ),
-                  onPressed: () {
-                    _resent_code(Provider.of<PersonModel>(context).getEmail);
-                  },
+                  onPressed: () =>
+                      Cognito.resentCode(personModel.getEmail, context),
                   child: const Text("Reenvia tu codigo"),
                 ),
               ),
@@ -95,8 +102,8 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                   textStyle: const TextStyle(fontSize: 20),
                 ),
                 onPressed: () {
-                  // ignore: avoid_print
-                  print(Provider.of<PersonModel>(context).toString());
+                  print(personModel.toString());
+                  print(shopModel.addres);
 
                   // ignore: avoid_print
                   // if (_formKey.currentState!.validate()) {
@@ -137,22 +144,6 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Error al verificar el código'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  // ignore: non_constant_identifier_names
-  void _resent_code(String username) async {
-    try {
-      await Amplify.Auth.resendSignUpCode(username: username);
-    } on AuthException catch (e) {
-      // ignore: avoid_print
-      print("[_resent_code ]" + e.message);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error al reenviar el código'),
           backgroundColor: Colors.red,
         ),
       );

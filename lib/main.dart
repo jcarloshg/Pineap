@@ -5,13 +5,7 @@ import 'package:pineap/pages/Login.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      Provider<PersonModel>(create: (_) => PersonModel()),
-      Provider<ShopModel>(create: (_) => ShopModel()),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,13 +14,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Pineap',
-      theme: ThemeData(
-        primarySwatch: Colors.brown,
+    return MultiProvider(
+      providers: [
+        Provider<PersonModel>(create: (context) => PersonModel()),
+        Provider<ShopModel>(create: (context) => ShopModel()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Pineap',
+        theme: ThemeData(
+          primarySwatch: Colors.brown,
+        ),
+        home: const LoginScreen(),
       ),
-      home: const LoginScreen(),
     );
   }
 }

@@ -30,16 +30,17 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   // controles
   TextEditingController birthdayController = TextEditingController();
   TextEditingController typeShopController = TextEditingController();
+
   // data from person
-  String lastName = "";
-  String firstName = "";
+  String lastName = "Huert Garcia";
+  String firstName = "Jose Carlos";
   DateTime birthday = DateTime.now();
   // data from user
-  String email = "";
-  String pass = "";
+  String email = "carlosj12336@gmail.com";
+  String pass = "qazwsx123";
   // data from user
-  String nameShop = "";
-  String addresShop = "";
+  String nameShop = "Holaaaa";
+  String addresShop = "C. Vicente Guerrero #40, Col. Rosas del Tepeyeac";
   String typeShop = 'Restaurante';
 
   @override
@@ -241,11 +242,11 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
     typeShopController.text = typeShop;
   }
 
-  // ignore: non_constant_identifier_names
-  void _register_a_user() async {
+  void uploadInfoUserToCognito() async {
     setState(() {
       isSignUpComplete = false;
     });
+
     try {
       setState(() {
         isSignUpComplete = true;
@@ -274,44 +275,74 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
         );
       }
     }
+
     setState(() {
       isSignUpComplete = true;
     });
   }
 
   void onPressedregistred() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+    // if (_formKey.currentState!.validate()) {
+    //   _formKey.currentState!.save();
 
-      Provider.of<PersonModel>(context, listen: false).setData(
-          firstName: firstName,
-          lastName: lastName,
-          birthday: birthday,
-          email: email,
-          password: pass,
-          role: Constants.manager);
+    //   Provider.of<PersonModel>(context, listen: false).setData(
+    //       firstName: firstName,
+    //       lastName: lastName,
+    //       birthday: birthday,
+    //       email: email,
+    //       password: pass,
+    //       role: Constants.manager);
 
-      Provider.of<ShopModel>(context, listen: false).setDate(
-          name: nameShop,
-          idPhoto: "adsd",
-          addres: addresShop,
-          typeShop: typeShop);
+    //   Provider.of<ShopModel>(context, listen: false).setDate(
+    //       name: nameShop,
+    //       idPhoto: "adsd",
+    //       addres: addresShop,
+    //       typeShop: typeShop);
 
-      if (!isChecked) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Debes aceptar terminos y condiciones'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
+    //   if (!isChecked) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(
+    //         content: Text('Debes aceptar terminos y condiciones'),
+    //         backgroundColor: Colors.red,
+    //       ),
+    //     );
+    //     return;
+    //   }
 
-      _register_a_user();
+    //   uploadInfoUserToCognito();
 
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const CodeVerificationShop()));
+    //   Navigator.of(context).push(MaterialPageRoute(
+    //       builder: (context) => const CodeVerificationShop()));
+    // }
+
+    Provider.of<PersonModel>(context, listen: false).setData(
+        firstName: "Huert Garcia",
+        lastName: "Jose Carlos",
+        birthday: DateTime.now(),
+        email: "carlosj12336@gmail.com",
+        password: "qazwsx123",
+        role: Constants.manager);
+
+    Provider.of<ShopModel>(context, listen: false).setDate(
+        name: "Holaaaa",
+        idPhoto: "adsd",
+        addres: "C. Vicente Guerrero #40, Col. Rosas del Tepeyeac",
+        typeShop: 'qazwsx123');
+
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Debes aceptar terminos y condiciones'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
     }
+
+    // uploadInfoUserToCognito();
+
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const CodeVerificationShop()));
   }
 
   Color getColor(Set<MaterialState> states) {
