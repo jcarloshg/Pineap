@@ -1,5 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/Widgets/show_loading.dart';
@@ -9,6 +7,7 @@ import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/person_model.dart';
 import 'package:pineap/models/shop_model.dart';
 import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -213,7 +212,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(fontSize: 20),
                             ),
-                            onPressed: () => onPressedregistred(),
+                            onPressed: onPressedregistred,
                             child: const Text('Registrarse'),
                           ),
                         ],
@@ -250,19 +249,11 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
     typeShopController.text = typeShop;
   }
 
-  void uploadInfoUserToCognito() async {
+  void onPressedregistred() async {
     setState(() {
       isSignUpComplete = false;
     });
 
-    Cognito.uploadInfoUserToCognito(context: context, email: email, pass: pass);
-
-    setState(() {
-      isSignUpComplete = true;
-    });
-  }
-
-  void onPressedregistred() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -278,20 +269,26 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
           name: nameShop, idPhoto: "", addres: addresShop, typeShop: typeShop);
 
       if (!isChecked) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Debes aceptar terminos y condiciones'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Debes aceptar terminos y condiciones');
         return;
       }
+      
+      bool isSignUpComplete = await Cognito.uploadInfoUserToCognito(
+          context: context, email: email, pass: pass);
 
-      uploadInfoUserToCognito();
-
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const CodeVerificationShop()));
+      if (isSignUpComplete) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const CodeVerificationShop()));
+      } else {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'El correo ya fue registrado');
+      }
     }
+
+    setState(() {
+      isSignUpComplete = true;
+    });
   }
 
   Color getColor(Set<MaterialState> states) {

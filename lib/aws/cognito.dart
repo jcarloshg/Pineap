@@ -38,11 +38,12 @@ class Cognito {
     return isSignUpComplete;
   }
 
-  static void uploadInfoUserToCognito({
+  static Future<bool> uploadInfoUserToCognito({
     required BuildContext context,
     required String email,
     required String pass,
   }) async {
+    bool isSignUpComplete = false;
     try {
       Map<String, String> userAttributes = {
         'email': email,
@@ -53,6 +54,7 @@ class Cognito {
         password: pass,
         options: CognitoSignUpOptions(userAttributes: userAttributes),
       );
+      isSignUpComplete = res.isSignUpComplete;
     } on AuthException catch (e) {
       // ignore: avoid_print
       print(e.message);
@@ -61,5 +63,6 @@ class Cognito {
             context: context, message: 'El correo ya fue registrado');
       }
     }
+    return isSignUpComplete;
   }
 }

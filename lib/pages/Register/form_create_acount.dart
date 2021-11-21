@@ -1,10 +1,17 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:pineap/pages/Register/code_verification.dart';
+import 'package:intl/intl.dart';
+import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/helpers/constants.dart';
+import 'package:pineap/helpers/validator.dart';
+import 'package:pineap/models/person_model.dart';
+import 'package:pineap/pages/Register/register_shops/code_verification_shop.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
+import 'package:provider/provider.dart';
 
 class FormCreateAcount extends StatefulWidget {
   const FormCreateAcount({Key? key}) : super(key: key);
@@ -42,8 +49,22 @@ class FormAcount extends StatefulWidget {
 }
 
 class _FormAcountState extends State<FormAcount> {
+  // data to form
   final _formKey = GlobalKey<FormState>();
+  // to show show_loading
+  bool isSignUpComplete = false;
   bool isChecked = false;
+  bool showPass = false;
+  // controles
+  TextEditingController birthdayController = TextEditingController();
+  TextEditingController typeShopController = TextEditingController();
+  // data from person
+  String lastName = "";
+  String firstName = "";
+  DateTime birthday = DateTime.now();
+  // data from user
+  String email = "";
+  String pass = "";
 
   @override
   Widget build(BuildContext context) {
@@ -64,50 +85,57 @@ class _FormAcountState extends State<FormAcount> {
                   const TitleBlockForm(
                       title_block_form: "Información personal"),
                   TextFormField(
+                    onSaved: (value) => lastName = value!,
                     decoration: const InputDecoration(labelText: "Apellidos"),
-                    validator: (String? value) {
-                      return value == null ? 'Please enter some text' : null;
-                    },
+                    validator: (String? value) =>
+                        Validator.validate_name(value!),
                   ),
                   TextFormField(
+                    onSaved: (value) => firstName = value!,
                     decoration: const InputDecoration(labelText: "Nombre"),
-                    validator: (String? value) {
-                      return value == null ? 'Please enter some text' : null;
-                    },
+                    validator: (String? value) =>
+                        Validator.validate_name(value!),
                   ),
                   TextFormField(
+                    controller: birthdayController,
+                    readOnly: true,
+                    onTap: _showDataPicker,
                     decoration: InputDecoration(
                       labelText: "Fecha nacimiento",
                       suffixIcon: IconButton(
-                        onPressed: () {},
+                        onPressed: _showDataPicker,
                         icon: const Icon(Icons.calendar_today),
                       ),
                     ),
-                    validator: (String? value) {
-                      return value == null ? 'Please enter some text' : null;
-                    },
+                    validator: (String? value) => Validator.isEmpty(value!),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
                   const TitleBlockForm(title_block_form: "Información usuario"),
                   TextFormField(
+                    onSaved: (value) => email = value!,
                     decoration:
                         const InputDecoration(labelText: "correo electronico"),
-                    validator: (String? value) {
-                      return value == null ? 'Please enter some text' : null;
-                    },
+                    validator: (String? value) =>
+                        Validator.validate_email(value!),
                   ),
                   TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "contraseña",
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.remove_red_eye),
+                      obscureText: !showPass,
+                      onSaved: (value) => pass = value!,
+                      decoration: InputDecoration(
+                        labelText: "contraseña",
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPass = !showPass;
+                            });
+                          },
+                          icon: Icon(showPass
+                              ? Icons.remove_red_eye
+                              : Icons.remove_red_eye_outlined),
+                        ),
                       ),
-                    ),
-                    validator: (String? value) {
-                      return value == null ? 'Please enter some text' : null;
-                    },
-                  ),
+                      validator: (String? value) =>
+                          Validator.validate_pass(value!)),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +146,7 @@ class _FormAcountState extends State<FormAcount> {
                         value: isChecked,
                         onChanged: (bool? value) {
                           setState(() {
-                            isChecked = value!;
+                            isChecked = !isChecked;
                           });
                         },
                       ),
@@ -130,11 +158,7 @@ class _FormAcountState extends State<FormAcount> {
                     style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20),
                     ),
-                    onPressed: () {
-                      
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const CodeVerification()));
-                    },
+                    onPressed: onPressedregistred,
                     child: const Text('Registrarse'),
                   ),
                 ],
@@ -144,6 +168,58 @@ class _FormAcountState extends State<FormAcount> {
         ),
       ),
     );
+  }
+
+  void onPressedregistred() async {
+    setState(() {
+      isSignUpComplete = false;
+    });
+
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      Provider.of<PersonModel>(context, listen: false).setData(
+          firstName: firstName,
+          lastName: lastName,
+          birthday: birthday,
+          email: email,
+          password: pass,
+          role: Constants.client);
+
+      if (!isChecked) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'Debes aceptar terminos y condiciones');
+        return;
+      }
+
+      bool isSignUpCompleteResponse = await Cognito.uploadInfoUserToCognito(
+          context: context, email: email, pass: pass);
+
+      if (isSignUpCompleteResponse) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const CodeVerificationShop()));
+      } else {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: 'El correo ya fue registrado');
+      }
+    }
+
+    setState(() {
+      isSignUpComplete = true;
+    });
+  }
+
+  _showDataPicker() {
+    showDatePicker(
+            initialEntryMode: DatePickerEntryMode.calendarOnly,
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2222))
+        .then((value) {
+      birthday = value!;
+      birthdayController.text = DateFormat('MMMM dd, yyyy').format(value);
+    });
   }
 
   Color getColor(Set<MaterialState> states) {
