@@ -1,6 +1,6 @@
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify.dart';
-import 'package:pineap/models/person_model.dart';
+import 'package:pineap/models_class/person_model.dart';
 
 class DynamoPerson {
   static Future<String> uploadPerson(PersonModel personModel) async {

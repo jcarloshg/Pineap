@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
-import 'package:pineap/models/person_model.dart';
+import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';

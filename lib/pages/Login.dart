@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:amplify_datastore/amplify_datastore_stream_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
@@ -30,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       // amplify plugins
       await Amplify.addPlugin(AmplifyAPI());
+      await Amplify.addPlugin(AmplifyDataStore(modelProvider: modelProvider));
       await Amplify.addPlugin(AmplifyAuthCognito());
       // configure Amplify - note that Amplify cannot be configured more than once!
       await Amplify.configure(amplifyconfig);

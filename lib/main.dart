@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pineap/models/person_model.dart';
-import 'package:pineap/models/shop_model.dart';
+import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Login.dart';
 import 'package:provider/provider.dart';
 
