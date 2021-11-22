@@ -86,7 +86,8 @@ class Cognito {
     return isSignedIn;
   }
 
-  static Future<String> getCurrentUserID({required BuildContext context}) async {
+  static Future<String> getCurrentUserID(
+      {required BuildContext context}) async {
     String userId = "";
     try {
       AuthUser authUser = await Amplify.Auth.getCurrentUser();
@@ -103,7 +104,9 @@ class Cognito {
     return userId;
   }
 
-  static Future<String> getCurrentUserEmail({required BuildContext context}) async {
+  static Future<String> getCurrentUserEmail({
+    required BuildContext context,
+  }) async {
     String userEmail = "";
     try {
       AuthUser authUser = await Amplify.Auth.getCurrentUser();

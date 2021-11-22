@@ -8,12 +8,11 @@ class DynamoPerson {
     required PersonModel personModel,
   }) async {
     Person person = Person(
-      last_name: personModel.lastName,
-      first_name: personModel.firstName,
-      birthday: TemporalDateTime(personModel.birthday),
-      role: personModel.role,
-      email: personModel.email
-    );
+        last_name: personModel.lastName,
+        first_name: personModel.firstName,
+        birthday: TemporalDateTime(personModel.birthday),
+        role: personModel.role,
+        email: personModel.email);
 
     try {
       await Amplify.DataStore.save(person);
@@ -25,19 +24,20 @@ class DynamoPerson {
     return person.toString();
   }
 
-  static Future<void> getPerson({required String userEmail}) async {
+  static Future<Person?> getPerson({required String userEmail}) async {
     try {
-      // ignore: avoid_print
-      print(userEmail);
-      var response = (await Amplify.DataStore.query<Person>(
+      print("a;slkdfja;slkdfja;sldkfja;sldkfja;sldkfj");
+      Person personResponse = (await Amplify.DataStore.query<Person>(
         Person.classType,
-        // where: Person.E.eq(userEmail),
+        where: Person.EMAIL.eq(userEmail),
       ))[0];
 
-      print(response.toString());
+      return personResponse;
     } catch (e) {
       // ignore: avoid_print
       print("[getPerson]" + e.toString());
     }
+
+    return null;
   }
 }

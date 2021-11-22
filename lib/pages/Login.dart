@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/aws/dynamo_person.dart';
+import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
+import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/pages/Client/home_page_client.dart';
+import 'package:pineap/pages/Manager/home_manager.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
 import 'package:pineap/pages/Register/register_shops/form_create_acount_shops.dart';
 
@@ -17,6 +21,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'dart:async';
 
 import 'package:pineap/styles/messages.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -184,15 +189,38 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       String userEmail = await Cognito.getCurrentUserEmail(context: context);
-      // await DynamoPerson.getPerson(userId: userEmail);
+      Person? person = await DynamoPerson.getPerson(userEmail: userEmail);
 
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const FormCreateAcountShops()));
+      if (person == null) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: "error al obtener info user");
+        return;
+      }
+
+      Provider.of<PersonModel>(context, listen: false).setData(
+        firstName: person.first_name,
+        lastName: person.last_name,
+        birthday: person.birthday!.getDateTimeInUtc(),
+        email: person.email,
+        password: pass,
+        role: person.role,
+      );
+
+      if (person.role == Constants.client) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomePageClient()),
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomeManagerPage()),
+        );
+      }
     }
   }
 
   void onPressedCerrarSesion() async {
-    String userId = await Cognito.getCurrentUserID(context: context);
+    await Cognito.singOut(context: context);
+    // String userId = await Cognito.getCurrentUserID(context: context);
     // await DynamoPerson.getPerson(userId: userId);
   }
 }
