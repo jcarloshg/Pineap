@@ -4,6 +4,7 @@ type Person @model @auth(rules: [{allow: public}]) {
   first_name: String!
   birthday: AWSDateTime
   role: String!
+  email: String!
 }
 
 type Shop @model @auth(rules: [{allow: public}]) {
@@ -21,4 +22,4 @@ type Day @model @auth(rules: [{allow: public}]) {
   isOpen: Boolean!
   shop: Shop @connection(name: "fk_shop_day")
 }
- 
+  

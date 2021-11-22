@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 
 class Messages {
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> scaffoldMessengerWidget(
-      {required BuildContext context, required String message}) {
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      scaffoldMessengerWidget({
+    required BuildContext context,
+    required String message,
+  }) {
     return ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Error al reenviar el código'),
+      SnackBar(
+        content: Text(message),
         backgroundColor: Colors.red,
       ),
     );

@@ -3,6 +3,8 @@
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
+import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
@@ -13,6 +15,8 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify.dart';
 // dart async library we will refer to when setting up real time updates
 import 'dart:async';
+
+import 'package:pineap/styles/messages.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -145,6 +149,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (context) => const FormCreateAcountShops()));
                     },
                     child: const Text("Crear una cuenta como negocio"),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.brown,
+                      ),
+                    ),
+                    onPressed: onPressedCerrarSesion,
+                    child: const Text("Cerrar sesión"),
                   )
                 ],
               ),
@@ -155,14 +169,30 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void onPressedLogIn() {
+  void onPressedLogIn() async {
     if (_formKey.currentState!.validate()) {
-      print(emailController.text);
-      print(passController.text);
-    } else {
-      print('No jala nada compa D:');
+      String email = emailController.text.trim();
+      String pass = passController.text.trim();
+
+      bool isSignedIn =
+          await Cognito.singIn(context: context, email: email, pass: pass);
+
+      if (!isSignedIn) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: "Usuario o contraseña equivocadors.");
+        return;
+      }
+
+      String userEmail = await Cognito.getCurrentUserEmail(context: context);
+      // await DynamoPerson.getPerson(userId: userEmail);
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const FormCreateAcountShops()));
     }
-    // Navigator.of(context).push(
-    //     MaterialPageRoute(builder: (context) => const FormCreateAcountShops()));
+  }
+
+  void onPressedCerrarSesion() async {
+    String userId = await Cognito.getCurrentUserID(context: context);
+    // await DynamoPerson.getPerson(userId: userId);
   }
 }

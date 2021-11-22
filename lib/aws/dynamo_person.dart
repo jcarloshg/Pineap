@@ -4,12 +4,15 @@ import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models_class/person_model.dart';
 
 class DynamoPerson {
-  static Future<String?> uploadPerson(PersonModel personModel) async {
+  static Future<String?> uploadPerson({
+    required PersonModel personModel,
+  }) async {
     Person person = Person(
-        last_name: personModel.lastName,
-        first_name: personModel.firstName,
-        birthday: TemporalDateTime(personModel.birthday),
-        role: personModel.role);
+      last_name: personModel.lastName,
+      first_name: personModel.firstName,
+      birthday: TemporalDateTime(personModel.birthday),
+      role: personModel.role,
+    );
 
     try {
       await Amplify.DataStore.save(person);
@@ -19,5 +22,21 @@ class DynamoPerson {
       return null;
     }
     return person.toString();
+  }
+
+  static Future<void> getPerson({required String userEmail}) async {
+    try {
+      // ignore: avoid_print
+      print(userEmail);
+      var response = (await Amplify.DataStore.query<Person>(
+        Person.classType,
+        // where: Person.E.eq(userEmail),
+      ))[0];
+
+      print(response.toString());
+    } catch (e) {
+      // ignore: avoid_print
+      print("[getPerson]" + e.toString());
+    }
   }
 }

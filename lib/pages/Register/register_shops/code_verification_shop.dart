@@ -6,7 +6,6 @@ import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
-import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/pages/Manager/home_manager.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
@@ -138,7 +137,9 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
         return;
       }
 
-      final uploadPersonResponse = await DynamoPerson.uploadPerson(personModel);
+      final uploadPersonResponse = await DynamoPerson.uploadPerson(
+        personModel: personModel,
+      );
       if (uploadPersonResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del usuario');

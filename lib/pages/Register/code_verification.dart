@@ -123,7 +123,9 @@ class _CodeVerificationState extends State<CodeVerification> {
         return;
       }
 
-      final uploadPersonResponse = await DynamoPerson.uploadPerson(personModel);
+      final uploadPersonResponse = await DynamoPerson.uploadPerson(
+        personModel: personModel,
+      );
       if (uploadPersonResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del usuario');
