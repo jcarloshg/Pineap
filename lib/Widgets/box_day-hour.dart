@@ -13,11 +13,14 @@ class BoxDayHour extends StatefulWidget {
 class _BoxDayHourState extends State<BoxDayHour> {
   final _day = "Monday";
   // initial times
-  final startTime = const TimeOfDay(hour: 5, minute: 0);
-  final endTime = const TimeOfDay(hour: 23, minute: 0);
+  late TimeOfDay startTime = const TimeOfDay(hour: 5, minute: 0);
+  late TimeOfDay endTime = const TimeOfDay(hour: 23, minute: 0);
   // controllers
-  final hourStartController = TextEditingController();
-  final hourEndController = TextEditingController();
+  // final String hourStartController = '${startTime.hour.toString()} : ${startTime.minute.toString()}';
+  // final String hourEndController = '${endTime?.hour.toString()} : ${endTime?.minute.toString()}';
+  final String hourStartController = "";
+  final String hourEndController = "";
+  String dropdownValue = "Abierto";
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +31,28 @@ class _BoxDayHourState extends State<BoxDayHour> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(_day),
-            PopupMenuButton(
-              onSelected: setStateDay,
+            DropdownButton<String>(
+              value: dropdownValue,
               icon: const Icon(Icons.arrow_drop_down),
-              itemBuilder: (context) {
-                return Constants.stateDay.map(
-                  (String _selectvalue) {
-                    return PopupMenuItem<String>(
-                      value: _selectvalue,
-                      child: Text(_selectvalue),
-                    );
-                  },
-                ).toList();
+              iconSize: 24,
+              elevation: 16,
+              // style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 0,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
               },
+              items: Constants.stateDay
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -91,18 +103,16 @@ class _BoxDayHourState extends State<BoxDayHour> {
     required BuildContext context,
     required TimeOfDay initialTime,
   }) async {
-    final timeDay = await showTimePicker(
+    final timeSelected = await showTimePicker(
       context: context,
       initialTime: initialTime,
     );
 
-    hourEndController.text =
-        '${timeDay?.hour.toString()} : ${timeDay?.minute.toString()}';
-  }
+    setState(() {
+      startTime = timeSelected!;
+    });
 
-  void setStateDay(String value) {
-    String stateDay = "";
-    if (Constants.barberiaSHOP == value) stateDay = Constants.barberiaSHOP;
-    if (Constants.dentistaSHOP == value) stateDay = Constants.dentistaSHOP;
+    hourEndController.text =
+        '${timeSelected?.hour.toString()} : ${timeSelected?.minute.toString()}';
   }
 }

@@ -35,7 +35,7 @@ class _ReservationsState extends State<Reservations> {
 
               // ==============================================
               // button to create new resevacion
-              const SizedBox(height: 16),
+              const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {},
                 child: const Text('Crear una nueva reservación'),
@@ -43,7 +43,7 @@ class _ReservationsState extends State<Reservations> {
 
               // ==============================================
               // filtro de busqueda
-              const SizedBox(height: 16),
+              const SizedBox(height: 32),
               Container(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 decoration: BoxDecoration(
