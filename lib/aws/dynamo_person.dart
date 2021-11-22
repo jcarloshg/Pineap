@@ -12,6 +12,7 @@ class DynamoPerson {
       first_name: personModel.firstName,
       birthday: TemporalDateTime(personModel.birthday),
       role: personModel.role,
+      email: personModel.email
     );
 
     try {

@@ -32,6 +32,7 @@ class Person extends Model {
   final String? _first_name;
   final TemporalDateTime? _birthday;
   final String? _role;
+  final String? _email;
 
   @override
   getInstanceType() => classType;
@@ -69,15 +70,24 @@ class Person extends Model {
     }
   }
   
-  const Person._internal({required this.id, required last_name, required first_name, birthday, required role}): _last_name = last_name, _first_name = first_name, _birthday = birthday, _role = role;
+  String get email {
+    try {
+      return _email!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
+  }
   
-  factory Person({String? id, required String last_name, required String first_name, TemporalDateTime? birthday, required String role}) {
+  const Person._internal({required this.id, required last_name, required first_name, birthday, required role, required email}): _last_name = last_name, _first_name = first_name, _birthday = birthday, _role = role, _email = email;
+  
+  factory Person({String? id, required String last_name, required String first_name, TemporalDateTime? birthday, required String role, required String email}) {
     return Person._internal(
       id: id == null ? UUID.getUUID() : id,
       last_name: last_name,
       first_name: first_name,
       birthday: birthday,
-      role: role);
+      role: role,
+      email: email);
   }
   
   bool equals(Object other) {
@@ -92,7 +102,8 @@ class Person extends Model {
       _last_name == other._last_name &&
       _first_name == other._first_name &&
       _birthday == other._birthday &&
-      _role == other._role;
+      _role == other._role &&
+      _email == other._email;
   }
   
   @override
@@ -107,19 +118,21 @@ class Person extends Model {
     buffer.write("last_name=" + "$_last_name" + ", ");
     buffer.write("first_name=" + "$_first_name" + ", ");
     buffer.write("birthday=" + (_birthday != null ? _birthday!.format() : "null") + ", ");
-    buffer.write("role=" + "$_role");
+    buffer.write("role=" + "$_role" + ", ");
+    buffer.write("email=" + "$_email");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Person copyWith({String? id, String? last_name, String? first_name, TemporalDateTime? birthday, String? role}) {
+  Person copyWith({String? id, String? last_name, String? first_name, TemporalDateTime? birthday, String? role, String? email}) {
     return Person(
       id: id ?? this.id,
       last_name: last_name ?? this.last_name,
       first_name: first_name ?? this.first_name,
       birthday: birthday ?? this.birthday,
-      role: role ?? this.role);
+      role: role ?? this.role,
+      email: email ?? this.email);
   }
   
   Person.fromJson(Map<String, dynamic> json)  
@@ -127,10 +140,11 @@ class Person extends Model {
       _last_name = json['last_name'],
       _first_name = json['first_name'],
       _birthday = json['birthday'] != null ? TemporalDateTime.fromString(json['birthday']) : null,
-      _role = json['role'];
+      _role = json['role'],
+      _email = json['email'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'last_name': _last_name, 'first_name': _first_name, 'birthday': _birthday?.format(), 'role': _role
+    'id': id, 'last_name': _last_name, 'first_name': _first_name, 'birthday': _birthday?.format(), 'role': _role, 'email': _email
   };
 
   static final QueryField ID = QueryField(fieldName: "person.id");
@@ -138,6 +152,7 @@ class Person extends Model {
   static final QueryField FIRST_NAME = QueryField(fieldName: "first_name");
   static final QueryField BIRTHDAY = QueryField(fieldName: "birthday");
   static final QueryField ROLE = QueryField(fieldName: "role");
+  static final QueryField EMAIL = QueryField(fieldName: "email");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Person";
     modelSchemaDefinition.pluralName = "People";
@@ -175,6 +190,12 @@ class Person extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Person.ROLE,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Person.EMAIL,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
