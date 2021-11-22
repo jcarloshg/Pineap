@@ -26,7 +26,6 @@ class DynamoPerson {
 
   static Future<Person?> getPerson({required String userEmail}) async {
     try {
-      print("a;slkdfja;slkdfja;sldkfja;sldkfja;sldkfj");
       Person personResponse = (await Amplify.DataStore.query<Person>(
         Person.classType,
         where: Person.EMAIL.eq(userEmail),

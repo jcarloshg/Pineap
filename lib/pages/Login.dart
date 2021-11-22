@@ -206,6 +206,8 @@ class _LoginScreenState extends State<LoginScreen> {
         role: person.role,
       );
 
+      print("jfkdlsla;fjdklsa;fjdklsla;" + person.toString());
+
       if (person.role == Constants.client) {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomePageClient()),

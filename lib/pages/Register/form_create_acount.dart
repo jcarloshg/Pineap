@@ -204,7 +204,10 @@ class _FormAcountState extends State<FormAcount> {
       }
 
       bool isSignUpCompleteResponse = await Cognito.uploadInfoUserToCognito(
-          context: context, email: email, pass: pass);
+        context: context,
+        email: email,
+        pass: pass,
+      );
 
       if (isSignUpCompleteResponse) {
         Navigator.of(context).push(

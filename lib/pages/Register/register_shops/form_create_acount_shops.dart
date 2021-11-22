@@ -250,9 +250,7 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
   }
 
   void onPressedregistred() async {
-    setState(() {
-      showLoading = true;
-    });
+    setState(() => showLoading = true);
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -269,25 +267,35 @@ class _FormCreateAcountShopsState extends State<FormCreateAcountShops> {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Debes aceptar terminos y condiciones');
         setState(() => showLoading = false);
+        return;
       }
 
       Provider.of<ShopModel>(context, listen: false).setDate(
-          name: nameShop, idPhoto: "", addres: addresShop, typeShop: typeShop);
+        name: nameShop,
+        idPhoto: "",
+        addres: addresShop,
+        typeShop: typeShop,
+      );
 
       bool isSignUpComplete = await Cognito.uploadInfoUserToCognito(
-          context: context, email: email, pass: pass);
+        context: context,
+        email: email,
+        pass: pass,
+      );
+      
       if (!isSignUpComplete) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'El correo ya fue registrado');
+
+        setState(() => showLoading = false);
+        return;
       }
 
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const CodeVerificationShop()));
     }
 
-    setState(() {
-      showLoading = false;
-    });
+    setState(() => showLoading = false);
   }
 
   Color getColor(Set<MaterialState> states) {

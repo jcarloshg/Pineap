@@ -119,9 +119,8 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
   }
 
   void onPressedIngresar() async {
-    setState(() {
-      isSignUpComplete = true;
-    });
+    setState(() => isSignUpComplete = true);
+
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -129,7 +128,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
           username: personModel.getEmail,
           codeVerification: codeVerification,
           context: context);
-      if (isSignUpCompleteResponse) {
+      if (!isSignUpCompleteResponse) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');
 

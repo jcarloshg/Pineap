@@ -21,10 +21,11 @@ class _ScheduleState extends State<Schedule> {
             children: const <Widget>[
               TitleWidget(title: "Horas de citas"),
               SubTitle(subtitle: "Puedes ver y modificar tus horas de cita"),
+              SizedBox(height: 32),
             ],
           ),
         ),
       ),
     );
   }
-} 
+}
