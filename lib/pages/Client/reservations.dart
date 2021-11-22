@@ -21,6 +21,7 @@ class _ReservationsState extends State<Reservations> {
             children: const <Widget>[
               TitleWidget(title: "Reservaciones"),
               SubTitle(subtitle: "Reservaciones"),
+              
             ],
           ),
         ),

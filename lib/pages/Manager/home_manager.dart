@@ -23,6 +23,11 @@ class _HomeManagerPageState extends State<HomeManagerPage> {
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() => currentIndex = index);
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.ac_unit),

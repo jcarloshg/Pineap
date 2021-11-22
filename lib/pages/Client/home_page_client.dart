@@ -39,9 +39,7 @@ class _HomePageClientState extends State<HomePageClient> {
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          setState(() => currentIndex = index);
         },
         items: const [
           BottomNavigationBarItem(

@@ -16,4 +16,9 @@ class Constants {
         lavanderiaSHOP,
         otroSHOP,
       ];
+
+  // state of day
+  static String get isOpen => "Abierto";
+  static String get isClose => "Cerrado";
+  static List<String> get stateDay => [isOpen, isClose];
 }
