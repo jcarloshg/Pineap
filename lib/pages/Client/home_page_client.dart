@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/pages/Client/profile.dart';
 import 'package:pineap/pages/Client/reservations.dart';
 import 'package:pineap/pages/Client/shops.dart';
-import 'package:provider/provider.dart';
 
 class HomePageClient extends StatefulWidget {
   const HomePageClient({Key? key}) : super(key: key);

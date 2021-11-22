@@ -20,7 +20,7 @@ class _ReservationsState extends State<Reservations> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: const <Widget>[
               TitleWidget(title: "Reservaciones"),
-              SubTitle(subtitle: "Reservaciones"),
+              SubTitle(subtitle: "Puedes ver y crear reservaciones"),
               
             ],
           ),

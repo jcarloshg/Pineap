@@ -125,9 +125,10 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       _formKey.currentState!.save();
 
       bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
-          username: personModel.getEmail,
-          codeVerification: codeVerification,
-          context: context);
+        username: personModel.getEmail,
+        codeVerification: codeVerification,
+        context: context,
+      );
       if (!isSignUpCompleteResponse) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');

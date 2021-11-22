@@ -21,4 +21,14 @@ class Constants {
   static String get isOpen => "Abierto";
   static String get isClose => "Cerrado";
   static List<String> get stateDay => [isOpen, isClose];
+
+  // days
+  static String get today => "Hoy";
+  static String get tomorrow => "Mañana";
+  static String get dateEspecific => "Fecha especifico";
+  static List<String> get typesDayToSearch => [
+        today,
+        tomorrow,
+        dateEspecific,
+      ];
 }
