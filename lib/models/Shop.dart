@@ -31,8 +31,9 @@ class Shop extends Model {
   static const classType = const _ShopModelType();
   final String id;
   final String? _name;
-  final String? _id_photo;
   final String? _type;
+  final String? _address;
+  final String? _id_photo;
   final List<Day>? _schedule;
 
   @override
@@ -51,17 +52,25 @@ class Shop extends Model {
     }
   }
   
-  String get id_photo {
+  String get type {
     try {
-      return _id_photo!;
+      return _type!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
   }
   
-  String get type {
+  String get address {
     try {
-      return _type!;
+      return _address!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
+  }
+  
+  String get id_photo {
+    try {
+      return _id_photo!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
@@ -71,14 +80,15 @@ class Shop extends Model {
     return _schedule;
   }
   
-  const Shop._internal({required this.id, required name, required id_photo, required type, schedule}): _name = name, _id_photo = id_photo, _type = type, _schedule = schedule;
+  const Shop._internal({required this.id, required name, required type, required address, required id_photo, schedule}): _name = name, _type = type, _address = address, _id_photo = id_photo, _schedule = schedule;
   
-  factory Shop({String? id, required String name, required String id_photo, required String type, List<Day>? schedule}) {
+  factory Shop({String? id, required String name, required String type, required String address, required String id_photo, List<Day>? schedule}) {
     return Shop._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
-      id_photo: id_photo,
       type: type,
+      address: address,
+      id_photo: id_photo,
       schedule: schedule != null ? List<Day>.unmodifiable(schedule) : schedule);
   }
   
@@ -92,8 +102,9 @@ class Shop extends Model {
     return other is Shop &&
       id == other.id &&
       _name == other._name &&
-      _id_photo == other._id_photo &&
       _type == other._type &&
+      _address == other._address &&
+      _id_photo == other._id_photo &&
       DeepCollectionEquality().equals(_schedule, other._schedule);
   }
   
@@ -107,27 +118,30 @@ class Shop extends Model {
     buffer.write("Shop {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("name=" + "$_name" + ", ");
-    buffer.write("id_photo=" + "$_id_photo" + ", ");
-    buffer.write("type=" + "$_type");
+    buffer.write("type=" + "$_type" + ", ");
+    buffer.write("address=" + "$_address" + ", ");
+    buffer.write("id_photo=" + "$_id_photo");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Shop copyWith({String? id, String? name, String? id_photo, String? type, List<Day>? schedule}) {
+  Shop copyWith({String? id, String? name, String? type, String? address, String? id_photo, List<Day>? schedule}) {
     return Shop(
       id: id ?? this.id,
       name: name ?? this.name,
-      id_photo: id_photo ?? this.id_photo,
       type: type ?? this.type,
+      address: address ?? this.address,
+      id_photo: id_photo ?? this.id_photo,
       schedule: schedule ?? this.schedule);
   }
   
   Shop.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name'],
-      _id_photo = json['id_photo'],
       _type = json['type'],
+      _address = json['address'],
+      _id_photo = json['id_photo'],
       _schedule = json['schedule'] is List
         ? (json['schedule'] as List)
           .where((e) => e?['serializedData'] != null)
@@ -136,13 +150,14 @@ class Shop extends Model {
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'id_photo': _id_photo, 'type': _type, 'schedule': _schedule?.map((Day? e) => e?.toJson()).toList()
+    'id': id, 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'schedule': _schedule?.map((Day? e) => e?.toJson()).toList()
   };
 
   static final QueryField ID = QueryField(fieldName: "shop.id");
   static final QueryField NAME = QueryField(fieldName: "name");
-  static final QueryField ID_PHOTO = QueryField(fieldName: "id_photo");
   static final QueryField TYPE = QueryField(fieldName: "type");
+  static final QueryField ADDRESS = QueryField(fieldName: "address");
+  static final QueryField ID_PHOTO = QueryField(fieldName: "id_photo");
   static final QueryField SCHEDULE = QueryField(
     fieldName: "schedule",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Day).toString()));
@@ -170,13 +185,19 @@ class Shop extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Shop.ID_PHOTO,
+      key: Shop.TYPE,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Shop.TYPE,
+      key: Shop.ADDRESS,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Shop.ID_PHOTO,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

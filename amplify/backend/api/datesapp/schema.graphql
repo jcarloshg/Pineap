@@ -10,8 +10,9 @@ type Person @model @auth(rules: [{allow: public}]) {
 type Shop @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
-  id_photo: String!
   type: String!
+  address: String!
+  id_photo: String!
   schedule: [Day] @connection(name: "fk_shop_day")
 }
 

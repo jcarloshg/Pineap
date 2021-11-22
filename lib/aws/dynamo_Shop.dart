@@ -7,9 +7,11 @@ import 'package:pineap/models_class/shop_model.dart';
 class DynamoShop {
   static Future<String?> uploadShop(ShopModel shopModel) async {
     Shop shop = Shop(
-        name: shopModel.name,
-        id_photo: shopModel.idPhoto,
-        type: shopModel.typeShop);
+      name: shopModel.name,
+      id_photo: shopModel.idPhoto,
+      address: shopModel.addres,
+      type: shopModel.typeShop,
+    );
 
     try {
       await Amplify.DataStore.save(shop);
