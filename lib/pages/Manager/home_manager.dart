@@ -30,7 +30,7 @@ class _HomeManagerPageState extends State<HomeManagerPage> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.ac_unit),
+            icon: Icon(Icons.calendar_view_day),
             label: "Horarios",
           ),
           BottomNavigationBarItem(
