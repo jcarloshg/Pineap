@@ -38,6 +38,22 @@ class PersonModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setDataWithOutNotify({
+    required String lastName,
+    required String firstName,
+    required DateTime birthday,
+    required String role,
+    required String email,
+    required String password,
+  }) {
+    this.lastName = lastName;
+    this.firstName = firstName;
+    this.birthday = birthday;
+    this.role = role;
+    this.email = email;
+    this.password = password;
+  }
+
   String get getLastName => lastName;
   String get getFirstName => firstName;
   DateTime get getBirthday => birthday;

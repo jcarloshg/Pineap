@@ -148,7 +148,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
         return;
       }
 
-      final uploadShopResponse = await DynamoShop.uploadShop(shopModel);
+      final uploadShopResponse = await DynamoShop.uploadShop(shopModel: shopModel);
       if (uploadShopResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del negocio');

@@ -21,7 +21,6 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -34,7 +33,8 @@ class Shop extends Model {
   final String? _type;
   final String? _address;
   final String? _id_photo;
-  final List<Day>? _schedule;
+  final String? _personID;
+  final Person? _person;
 
   @override
   getInstanceType() => classType;
@@ -76,20 +76,25 @@ class Shop extends Model {
     }
   }
   
-  List<Day>? get schedule {
-    return _schedule;
+  String? get personID {
+    return _personID;
   }
   
-  const Shop._internal({required this.id, required name, required type, required address, required id_photo, schedule}): _name = name, _type = type, _address = address, _id_photo = id_photo, _schedule = schedule;
+  Person? get person {
+    return _person;
+  }
   
-  factory Shop({String? id, required String name, required String type, required String address, required String id_photo, List<Day>? schedule}) {
+  const Shop._internal({required this.id, required name, required type, required address, required id_photo, personID, person}): _name = name, _type = type, _address = address, _id_photo = id_photo, _personID = personID, _person = person;
+  
+  factory Shop({String? id, required String name, required String type, required String address, required String id_photo, String? personID, Person? person}) {
     return Shop._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       type: type,
       address: address,
       id_photo: id_photo,
-      schedule: schedule != null ? List<Day>.unmodifiable(schedule) : schedule);
+      personID: personID,
+      person: person);
   }
   
   bool equals(Object other) {
@@ -105,7 +110,8 @@ class Shop extends Model {
       _type == other._type &&
       _address == other._address &&
       _id_photo == other._id_photo &&
-      DeepCollectionEquality().equals(_schedule, other._schedule);
+      _personID == other._personID &&
+      _person == other._person;
   }
   
   @override
@@ -120,20 +126,22 @@ class Shop extends Model {
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("type=" + "$_type" + ", ");
     buffer.write("address=" + "$_address" + ", ");
-    buffer.write("id_photo=" + "$_id_photo");
+    buffer.write("id_photo=" + "$_id_photo" + ", ");
+    buffer.write("personID=" + "$_personID");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Shop copyWith({String? id, String? name, String? type, String? address, String? id_photo, List<Day>? schedule}) {
+  Shop copyWith({String? id, String? name, String? type, String? address, String? id_photo, String? personID, Person? person}) {
     return Shop(
       id: id ?? this.id,
       name: name ?? this.name,
       type: type ?? this.type,
       address: address ?? this.address,
       id_photo: id_photo ?? this.id_photo,
-      schedule: schedule ?? this.schedule);
+      personID: personID ?? this.personID,
+      person: person ?? this.person);
   }
   
   Shop.fromJson(Map<String, dynamic> json)  
@@ -142,15 +150,13 @@ class Shop extends Model {
       _type = json['type'],
       _address = json['address'],
       _id_photo = json['id_photo'],
-      _schedule = json['schedule'] is List
-        ? (json['schedule'] as List)
-          .where((e) => e?['serializedData'] != null)
-          .map((e) => Day.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
+      _personID = json['personID'],
+      _person = json['person']?['serializedData'] != null
+        ? Person.fromJson(new Map<String, dynamic>.from(json['person']['serializedData']))
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'schedule': _schedule?.map((Day? e) => e?.toJson()).toList()
+    'id': id, 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'personID': _personID, 'person': _person?.toJson()
   };
 
   static final QueryField ID = QueryField(fieldName: "shop.id");
@@ -158,9 +164,10 @@ class Shop extends Model {
   static final QueryField TYPE = QueryField(fieldName: "type");
   static final QueryField ADDRESS = QueryField(fieldName: "address");
   static final QueryField ID_PHOTO = QueryField(fieldName: "id_photo");
-  static final QueryField SCHEDULE = QueryField(
-    fieldName: "schedule",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Day).toString()));
+  static final QueryField PERSONID = QueryField(fieldName: "personID");
+  static final QueryField PERSON = QueryField(
+    fieldName: "person",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Person).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Shop";
     modelSchemaDefinition.pluralName = "Shops";
@@ -202,11 +209,17 @@ class Shop extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-      key: Shop.SCHEDULE,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Shop.PERSONID,
       isRequired: false,
-      ofModelName: (Day).toString(),
-      associatedKey: Day.SHOP
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasOne(
+      key: Shop.PERSON,
+      isRequired: false,
+      ofModelName: (Person).toString(),
+      associatedKey: Person.ID
     ));
   });
 }

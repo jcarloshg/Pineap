@@ -4,11 +4,13 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/aws/dynamo_Shop.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/pages/Manager/home_manager.dart';
 import 'package:pineap/pages/Register/form_create_acount.dart';
@@ -206,8 +208,6 @@ class _LoginScreenState extends State<LoginScreen> {
         role: person.role,
       );
 
-      print("jfkdlsla;fjdklsa;fjdklsla;" + person.toString());
-
       if (person.role == Constants.client) {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomePageClient()),
@@ -221,7 +221,32 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedCerrarSesion() async {
-    await Cognito.singOut(context: context);
+    PersonModel personModel = PersonModel();
+    ShopModel shopModel = ShopModel();
+
+    personModel.setDataWithOutNotify(
+      lastName: "Huerta",
+      firstName: "Jose Carlos",
+      birthday: DateTime.now(),
+      role: Constants.manager,
+      email: "carlosj12336@gmail.com",
+      password: "qazwsx123",
+    );
+
+    shopModel.setDataWithOutNotify(
+      name: "Holaaaa",
+      idPhoto: "",
+      addres: "C. Vicente Guerrero #40, Col. Rosas del Tepeyac",
+      typeShop: Constants.barberiaSHOP,
+    );
+
+    final response =
+        DynamoShop.plok(shopModel: shopModel, personModel: personModel);
+    // ignore: avoid_print
+    print(response == null ? "no se registro" : "si se hizo compa   ");
+
+    // await Cognito.singOut(context: context);
+
     // String userId = await Cognito.getCurrentUserID(context: context);
     // await DynamoPerson.getPerson(userId: userId);
   }

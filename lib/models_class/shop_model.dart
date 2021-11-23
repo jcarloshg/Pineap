@@ -8,13 +8,29 @@ class ShopModel extends ChangeNotifier {
 
   ShopModel();
 
-  void setDate(
-      {required name, required idPhoto, required addres, required typeShop}) {
+  void setDate({
+    required name,
+    required idPhoto,
+    required addres,
+    required typeShop,
+  }) {
     this.name = name;
     this.idPhoto = idPhoto;
     this.addres = addres;
     this.typeShop = typeShop;
     notifyListeners();
+  }
+
+  void setDataWithOutNotify({
+    required name,
+    required idPhoto,
+    required addres,
+    required typeShop,
+  }) {
+    this.name = name;
+    this.idPhoto = idPhoto;
+    this.addres = addres;
+    this.typeShop = typeShop;
   }
 
   String get getName => name;

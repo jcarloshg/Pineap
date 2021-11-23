@@ -71,12 +71,12 @@ class _BoxDayHourState extends State<BoxDayHour> {
               const Icon(Icons.lock_clock),
               Row(
                 children: <Widget>[
-                  Text(hourStartController.text),
+                  // Text(hourStartController.text),
                   IconButton(
                     onPressed: () => showPickSartTime(context),
                     icon: const Icon(Icons.arrow_drop_down),
                   ),
-                  Text(hourEndController.text),
+                  // Text(hourEndController.text),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.arrow_drop_down),
@@ -94,8 +94,6 @@ class _BoxDayHourState extends State<BoxDayHour> {
     final timeSelected = await showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 4, minute: 0),
-    ).then(
-      (value) => hourStartController.text = value.toString(),
     );
   }
 
@@ -112,7 +110,7 @@ class _BoxDayHourState extends State<BoxDayHour> {
       startTime = timeSelected!;
     });
 
-    hourEndController.text =
-        '${timeSelected?.hour.toString()} : ${timeSelected?.minute.toString()}';
+    // hourEndController.text =
+    //     '${timeSelected?.hour.toString()} : ${timeSelected?.minute.toString()}';
   }
 }

@@ -5,15 +5,22 @@ type Person @model @auth(rules: [{allow: public}]) {
   birthday: AWSDateTime
   role: String!
   email: String!
+  # conection to shop 1-1
+  shop: Shop @connection(keyName: "byShop", fields: ["personID"])
 }
-
-type Shop @model @auth(rules: [{allow: public}]) {
+# @key(name: "fk_person_shop", fields: ["personID", "address"])
+type Shop @model @auth(rules: [{allow: public}]) 
+ @key(name: "byShop", fields: ["personID"]){
   id: ID!
   name: String!
   type: String!
   address: String!
   id_photo: String!
-  schedule: [Day] @connection(name: "fk_shop_day")
+  # conection to shop 1-1 
+  # schedule: [Day] @connection(name: "fk_shop_day")
+  # conection to person 1-1
+  personID: ID
+  person: Person @connection(fields: ["personID"])
 }
 
 type Day @model @auth(rules: [{allow: public}]) {
@@ -21,6 +28,6 @@ type Day @model @auth(rules: [{allow: public}]) {
   hour_open: String!
   hour_close: String!
   isOpen: Boolean!
-  shop: Shop @connection(name: "fk_shop_day")
+  # shop: Shop @connection(name: "fk_shop_day")
 }
   
