@@ -15,9 +15,7 @@ class Reservations extends StatefulWidget {
 class _ReservationsState extends State<Reservations> {
   // controles
   TextEditingController birthdayController = TextEditingController();
-  TextEditingController typeShopController = TextEditingController();
   DateTime birthday = DateTime.now();
-
   String dayToSearch = "Hoy";
 
   @override
@@ -32,16 +30,16 @@ class _ReservationsState extends State<Reservations> {
               const TitleWidget(title: "Reservaciones"),
               const SubTitle(
                   subtitle: "Pueder ver y crear nuevas reservaciones"),
-
-              // ==============================================
+              //
+              // 
               // button to create new resevacion
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {},
                 child: const Text('Crear una nueva reservación'),
               ),
-
-              // ==============================================
+              //
+              // 
               // filtro de busqueda
               const SizedBox(height: 32),
               Container(
