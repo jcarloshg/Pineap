@@ -43,7 +43,7 @@ class DynamoShop {
       id_photo: shopModel.idPhoto,
       address: shopModel.addres,
       type: shopModel.typeShop,
-      person: person,
+      // person: person,
     );
 
     try {

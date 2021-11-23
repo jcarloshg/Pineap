@@ -19,6 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
+import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 
@@ -33,6 +34,8 @@ class Person extends Model {
   final TemporalDateTime? _birthday;
   final String? _role;
   final String? _email;
+  final String? _shopId;
+  final Shop? _shop;
 
   @override
   getInstanceType() => classType;
@@ -78,16 +81,26 @@ class Person extends Model {
     }
   }
   
-  const Person._internal({required this.id, required last_name, required first_name, birthday, required role, required email}): _last_name = last_name, _first_name = first_name, _birthday = birthday, _role = role, _email = email;
+  String? get shopId {
+    return _shopId;
+  }
   
-  factory Person({String? id, required String last_name, required String first_name, TemporalDateTime? birthday, required String role, required String email}) {
+  Shop? get shop {
+    return _shop;
+  }
+  
+  const Person._internal({required this.id, required last_name, required first_name, birthday, required role, required email, shopId, shop}): _last_name = last_name, _first_name = first_name, _birthday = birthday, _role = role, _email = email, _shopId = shopId, _shop = shop;
+  
+  factory Person({String? id, required String last_name, required String first_name, TemporalDateTime? birthday, required String role, required String email, String? shopId, Shop? shop}) {
     return Person._internal(
       id: id == null ? UUID.getUUID() : id,
       last_name: last_name,
       first_name: first_name,
       birthday: birthday,
       role: role,
-      email: email);
+      email: email,
+      shopId: shopId,
+      shop: shop);
   }
   
   bool equals(Object other) {
@@ -103,7 +116,9 @@ class Person extends Model {
       _first_name == other._first_name &&
       _birthday == other._birthday &&
       _role == other._role &&
-      _email == other._email;
+      _email == other._email &&
+      _shopId == other._shopId &&
+      _shop == other._shop;
   }
   
   @override
@@ -119,20 +134,23 @@ class Person extends Model {
     buffer.write("first_name=" + "$_first_name" + ", ");
     buffer.write("birthday=" + (_birthday != null ? _birthday!.format() : "null") + ", ");
     buffer.write("role=" + "$_role" + ", ");
-    buffer.write("email=" + "$_email");
+    buffer.write("email=" + "$_email" + ", ");
+    buffer.write("shopId=" + "$_shopId");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Person copyWith({String? id, String? last_name, String? first_name, TemporalDateTime? birthday, String? role, String? email}) {
+  Person copyWith({String? id, String? last_name, String? first_name, TemporalDateTime? birthday, String? role, String? email, String? shopId, Shop? shop}) {
     return Person(
       id: id ?? this.id,
       last_name: last_name ?? this.last_name,
       first_name: first_name ?? this.first_name,
       birthday: birthday ?? this.birthday,
       role: role ?? this.role,
-      email: email ?? this.email);
+      email: email ?? this.email,
+      shopId: shopId ?? this.shopId,
+      shop: shop ?? this.shop);
   }
   
   Person.fromJson(Map<String, dynamic> json)  
@@ -141,10 +159,14 @@ class Person extends Model {
       _first_name = json['first_name'],
       _birthday = json['birthday'] != null ? TemporalDateTime.fromString(json['birthday']) : null,
       _role = json['role'],
-      _email = json['email'];
+      _email = json['email'],
+      _shopId = json['shopId'],
+      _shop = json['shop']?['serializedData'] != null
+        ? Shop.fromJson(new Map<String, dynamic>.from(json['shop']['serializedData']))
+        : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'last_name': _last_name, 'first_name': _first_name, 'birthday': _birthday?.format(), 'role': _role, 'email': _email
+    'id': id, 'last_name': _last_name, 'first_name': _first_name, 'birthday': _birthday?.format(), 'role': _role, 'email': _email, 'shopId': _shopId, 'shop': _shop?.toJson()
   };
 
   static final QueryField ID = QueryField(fieldName: "person.id");
@@ -153,6 +175,10 @@ class Person extends Model {
   static final QueryField BIRTHDAY = QueryField(fieldName: "birthday");
   static final QueryField ROLE = QueryField(fieldName: "role");
   static final QueryField EMAIL = QueryField(fieldName: "email");
+  static final QueryField SHOPID = QueryField(fieldName: "shopId");
+  static final QueryField SHOP = QueryField(
+    fieldName: "shop",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Shop).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Person";
     modelSchemaDefinition.pluralName = "People";
@@ -198,6 +224,19 @@ class Person extends Model {
       key: Person.EMAIL,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Person.SHOPID,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasOne(
+      key: Person.SHOP,
+      isRequired: false,
+      ofModelName: (Shop).toString(),
+      associatedKey: Shop.ID
     ));
   });
 }

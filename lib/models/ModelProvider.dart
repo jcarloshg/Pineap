@@ -30,7 +30,7 @@ export 'Shop.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "d4a6e505366c7f4ba106f69ac25c117a";
+  String version = "2f921b07ef296fe700dd1114782bdd62";
   @override
   List<ModelSchema> modelSchemas = [Day.schema, Person.schema, Shop.schema];
   static final ModelProvider _instance = ModelProvider();

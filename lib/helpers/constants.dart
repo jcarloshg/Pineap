@@ -31,4 +31,8 @@ class Constants {
         tomorrow,
         dateEspecific,
       ];
+
+  // methods payment
+  static String get cash => "Efectivo";
+  static String get creditCard => "Tarjeta de credito";
 }

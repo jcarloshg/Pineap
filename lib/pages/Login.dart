@@ -177,6 +177,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedLogIn() async {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const HomeManagerPage()),
+    );
+
     if (_formKey.currentState!.validate()) {
       String email = emailController.text.trim();
       String pass = passController.text.trim();

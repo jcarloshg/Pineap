@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/pages/Manager/info_reservation.dart';
 
 class CardDate extends StatefulWidget {
   const CardDate({Key? key}) : super(key: key);
@@ -8,6 +9,7 @@ class CardDate extends StatefulWidget {
 }
 
 class _CardDateState extends State<CardDate> {
+  
   final String titleShop = "Barber shops";
   final String date = "November 21, 2021";
   final String dateTime = "10:00 pm";
@@ -20,9 +22,10 @@ class _CardDateState extends State<CardDate> {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           ListTile(
+            onTap: navigateToInfoReservation,
             isThreeLine: true,
             leading: Image.asset(
-              "assets/images/store_generec.jpg",
+              "assets/images/backgorundlogin.jpg",
             ),
             title: Text(titleShop),
             subtitle: Column(
@@ -31,7 +34,7 @@ class _CardDateState extends State<CardDate> {
                 Row(
                   children: <Widget>[
                     const Icon(
-                      Icons.assignment,
+                      Icons.calendar_today,
                       size: 12,
                     ),
                     const SizedBox(width: 4),
@@ -55,6 +58,12 @@ class _CardDateState extends State<CardDate> {
           ),
         ],
       ),
+    );
+  }
+
+  void navigateToInfoReservation() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const InfoReservation()),
     );
   }
 }
