@@ -43,7 +43,12 @@ class _ProfileState extends State<Profile> {
                 //
                 // info shop
                 const SizedBox(height: 32),
-                Image(image: AssetImage(uriPhoto)),
+                Image(
+                  image: AssetImage(uriPhoto),
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                ),
                 const SizedBox(height: 16),
                 Align(
                   child: Text(titleShop, style: const TextStyle(fontSize: 18)),
