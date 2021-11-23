@@ -23,12 +23,26 @@ class _ShopsState extends State<Shops> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: <Widget>[
-                const TitleWidget(title: "Negocios"),
-                const SubTitle(subtitle: "Busca negocios y crea reservaciones"),
-                const LabelWithIcon(
-                  iconData: Icons.place,
-                  info: "Obtener ubucación actual",
-                  mainAxisAlignment: MainAxisAlignment.end,
+                //
+                //
+                // header title
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const <Widget>[
+                        TitleWidget(title: "Negocios"),
+                        SubTitle(
+                            subtitle: "Busca negocios y crea reservaciones"),
+                      ],
+                    ),
+                    const LabelWithIcon(
+                      iconData: Icons.place,
+                      info: "Obtener ubucación actual",
+                      mainAxisAlignment: MainAxisAlignment.end,
+                    ),
+                  ],
                 ),
                 //
                 //
@@ -47,7 +61,7 @@ class _ShopsState extends State<Shops> {
                 //
                 //
                 // list seach
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 const CardShopWidget(),
                 const CardShopWidget(),
                 const CardShopWidget(),
