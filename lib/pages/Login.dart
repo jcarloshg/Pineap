@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.center,
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            height: 400,
+            height: 500,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
               color: Colors.white70,
