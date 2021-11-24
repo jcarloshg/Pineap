@@ -1,30 +1,3 @@
-type Person @model @auth(rules: [{ allow: public }]) {
-  id: ID!
-  last_name: String!
-  first_name: String!
-  birthday: AWSDateTime
-  role: String!
-  email: String!
-  # conection to shop 1-1
-  shopId: ID
-  shop: Shop @connection(fields: ["shopId"])
-  # shop: Shop @connection(keyName: "id", fields: ["id"])
-}
-
-# @key(name: "fk_person_shop", fields: ["personID", "address"])
-type Shop @model @auth(rules: [{ allow: public }]) {
-  id: ID!
-  name: String!
-  type: String!
-  address: String!
-  id_photo: String!
-  # conection to shop 1-1
-  # schedule: [Day] @connection(name: "fk_shop_day")
-  # conection to person 1-1
-  # personID: ID
-  # person: Person @connection(fields: ["personID"])
-}
-
 type Day @model @auth(rules: [{ allow: public }]) {
   id: ID!
   hour_open: String!
@@ -33,7 +6,7 @@ type Day @model @auth(rules: [{ allow: public }]) {
   # shop: Shop @connection(name: "fk_shop_day")
 }
 
-type Post @model {
+type Persondata @model {
   id: ID!
   last_name: String!
   first_name: String!
@@ -41,14 +14,14 @@ type Post @model {
   role: String!
   email: String!
   # New field with @connection
-  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+  shops: [Shop] @connection(keyName: "byPersondata", fields: ["id"])
 }
 
 # New model
-type Comment @model @key(name: "byPost", fields: ["postID", "name"]) {
+type Shop @model @key(name: "byPersondata", fields: ["PersondataID", "name"]) {
   id: ID!
-  postID: ID!
-  post: Post! @connection(fields: ["postID"])
+  PersondataID: ID!
+  Persondata: Persondata! @connection(fields: ["PersondataID"])
   name: String!
   type: String!
   address: String!

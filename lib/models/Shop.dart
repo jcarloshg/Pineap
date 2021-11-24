@@ -19,6 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
+import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 
@@ -28,6 +29,7 @@ import 'package:flutter/foundation.dart';
 class Shop extends Model {
   static const classType = const _ShopModelType();
   final String id;
+  final Persondata? _Persondata;
   final String? _name;
   final String? _type;
   final String? _address;
@@ -39,6 +41,14 @@ class Shop extends Model {
   @override
   String getId() {
     return id;
+  }
+  
+  Persondata get persondata {
+    try {
+      return _Persondata!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
   }
   
   String get name {
@@ -73,11 +83,12 @@ class Shop extends Model {
     }
   }
   
-  const Shop._internal({required this.id, required name, required type, required address, required id_photo}): _name = name, _type = type, _address = address, _id_photo = id_photo;
+  const Shop._internal({required this.id, required Persondata, required name, required type, required address, required id_photo}): _Persondata = Persondata, _name = name, _type = type, _address = address, _id_photo = id_photo;
   
-  factory Shop({String? id, required String name, required String type, required String address, required String id_photo}) {
+  factory Shop({String? id, required Persondata Persondata, required String name, required String type, required String address, required String id_photo}) {
     return Shop._internal(
       id: id == null ? UUID.getUUID() : id,
+      Persondata: Persondata,
       name: name,
       type: type,
       address: address,
@@ -93,6 +104,7 @@ class Shop extends Model {
     if (identical(other, this)) return true;
     return other is Shop &&
       id == other.id &&
+      _Persondata == other._Persondata &&
       _name == other._name &&
       _type == other._type &&
       _address == other._address &&
@@ -108,6 +120,7 @@ class Shop extends Model {
     
     buffer.write("Shop {");
     buffer.write("id=" + "$id" + ", ");
+    buffer.write("Persondata=" + (_Persondata != null ? _Persondata!.toString() : "null") + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("type=" + "$_type" + ", ");
     buffer.write("address=" + "$_address" + ", ");
@@ -117,9 +130,10 @@ class Shop extends Model {
     return buffer.toString();
   }
   
-  Shop copyWith({String? id, String? name, String? type, String? address, String? id_photo}) {
+  Shop copyWith({String? id, Persondata? Persondata, String? name, String? type, String? address, String? id_photo}) {
     return Shop(
       id: id ?? this.id,
+      Persondata: Persondata ?? persondata ,
       name: name ?? this.name,
       type: type ?? this.type,
       address: address ?? this.address,
@@ -128,16 +142,22 @@ class Shop extends Model {
   
   Shop.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
+      _Persondata = json['Persondata']?['serializedData'] != null
+        ? Persondata.fromJson(new Map<String, dynamic>.from(json['Persondata']['serializedData']))
+        : null,
       _name = json['name'],
       _type = json['type'],
       _address = json['address'],
       _id_photo = json['id_photo'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo
+    'id': id, 'Persondata': _Persondata?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo
   };
 
   static final QueryField ID = QueryField(fieldName: "shop.id");
+  static final QueryField PERSONDATA = QueryField(
+    fieldName: "Persondata",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Persondata).toString()));
   static final QueryField NAME = QueryField(fieldName: "name");
   static final QueryField TYPE = QueryField(fieldName: "type");
   static final QueryField ADDRESS = QueryField(fieldName: "address");
@@ -146,18 +166,14 @@ class Shop extends Model {
     modelSchemaDefinition.name = "Shop";
     modelSchemaDefinition.pluralName = "Shops";
     
-    modelSchemaDefinition.authRules = [
-      AuthRule(
-        authStrategy: AuthStrategy.PUBLIC,
-        operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
-        ])
-    ];
-    
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+      key: Shop.PERSONDATA,
+      isRequired: true,
+      targetName: "PersondataID",
+      ofModelName: (Persondata).toString()
+    ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Shop.NAME,

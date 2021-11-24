@@ -16,5 +16,23 @@
         "datesapp5e798625": {}
       }
     }
+  },
+  "pineap": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-datesapp-pineap-132332-authRole",
+      "UnauthRoleArn": "arn:aws:iam::111421882477:role/amplify-datesapp-pineap-132332-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::111421882477:role/amplify-datesapp-pineap-132332-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-datesapp-pineap-132332-deployment",
+      "UnauthRoleName": "amplify-datesapp-pineap-132332-unauthRole",
+      "StackName": "amplify-datesapp-pineap-132332",
+      "StackId": "arn:aws:cloudformation:us-east-2:111421882477:stack/amplify-datesapp-pineap-132332/03839dd0-4d5c-11ec-95ec-0a371ac61dfa",
+      "AmplifyAppId": "d1ecg3cr1n94xl"
+    },
+    "categories": {
+      "auth": {
+        "datesapp5e798625": {}
+      }
+    }
   }
 }

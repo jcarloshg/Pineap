@@ -30,30 +30,16 @@ class DynamoShop {
     required ShopModel shopModel,
     required PersonModel personModel,
   }) async {
-    // Person person = Person(
-    //   last_name: personModel.lastName,
-    //   first_name: personModel.firstName,
-    //   birthday: TemporalDateTime(personModel.birthday),
-    //   role: personModel.role,
-    //   email: personModel.email,
-    // );
-
-    // Shop shop = Shop(
-    //   name: shopModel.name,
-    //   id_photo: shopModel.idPhoto,
-    //   address: shopModel.addres,
-    //   type: shopModel.typeShop,
-    //   // person: person,
-    // );
-
-    Post post = Post(
+    Person person = Person(
       last_name: personModel.lastName,
       first_name: personModel.firstName,
+      birthday: TemporalDateTime(personModel.birthday),
       role: personModel.role,
       email: personModel.email,
     );
-    Comment comment = Comment(
-      post: post,
+
+    Shop shop = Shop(
+      Person: Person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
@@ -61,10 +47,13 @@ class DynamoShop {
     );
 
     try {
-      await Amplify.DataStore.save(post);
+      await Amplify.DataStore.save(person);
+      // ignore: avoid_print
       print('Post saved');
-      await Amplify.DataStore.save(comment);
+      await Amplify.DataStore.save(shop);
+      // ignore: avoid_print
       print('Comment saved');
+      
     } catch (e) {
       // ignore: avoid_print
       print("[uploadShop] " + e.toString());
