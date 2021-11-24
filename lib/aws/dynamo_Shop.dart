@@ -47,13 +47,17 @@ class DynamoShop {
     // );
 
     Post post = Post(
-      title: 'My Post with comments',
-      rating: 10,
-      status: PostStatus.ACTIVE,
+      last_name: personModel.lastName,
+      first_name: personModel.firstName,
+      role: personModel.role,
+      email: personModel.email,
     );
     Comment comment = Comment(
-      post: post, // Directly pass in the post instance
-      content: 'Loving Amplify DataStore!',
+      post: post,
+      name: shopModel.name,
+      type: shopModel.typeShop,
+      address: shopModel.addres,
+      id_photo: shopModel.idPhoto,
     );
 
     try {
