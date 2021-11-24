@@ -33,11 +33,6 @@ type Day @model @auth(rules: [{ allow: public }]) {
   # shop: Shop @connection(name: "fk_shop_day")
 }
 
-enum PostStatus {
-  ACTIVE
-  INACTIVE
-}
-
 type Post @model {
   id: ID!
   last_name: String!
