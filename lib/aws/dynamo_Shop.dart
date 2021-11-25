@@ -39,7 +39,7 @@ class DynamoShop {
     );
 
     Shop shop = Shop(
-      Person: Person,
+      Person: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
@@ -53,7 +53,6 @@ class DynamoShop {
       await Amplify.DataStore.save(shop);
       // ignore: avoid_print
       print('Comment saved');
-      
     } catch (e) {
       // ignore: avoid_print
       print("[uploadShop] " + e.toString());

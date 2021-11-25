@@ -25,10 +25,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
-/** This is an auto generated class representing the Persondata type in your schema. */
+/** This is an auto generated class representing the Person type in your schema. */
 @immutable
-class Persondata extends Model {
-  static const classType = const _PersondataModelType();
+class Person extends Model {
+  static const classType = const _PersonModelType();
   final String id;
   final String? _last_name;
   final String? _first_name;
@@ -85,10 +85,10 @@ class Persondata extends Model {
     return _shops;
   }
   
-  const Persondata._internal({required this.id, required last_name, required first_name, birthday, required role, required email, shops}): _last_name = last_name, _first_name = first_name, _birthday = birthday, _role = role, _email = email, _shops = shops;
+  const Person._internal({required this.id, required last_name, required first_name, birthday, required role, required email, shops}): _last_name = last_name, _first_name = first_name, _birthday = birthday, _role = role, _email = email, _shops = shops;
   
-  factory Persondata({String? id, required String last_name, required String first_name, TemporalDateTime? birthday, required String role, required String email, List<Shop>? shops}) {
-    return Persondata._internal(
+  factory Person({String? id, required String last_name, required String first_name, TemporalDateTime? birthday, required String role, required String email, List<Shop>? shops}) {
+    return Person._internal(
       id: id == null ? UUID.getUUID() : id,
       last_name: last_name,
       first_name: first_name,
@@ -105,7 +105,7 @@ class Persondata extends Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Persondata &&
+    return other is Person &&
       id == other.id &&
       _last_name == other._last_name &&
       _first_name == other._first_name &&
@@ -122,7 +122,7 @@ class Persondata extends Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Persondata {");
+    buffer.write("Person {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("last_name=" + "$_last_name" + ", ");
     buffer.write("first_name=" + "$_first_name" + ", ");
@@ -134,8 +134,8 @@ class Persondata extends Model {
     return buffer.toString();
   }
   
-  Persondata copyWith({String? id, String? last_name, String? first_name, TemporalDateTime? birthday, String? role, String? email, List<Shop>? shops}) {
-    return Persondata(
+  Person copyWith({String? id, String? last_name, String? first_name, TemporalDateTime? birthday, String? role, String? email, List<Shop>? shops}) {
+    return Person(
       id: id ?? this.id,
       last_name: last_name ?? this.last_name,
       first_name: first_name ?? this.first_name,
@@ -145,7 +145,7 @@ class Persondata extends Model {
       shops: shops ?? this.shops);
   }
   
-  Persondata.fromJson(Map<String, dynamic> json)  
+  Person.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _last_name = json['last_name'],
       _first_name = json['first_name'],
@@ -163,7 +163,7 @@ class Persondata extends Model {
     'id': id, 'last_name': _last_name, 'first_name': _first_name, 'birthday': _birthday?.format(), 'role': _role, 'email': _email, 'shops': _shops?.map((Shop? e) => e?.toJson()).toList()
   };
 
-  static final QueryField ID = QueryField(fieldName: "persondata.id");
+  static final QueryField ID = QueryField(fieldName: "person.id");
   static final QueryField LAST_NAME = QueryField(fieldName: "last_name");
   static final QueryField FIRST_NAME = QueryField(fieldName: "first_name");
   static final QueryField BIRTHDAY = QueryField(fieldName: "birthday");
@@ -173,55 +173,55 @@ class Persondata extends Model {
     fieldName: "shops",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Shop).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Persondata";
-    modelSchemaDefinition.pluralName = "Persondata";
+    modelSchemaDefinition.name = "Person";
+    modelSchemaDefinition.pluralName = "People";
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Persondata.LAST_NAME,
+      key: Person.LAST_NAME,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Persondata.FIRST_NAME,
+      key: Person.FIRST_NAME,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Persondata.BIRTHDAY,
+      key: Person.BIRTHDAY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Persondata.ROLE,
+      key: Person.ROLE,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Persondata.EMAIL,
+      key: Person.EMAIL,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-      key: Persondata.SHOPS,
+      key: Person.SHOPS,
       isRequired: false,
       ofModelName: (Shop).toString(),
-      associatedKey: Shop.PERSONDATA
+      associatedKey: Shop.PERSON
     ));
   });
 }
 
-class _PersondataModelType extends ModelType<Persondata> {
-  const _PersondataModelType();
+class _PersonModelType extends ModelType<Person> {
+  const _PersonModelType();
   
   @override
-  Persondata fromJson(Map<String, dynamic> jsonData) {
-    return Persondata.fromJson(jsonData);
+  Person fromJson(Map<String, dynamic> jsonData) {
+    return Person.fromJson(jsonData);
   }
 }

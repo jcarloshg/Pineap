@@ -6,7 +6,7 @@ type Day @model @auth(rules: [{ allow: public }]) {
   # shop: Shop @connection(name: "fk_shop_day")
 }
 
-type Persondata @model {
+type Person @model {
   id: ID!
   last_name: String!
   first_name: String!
@@ -14,14 +14,14 @@ type Persondata @model {
   role: String!
   email: String!
   # New field with @connection
-  shops: [Shop] @connection(keyName: "byPersondata", fields: ["id"])
+  shops: [Shop] @connection(keyName: "byPerson", fields: ["id"])
 }
 
 # New model
-type Shop @model @key(name: "byPersondata", fields: ["PersondataID", "name"]) {
+type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
   id: ID!
-  PersondataID: ID!
-  Persondata: Persondata! @connection(fields: ["PersondataID"])
+  PersonID: ID!
+  Person: Person! @connection(fields: ["PersonID"])
   name: String!
   type: String!
   address: String!

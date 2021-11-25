@@ -29,7 +29,7 @@ import 'package:flutter/foundation.dart';
 class Shop extends Model {
   static const classType = const _ShopModelType();
   final String id;
-  final Persondata? _Persondata;
+  final Person? _Person;
   final String? _name;
   final String? _type;
   final String? _address;
@@ -43,9 +43,9 @@ class Shop extends Model {
     return id;
   }
   
-  Persondata get persondata {
+  Person get person {
     try {
-      return _Persondata!;
+      return _Person!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
@@ -83,12 +83,12 @@ class Shop extends Model {
     }
   }
   
-  const Shop._internal({required this.id, required Persondata, required name, required type, required address, required id_photo}): _Persondata = Persondata, _name = name, _type = type, _address = address, _id_photo = id_photo;
+  const Shop._internal({required this.id, required Person, required name, required type, required address, required id_photo}): _Person = Person, _name = name, _type = type, _address = address, _id_photo = id_photo;
   
-  factory Shop({String? id, required Persondata Persondata, required String name, required String type, required String address, required String id_photo}) {
+  factory Shop({String? id, required Person Person, required String name, required String type, required String address, required String id_photo}) {
     return Shop._internal(
       id: id == null ? UUID.getUUID() : id,
-      Persondata: Persondata,
+      Person: Person,
       name: name,
       type: type,
       address: address,
@@ -104,7 +104,7 @@ class Shop extends Model {
     if (identical(other, this)) return true;
     return other is Shop &&
       id == other.id &&
-      _Persondata == other._Persondata &&
+      _Person == other._Person &&
       _name == other._name &&
       _type == other._type &&
       _address == other._address &&
@@ -120,7 +120,7 @@ class Shop extends Model {
     
     buffer.write("Shop {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("Persondata=" + (_Persondata != null ? _Persondata!.toString() : "null") + ", ");
+    buffer.write("Person=" + (_Person != null ? _Person!.toString() : "null") + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("type=" + "$_type" + ", ");
     buffer.write("address=" + "$_address" + ", ");
@@ -130,10 +130,10 @@ class Shop extends Model {
     return buffer.toString();
   }
   
-  Shop copyWith({String? id, Persondata? Persondata, String? name, String? type, String? address, String? id_photo}) {
+  Shop copyWith({String? id, Person? Person, String? name, String? type, String? address, String? id_photo}) {
     return Shop(
       id: id ?? this.id,
-      Persondata: Persondata ?? persondata ,
+      Person: Person ?? person,
       name: name ?? this.name,
       type: type ?? this.type,
       address: address ?? this.address,
@@ -142,8 +142,8 @@ class Shop extends Model {
   
   Shop.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _Persondata = json['Persondata']?['serializedData'] != null
-        ? Persondata.fromJson(new Map<String, dynamic>.from(json['Persondata']['serializedData']))
+      _Person = json['Person']?['serializedData'] != null
+        ? Person.fromJson(new Map<String, dynamic>.from(json['Person']['serializedData']))
         : null,
       _name = json['name'],
       _type = json['type'],
@@ -151,13 +151,13 @@ class Shop extends Model {
       _id_photo = json['id_photo'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'Persondata': _Persondata?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo
+    'id': id, 'Person': _Person?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo
   };
 
   static final QueryField ID = QueryField(fieldName: "shop.id");
-  static final QueryField PERSONDATA = QueryField(
-    fieldName: "Persondata",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Persondata).toString()));
+  static final QueryField PERSON = QueryField(
+    fieldName: "Person",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Person).toString()));
   static final QueryField NAME = QueryField(fieldName: "name");
   static final QueryField TYPE = QueryField(fieldName: "type");
   static final QueryField ADDRESS = QueryField(fieldName: "address");
@@ -169,10 +169,10 @@ class Shop extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-      key: Shop.PERSONDATA,
+      key: Shop.PERSON,
       isRequired: true,
-      targetName: "PersondataID",
-      ofModelName: (Persondata).toString()
+      targetName: "PersonID",
+      ofModelName: (Person).toString()
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
