@@ -9,7 +9,6 @@ class CardDate extends StatefulWidget {
 }
 
 class _CardDateState extends State<CardDate> {
-  
   final String titleShop = "Barber shops";
   final String date = "November 21, 2021";
   final String dateTime = "10:00 pm";
@@ -24,9 +23,7 @@ class _CardDateState extends State<CardDate> {
           ListTile(
             onTap: navigateToInfoReservation,
             isThreeLine: true,
-            leading: Image.asset(
-              "assets/images/backgorundlogin.jpg",
-            ),
+            leading: Image.asset("assets/images/backgorundlogin.jpg"),
             title: Text(titleShop),
             subtitle: Column(
               children: <Widget>[

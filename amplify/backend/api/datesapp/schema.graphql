@@ -35,8 +35,8 @@ enum DaysName {
 
 type Day @model @key(name: "byShop", fields: ["ShopID", "dayName"]) {
   id: ID!
-  hour_open: String!
-  hour_close: String!
+  hour_open: AWSTime
+  hour_close: AWSTime
   dayName: String!
   day: DaysName!
   isOpen: Boolean!
