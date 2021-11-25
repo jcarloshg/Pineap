@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/aws/dynamo_day.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
@@ -169,6 +170,73 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
         setState(() => isSignUpComplete = false);
         return;
       }
+
+      //
+      //
+      // upload info days
+      Day DOMINGO = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "DOMINGO",
+      day: DaysName.DOMINGO,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day LUNES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "LUNES",
+      day: DaysName.LUNES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day MARTES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "MARTES",
+      day: DaysName.MARTES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day MIERCOLES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "MIERCOLES",
+      day: DaysName.MIERCOLES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day JUEVES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "JUEVES",
+      day: DaysName.JUEVES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day VIERNES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "VIERNES",
+      day: DaysName.VIERNES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day SABADO = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "SABADO",
+      day: DaysName.SABADO,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    if (DynamoDay.uploadDay(day: DOMINGO) == null) return;
+    if (DynamoDay.uploadDay(day: LUNES) == null) return;
+    if (DynamoDay.uploadDay(day: MARTES) == null) return;
+    if (DynamoDay.uploadDay(day: MIERCOLES) == null) return;
+    if (DynamoDay.uploadDay(day: JUEVES) == null) return;
+    if (DynamoDay.uploadDay(day: VIERNES) == null) return;
+    if (DynamoDay.uploadDay(day: SABADO) == null) return;
 
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomeManagerPage()));

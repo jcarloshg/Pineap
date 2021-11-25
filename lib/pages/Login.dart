@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/aws/dynamo_day.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
@@ -177,10 +178,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedLogIn() async {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const HomePageClient()),
-    );
-
     if (_formKey.currentState!.validate()) {
       String email = emailController.text.trim();
       String pass = passController.text.trim();
@@ -236,6 +233,12 @@ class _LoginScreenState extends State<LoginScreen> {
       email: "carlosj12336@gmail.com",
       password: "qazwsx123",
     );
+    Person? uploadPersonResponse = await DynamoPerson.uploadPerson(
+      personModel: personModel,
+    );
+    if (uploadPersonResponse == null) return;
+    // ignore: avoid_print
+    print("YA NO SE REGISTRO...........................PERSON");
 
     shopModel.setDataWithOutNotify(
       name: "Holaaaa",
@@ -243,12 +246,78 @@ class _LoginScreenState extends State<LoginScreen> {
       addres: "C. Vicente Guerrero #40, Col. Rosas del Tepeyac",
       typeShop: Constants.barberiaSHOP,
     );
+    Shop? uploadShopResponse = await DynamoShop.uploadShop(
+      shopModel: shopModel,
+      person: uploadPersonResponse,
+    );
+    if (uploadShopResponse == null) return;
+    // ignore: avoid_print
+    print("YA NO SE REGISTRO...........................PERSON");
 
-    final response =
-        DynamoShop.plok(shopModel: shopModel, personModel: personModel);
+    Day dayDomingo = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "DOMINGO",
+      day: DaysName.DOMINGO,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day dayLUNES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "Lunes",
+      day: DaysName.LUNES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day dayMARTES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "Lunes",
+      day: DaysName.MARTES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day dayMIERCOLES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "Lunes",
+      day: DaysName.MIERCOLES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day dayJUEVES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "Lunes",
+      day: DaysName.JUEVES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day dayVIERNES = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "Lunes",
+      day: DaysName.VIERNES,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
+    Day daySABADO = Day(
+      hour_open: "09:00 hrs",
+      hour_close: "17:00 hrs",
+      dayName: "Lunes",
+      day: DaysName.SABADO,
+      isOpen: true,
+      Shop: uploadShopResponse,
+    );
 
-    // ignore: avoid_print, unnecessary_null_comparison
-    print(response == null ? "no se registro" : "si se hizo compa   ");
+    if (DynamoDay.uploadDay(day: dayDomingo) == null) return;
+    if (DynamoDay.uploadDay(day: dayLUNES) == null) return;
+    if (DynamoDay.uploadDay(day: dayMARTES) == null) return;
+    if (DynamoDay.uploadDay(day: dayMIERCOLES) == null) return;
+    if (DynamoDay.uploadDay(day: dayJUEVES) == null) return;
+    if (DynamoDay.uploadDay(day: dayVIERNES) == null) return;
+    if (DynamoDay.uploadDay(day: daySABADO) == null) return;
 
     // await Cognito.singOut(context: context);
 

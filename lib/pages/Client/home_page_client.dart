@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Client/profile.dart';
 import 'package:pineap/pages/Client/reservations.dart';
 import 'package:pineap/pages/Client/shops.dart';
+import 'package:provider/provider.dart';
 
 class HomePageClient extends StatefulWidget {
   const HomePageClient({Key? key}) : super(key: key);
@@ -17,22 +20,18 @@ class _HomePageClientState extends State<HomePageClient> {
     const Reservations(),
     const Profile(),
   ];
+  // orivider
+  late PersonModel personModel;
+  late ShopModel shopModel;
 
   @override
   Widget build(BuildContext context) {
+    personModel = Provider.of<PersonModel>(context);
+    shopModel = Provider.of<ShopModel>(context);
+
     return Scaffold(
       //appBar: AppBar(),
       body: screens[currentIndex],
-      // Padding(
-      //   padding: const EdgeInsets.all(16.0),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.start,
-      //     children: const <Widget>[
-      //       TitleWidget(title: "homePage"),
-      //       SubTitle(subtitle: "gola compa"),
-      //     ],
-      //   ),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
