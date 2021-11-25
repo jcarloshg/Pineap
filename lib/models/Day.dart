@@ -29,8 +29,8 @@ import 'package:flutter/foundation.dart';
 class Day extends Model {
   static const classType = const _DayModelType();
   final String id;
-  final String? _hour_open;
-  final String? _hour_close;
+  final TemporalTime? _hour_open;
+  final TemporalTime? _hour_close;
   final String? _dayName;
   final DaysName? _day;
   final bool? _isOpen;
@@ -44,20 +44,12 @@ class Day extends Model {
     return id;
   }
   
-  String get hour_open {
-    try {
-      return _hour_open!;
-    } catch(e) {
-      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
-    }
+  TemporalTime? get hour_open {
+    return _hour_open;
   }
   
-  String get hour_close {
-    try {
-      return _hour_close!;
-    } catch(e) {
-      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
-    }
+  TemporalTime? get hour_close {
+    return _hour_close;
   }
   
   String get dayName {
@@ -92,9 +84,9 @@ class Day extends Model {
     }
   }
   
-  const Day._internal({required this.id, required hour_open, required hour_close, required dayName, required day, required isOpen, required Shop}): _hour_open = hour_open, _hour_close = hour_close, _dayName = dayName, _day = day, _isOpen = isOpen, _Shop = Shop;
+  const Day._internal({required this.id, hour_open, hour_close, required dayName, required day, required isOpen, required Shop}): _hour_open = hour_open, _hour_close = hour_close, _dayName = dayName, _day = day, _isOpen = isOpen, _Shop = Shop;
   
-  factory Day({String? id, required String hour_open, required String hour_close, required String dayName, required DaysName day, required bool isOpen, required Shop Shop}) {
+  factory Day({String? id, TemporalTime? hour_open, TemporalTime? hour_close, required String dayName, required DaysName day, required bool isOpen, required Shop Shop}) {
     return Day._internal(
       id: id == null ? UUID.getUUID() : id,
       hour_open: hour_open,
@@ -131,8 +123,8 @@ class Day extends Model {
     
     buffer.write("Day {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("hour_open=" + "$_hour_open" + ", ");
-    buffer.write("hour_close=" + "$_hour_close" + ", ");
+    buffer.write("hour_open=" + (_hour_open != null ? _hour_open!.format() : "null") + ", ");
+    buffer.write("hour_close=" + (_hour_close != null ? _hour_close!.format() : "null") + ", ");
     buffer.write("dayName=" + "$_dayName" + ", ");
     buffer.write("day=" + (_day != null ? enumToString(_day)! : "null") + ", ");
     buffer.write("isOpen=" + (_isOpen != null ? _isOpen!.toString() : "null") + ", ");
@@ -142,7 +134,7 @@ class Day extends Model {
     return buffer.toString();
   }
   
-  Day copyWith({String? id, String? hour_open, String? hour_close, String? dayName, DaysName? day, bool? isOpen, Shop? Shop}) {
+  Day copyWith({String? id, TemporalTime? hour_open, TemporalTime? hour_close, String? dayName, DaysName? day, bool? isOpen, Shop? Shop}) {
     return Day(
       id: id ?? this.id,
       hour_open: hour_open ?? this.hour_open,
@@ -155,8 +147,8 @@ class Day extends Model {
   
   Day.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _hour_open = json['hour_open'],
-      _hour_close = json['hour_close'],
+      _hour_open = json['hour_open'] != null ? TemporalTime.fromString(json['hour_open']) : null,
+      _hour_close = json['hour_close'] != null ? TemporalTime.fromString(json['hour_close']) : null,
       _dayName = json['dayName'],
       _day = enumFromString<DaysName>(json['day'], DaysName.values),
       _isOpen = json['isOpen'],
@@ -165,7 +157,7 @@ class Day extends Model {
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'hour_open': _hour_open, 'hour_close': _hour_close, 'dayName': _dayName, 'day': enumToString(_day), 'isOpen': _isOpen, 'Shop': _Shop?.toJson()
+    'id': id, 'hour_open': _hour_open?.format(), 'hour_close': _hour_close?.format(), 'dayName': _dayName, 'day': enumToString(_day), 'isOpen': _isOpen, 'Shop': _Shop?.toJson()
   };
 
   static final QueryField ID = QueryField(fieldName: "day.id");
@@ -185,14 +177,14 @@ class Day extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Day.HOUR_OPEN,
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.time)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Day.HOUR_CLOSE,
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.time)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
