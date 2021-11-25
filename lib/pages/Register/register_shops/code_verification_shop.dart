@@ -1,3 +1,4 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/show_loading.dart';
 import 'package:pineap/aws/cognito.dart';
@@ -175,56 +176,56 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       //
       // upload info days
       Day DOMINGO = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "DOMINGO",
       day: DaysName.DOMINGO,
       isOpen: true,
       Shop: uploadShopResponse,
     );
     Day LUNES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "LUNES",
       day: DaysName.LUNES,
       isOpen: true,
       Shop: uploadShopResponse,
     );
     Day MARTES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "MARTES",
       day: DaysName.MARTES,
       isOpen: true,
       Shop: uploadShopResponse,
     );
     Day MIERCOLES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "MIERCOLES",
       day: DaysName.MIERCOLES,
       isOpen: true,
       Shop: uploadShopResponse,
     );
     Day JUEVES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "JUEVES",
       day: DaysName.JUEVES,
       isOpen: true,
       Shop: uploadShopResponse,
     );
     Day VIERNES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "VIERNES",
       day: DaysName.VIERNES,
       isOpen: true,
       Shop: uploadShopResponse,
     );
     Day SABADO = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
+      hour_open: TemporalTime.now(),
+      hour_close: TemporalTime.now(),
       dayName: "SABADO",
       day: DaysName.SABADO,
       isOpen: true,

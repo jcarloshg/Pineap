@@ -75,12 +75,12 @@ class _BoxDayHourState extends State<BoxDayHour> {
                 const Icon(Icons.lock_clock),
                 Row(
                   children: <Widget>[
-                    Text(widget.day.hour_open),
+                    Text(widget.day.hour_open.toString()),
                     IconButton(
                       onPressed: () => showPickSartTime(context),
                       icon: const Icon(Icons.arrow_drop_down),
                     ),
-                    Text(widget.day.hour_close),
+                    Text(widget.day.hour_close.toString()),
                     IconButton(
                       onPressed: () => showPickSartTime(context),
                       icon: const Icon(Icons.arrow_drop_down),
