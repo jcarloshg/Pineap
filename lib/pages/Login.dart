@@ -191,8 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      String userEmail = await Cognito.getCurrentUserEmail(context: context);
-      Person? person = await DynamoPerson.getPerson(userEmail: userEmail);
+      String? userEmail = await Cognito.getCurrentUserEmail(context: context);
+      Person? person = await DynamoPerson.getPerson(userEmail: userEmail!);
 
       if (person == null) {
         Messages.scaffoldMessengerWidget(
@@ -222,106 +222,117 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedCerrarSesion() async {
-    PersonModel personModel = PersonModel();
-    ShopModel shopModel = ShopModel();
-
-    personModel.setDataWithOutNotify(
-      lastName: "Huerta",
-      firstName: "Jose Carlos",
-      birthday: DateTime.now(),
-      role: Constants.manager,
-      email: "carlosj12336@gmail.com",
-      password: "qazwsx123",
-    );
-    Person? uploadPersonResponse = await DynamoPerson.uploadPerson(
-      personModel: personModel,
-    );
-    if (uploadPersonResponse == null) return;
-    // ignore: avoid_print
-    print("YA NO SE REGISTRO...........................PERSON");
-
-    shopModel.setDataWithOutNotify(
-      name: "Holaaaa",
-      idPhoto: "",
-      addres: "C. Vicente Guerrero #40, Col. Rosas del Tepeyac",
-      typeShop: Constants.barberiaSHOP,
-    );
-    Shop? uploadShopResponse = await DynamoShop.uploadShop(
-      shopModel: shopModel,
-      person: uploadPersonResponse,
-    );
-    if (uploadShopResponse == null) return;
-    // ignore: avoid_print
-    print("YA NO SE REGISTRO...........................PERSON");
-
-    Day dayDomingo = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "DOMINGO",
-      day: DaysName.DOMINGO,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day dayLUNES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "Lunes",
-      day: DaysName.LUNES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day dayMARTES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "Lunes",
-      day: DaysName.MARTES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day dayMIERCOLES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "Lunes",
-      day: DaysName.MIERCOLES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day dayJUEVES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "Lunes",
-      day: DaysName.JUEVES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day dayVIERNES = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "Lunes",
-      day: DaysName.VIERNES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day daySABADO = Day(
-      hour_open: "09:00 hrs",
-      hour_close: "17:00 hrs",
-      dayName: "Lunes",
-      day: DaysName.SABADO,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-
-    if (DynamoDay.uploadDay(day: dayDomingo) == null) return;
-    if (DynamoDay.uploadDay(day: dayLUNES) == null) return;
-    if (DynamoDay.uploadDay(day: dayMARTES) == null) return;
-    if (DynamoDay.uploadDay(day: dayMIERCOLES) == null) return;
-    if (DynamoDay.uploadDay(day: dayJUEVES) == null) return;
-    if (DynamoDay.uploadDay(day: dayVIERNES) == null) return;
-    if (DynamoDay.uploadDay(day: daySABADO) == null) return;
-
     // await Cognito.singOut(context: context);
 
-    // String userId = await Cognito.getCurrentUserID(context: context);
+    // ========================================================
+    // ========================================================
+    // ========================================================
+    // ========================================================
+
+    // PersonModel personModel = PersonModel();
+    // ShopModel shopModel = ShopModel();
+
+    // personModel.setDataWithOutNotify(
+    //   lastName: "Huerta",
+    //   firstName: "Jose Carlos",
+    //   birthday: DateTime.now(),
+    //   role: Constants.manager,
+    //   email: "carlosj12336@gmail.com",
+    //   password: "qazwsx123",
+    // );
+    // Person? uploadPersonResponse = await DynamoPerson.uploadPerson(
+    //   personModel: personModel,
+    // );
+    // if (uploadPersonResponse == null) return;
+    // // ignore: avoid_print
+    // print("YA NO SE REGISTRO...........................PERSON");
+
+    // shopModel.setDataWithOutNotify(
+    //   name: "Holaaaa",
+    //   idPhoto: "",
+    //   addres: "C. Vicente Guerrero #40, Col. Rosas del Tepeyac",
+    //   typeShop: Constants.barberiaSHOP,
+    // );
+    // Shop? uploadShopResponse = await DynamoShop.uploadShop(
+    //   shopModel: shopModel,
+    //   person: uploadPersonResponse,
+    // );
+    // if (uploadShopResponse == null) return;
+    // // ignore: avoid_print
+    // print("YA NO SE REGISTRO...........................PERSON");
+
+    // Day dayDomingo = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "DOMINGO",
+    //   day: DaysName.DOMINGO,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+    // Day dayLUNES = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "Lunes",
+    //   day: DaysName.LUNES,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+    // Day dayMARTES = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "Lunes",
+    //   day: DaysName.MARTES,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+    // Day dayMIERCOLES = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "Lunes",
+    //   day: DaysName.MIERCOLES,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+    // Day dayJUEVES = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "Lunes",
+    //   day: DaysName.JUEVES,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+    // Day dayVIERNES = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "Lunes",
+    //   day: DaysName.VIERNES,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+    // Day daySABADO = Day(
+    //   hour_open: "09:00 hrs",
+    //   hour_close: "17:00 hrs",
+    //   dayName: "Lunes",
+    //   day: DaysName.SABADO,
+    //   isOpen: true,
+    //   Shop: uploadShopResponse,
+    // );
+
+    // if (DynamoDay.uploadDay(day: dayDomingo) == null) return;
+    // if (DynamoDay.uploadDay(day: dayLUNES) == null) return;
+    // if (DynamoDay.uploadDay(day: dayMARTES) == null) return;
+    // if (DynamoDay.uploadDay(day: dayMIERCOLES) == null) return;
+    // if (DynamoDay.uploadDay(day: dayJUEVES) == null) return;
+    // if (DynamoDay.uploadDay(day: dayVIERNES) == null) return;
+    // if (DynamoDay.uploadDay(day: daySABADO) == null) return;
+
+    // ========================================================
+    // ========================================================
+    // ========================================================
+    // ========================================================
+
+    
+
     // await DynamoPerson.getPerson(userId: userId);
   }
 }

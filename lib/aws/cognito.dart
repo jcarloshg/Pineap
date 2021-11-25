@@ -104,7 +104,7 @@ class Cognito {
     return userId;
   }
 
-  static Future<String> getCurrentUserEmail({
+  static Future<String?> getCurrentUserEmail({
     required BuildContext context,
   }) async {
     String userEmail = "";
@@ -113,11 +113,12 @@ class Cognito {
       // ignore: avoid_print
       userEmail = authUser.username;
     } on AuthException catch (e) {
-      String err = "[getCurrentUser]" + e.message;
+      String err = "[getCurrentUser]      " + e.message;
       // ignore: avoid_print
       print(err);
       Messages.scaffoldMessengerWidget(
           context: context, message: "[singIn]" + err);
+      return null;
     }
 
     return userEmail;
