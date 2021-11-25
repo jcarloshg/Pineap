@@ -4,6 +4,7 @@ import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/aws/dynamo_Shop.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
+import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Manager/home_manager.dart';
@@ -124,6 +125,9 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
+      //
+      //
+      // send code verfication
       bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
         username: personModel.getEmail,
         codeVerification: codeVerification,
@@ -137,7 +141,10 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
         return;
       }
 
-      final uploadPersonResponse = await DynamoPerson.uploadPerson(
+      //
+      //
+      // upload indo user
+      Person? uploadPersonResponse = await DynamoPerson.uploadPerson(
         personModel: personModel,
       );
       if (uploadPersonResponse == null) {
@@ -148,7 +155,13 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
         return;
       }
 
-      final uploadShopResponse = await DynamoShop.uploadShop(shopModel: shopModel);
+      //
+      //
+      // upload info shop
+      Shop? uploadShopResponse = await DynamoShop.uploadShop(
+        shopModel: shopModel,
+        person: uploadPersonResponse,
+      );
       if (uploadShopResponse == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al registrar info del negocio');

@@ -7,14 +7,27 @@ import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
 
 class DynamoShop {
-  static Future<String?> uploadShop({required ShopModel shopModel}) async {
-    // Shop shop = Shop(
-    //   name: shopModel.name,
-    //   id_photo: shopModel.idPhoto,
-    //   address: shopModel.addres,
-    //   type: shopModel.typeShop,
-    //   person: person
-    // );
+  static Future<Shop?> uploadShop({
+    required Person person,
+    required ShopModel shopModel,
+  }) async {
+    Shop shop = Shop(
+      Person: person,
+      name: shopModel.name,
+      type: shopModel.typeShop,
+      address: shopModel.addres,
+      id_photo: shopModel.idPhoto,
+    );
+
+    try {
+      await Amplify.DataStore.save(shop);
+    } catch (e) {
+      // ignore: avoid_print
+      print("[uploadShop] " + e.toString());
+      return null;
+    }
+
+    return shop;
 
     // try {
     //   await Amplify.DataStore.save(shop);
@@ -47,9 +60,12 @@ class DynamoShop {
     );
 
     try {
+      // ignore: avoid_print
+      print("\n\n\n\n\n\n\n\n\n\n" + person.toString());
       await Amplify.DataStore.save(person);
       // ignore: avoid_print
-      print('Post saved');
+      print("\n\n\n\n\n\n\n\n\n\n" + person.toString());
+
       await Amplify.DataStore.save(shop);
       // ignore: avoid_print
       print('Comment saved');

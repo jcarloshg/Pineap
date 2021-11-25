@@ -111,10 +111,14 @@ class _CodeVerificationState extends State<CodeVerification> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
+      //
+      //
+      // send code verfication
       bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
-          username: personModel.getEmail,
-          codeVerification: codeVerification,
-          context: context);
+        username: personModel.getEmail,
+        codeVerification: codeVerification,
+        context: context,
+      );
       if (!isSignUpCompleteResponse) {
         Messages.scaffoldMessengerWidget(
             context: context, message: 'Error al verificar el código');
@@ -123,6 +127,9 @@ class _CodeVerificationState extends State<CodeVerification> {
         return;
       }
 
+      //
+      //
+      // upload indo user
       final uploadPersonResponse = await DynamoPerson.uploadPerson(
         personModel: personModel,
       );
