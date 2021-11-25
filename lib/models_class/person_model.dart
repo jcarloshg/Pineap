@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/models/ModelProvider.dart';
 
 class PersonModel extends ChangeNotifier {
   String lastName = "";
@@ -52,6 +53,17 @@ class PersonModel extends ChangeNotifier {
     this.role = role;
     this.email = email;
     this.password = password;
+  }
+
+  void setDataWithPerson({required Person person}) {
+    lastName = person.last_name;
+    firstName = person.first_name;
+    birthday = person.birthday!.getDateTimeInUtc();
+    role = person.role;
+    email = person.email;
+    password = "";
+
+    notifyListeners();
   }
 
   String get getLastName => lastName;

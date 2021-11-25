@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/models/ModelProvider.dart';
 
 class ShopModel extends ChangeNotifier {
   String name = "";
   String idPhoto = "";
   String addres = "";
   String typeShop = "";
+  List<Day>? _days;
 
   ShopModel();
 
@@ -31,6 +33,19 @@ class ShopModel extends ChangeNotifier {
     this.idPhoto = idPhoto;
     this.addres = addres;
     this.typeShop = typeShop;
+  }
+
+  void setDataWithShop({required Shop shop}) {
+    name = shop.name;
+    idPhoto = shop.id_photo;
+    addres = shop.address;
+    typeShop = shop.type;
+    notifyListeners();
+  }
+
+  void setDays({required List<Day> days}) {
+    _days = days;
+    notifyListeners();
   }
 
   String get getName => name;

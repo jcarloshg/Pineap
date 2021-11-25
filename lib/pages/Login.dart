@@ -191,22 +191,27 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
+      //
+      //
+      // get email from current user
       String? userEmail = await Cognito.getCurrentUserEmail(context: context);
-      Person? person = await DynamoPerson.getPerson(userEmail: userEmail!);
-
-      if (person == null) {
+      if (userEmail == null) {
         Messages.scaffoldMessengerWidget(
             context: context, message: "error al obtener info user");
         return;
       }
 
-      Provider.of<PersonModel>(context, listen: false).setData(
-        firstName: person.first_name,
-        lastName: person.last_name,
-        birthday: person.birthday!.getDateTimeInUtc(),
-        email: person.email,
-        password: pass,
-        role: person.role,
+      //
+      //
+      // set data person
+      Person? person = await DynamoPerson.getPerson(userEmail: userEmail);
+      if (person == null) {
+        Messages.scaffoldMessengerWidget(
+            context: context, message: "error al obtener info user");
+        return;
+      }
+      Provider.of<PersonModel>(context, listen: false).setDataWithPerson(
+        person: person,
       );
 
       if (person.role == Constants.client) {
@@ -214,6 +219,24 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => const HomePageClient()),
         );
       } else {
+        //
+        //
+        // set data shop
+        Shop? shop = (await Amplify.DataStore.query(
+          Shop.classType,
+          where: Shop.PERSON.eq(person.id),
+        ))[0];
+        if (shop == null) return;
+        Provider.of<ShopModel>(context, listen: false)
+            .setDataWithShop(shop: shop);
+        //
+        //
+        // set day
+        List<Day> days = await Amplify.DataStore.query(
+          Day.classType,
+          where: Day.SHOP.eq(shop.getId()),
+        );
+        Provider.of<ShopModel>(context, listen: false).setDays(days: days);
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomeManagerPage()),
         );
@@ -222,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedCerrarSesion() async {
-    // await Cognito.singOut(context: context);
+    await Cognito.singOut(context: context);
 
     // ========================================================
     // ========================================================
@@ -330,8 +353,6 @@ class _LoginScreenState extends State<LoginScreen> {
     // ========================================================
     // ========================================================
     // ========================================================
-
-    
 
     // await DynamoPerson.getPerson(userId: userId);
   }
