@@ -19,42 +19,12 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'Day.dart';
-import 'Person.dart';
-import 'Shop.dart';
-
-export 'Day.dart';
-export 'DaysName.dart';
-export 'Person.dart';
-export 'Shop.dart';
-
-class ModelProvider implements ModelProviderInterface {
-  @override
-  String version = "5f991c31e3f0340f1e36cd7ad1c3ac41";
-  @override
-  List<ModelSchema> modelSchemas = [Day.schema, Person.schema, Shop.schema];
-  static final ModelProvider _instance = ModelProvider();
-
-  static ModelProvider get instance => _instance;
-  
-  ModelType getModelTypeByModelName(String modelName) {
-    switch(modelName) {
-    case "Day": {
-    return Day.classType;
-    }
-    break;
-    case "Person": {
-    return Person.classType;
-    }
-    break;
-    case "Shop": {
-    return Shop.classType;
-    }
-    break;
-    default: {
-    throw Exception("Failed to find model in model provider for model name: " + modelName);
-    }
-    }
-  }
+enum DaysName {
+  DOMINGO,
+  LUNES,
+  MARTES,
+  MIERCOLES,
+  JUEVES,
+  VIERNES,
+  SABADO
 }

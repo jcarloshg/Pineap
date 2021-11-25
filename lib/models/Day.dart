@@ -19,6 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
+import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 
@@ -30,7 +31,10 @@ class Day extends Model {
   final String id;
   final String? _hour_open;
   final String? _hour_close;
+  final String? _dayName;
+  final DaysName? _day;
   final bool? _isOpen;
+  final Shop? _Shop;
 
   @override
   getInstanceType() => classType;
@@ -56,6 +60,22 @@ class Day extends Model {
     }
   }
   
+  String get dayName {
+    try {
+      return _dayName!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
+  }
+  
+  DaysName get day {
+    try {
+      return _day!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
+  }
+  
   bool get isOpen {
     try {
       return _isOpen!;
@@ -64,14 +84,25 @@ class Day extends Model {
     }
   }
   
-  const Day._internal({required this.id, required hour_open, required hour_close, required isOpen}): _hour_open = hour_open, _hour_close = hour_close, _isOpen = isOpen;
+  Shop get shop {
+    try {
+      return _Shop!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
+  }
   
-  factory Day({String? id, required String hour_open, required String hour_close, required bool isOpen}) {
+  const Day._internal({required this.id, required hour_open, required hour_close, required dayName, required day, required isOpen, required Shop}): _hour_open = hour_open, _hour_close = hour_close, _dayName = dayName, _day = day, _isOpen = isOpen, _Shop = Shop;
+  
+  factory Day({String? id, required String hour_open, required String hour_close, required String dayName, required DaysName day, required bool isOpen, required Shop Shop}) {
     return Day._internal(
       id: id == null ? UUID.getUUID() : id,
       hour_open: hour_open,
       hour_close: hour_close,
-      isOpen: isOpen);
+      dayName: dayName,
+      day: day,
+      isOpen: isOpen,
+      Shop: Shop);
   }
   
   bool equals(Object other) {
@@ -85,7 +116,10 @@ class Day extends Model {
       id == other.id &&
       _hour_open == other._hour_open &&
       _hour_close == other._hour_close &&
-      _isOpen == other._isOpen;
+      _dayName == other._dayName &&
+      _day == other._day &&
+      _isOpen == other._isOpen &&
+      _Shop == other._Shop;
   }
   
   @override
@@ -99,48 +133,53 @@ class Day extends Model {
     buffer.write("id=" + "$id" + ", ");
     buffer.write("hour_open=" + "$_hour_open" + ", ");
     buffer.write("hour_close=" + "$_hour_close" + ", ");
-    buffer.write("isOpen=" + (_isOpen != null ? _isOpen!.toString() : "null"));
+    buffer.write("dayName=" + "$_dayName" + ", ");
+    buffer.write("day=" + (_day != null ? enumToString(_day)! : "null") + ", ");
+    buffer.write("isOpen=" + (_isOpen != null ? _isOpen!.toString() : "null") + ", ");
+    buffer.write("Shop=" + (_Shop != null ? _Shop!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Day copyWith({String? id, String? hour_open, String? hour_close, bool? isOpen}) {
+  Day copyWith({String? id, String? hour_open, String? hour_close, String? dayName, DaysName? day, bool? isOpen, Shop? Shop}) {
     return Day(
       id: id ?? this.id,
       hour_open: hour_open ?? this.hour_open,
       hour_close: hour_close ?? this.hour_close,
-      isOpen: isOpen ?? this.isOpen);
+      dayName: dayName ?? this.dayName,
+      day: day ?? this.day,
+      isOpen: isOpen ?? this.isOpen,
+      Shop: Shop ?? shop);
   }
   
   Day.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _hour_open = json['hour_open'],
       _hour_close = json['hour_close'],
-      _isOpen = json['isOpen'];
+      _dayName = json['dayName'],
+      _day = enumFromString<DaysName>(json['day'], DaysName.values),
+      _isOpen = json['isOpen'],
+      _Shop = json['Shop']?['serializedData'] != null
+        ? Shop.fromJson(new Map<String, dynamic>.from(json['Shop']['serializedData']))
+        : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'hour_open': _hour_open, 'hour_close': _hour_close, 'isOpen': _isOpen
+    'id': id, 'hour_open': _hour_open, 'hour_close': _hour_close, 'dayName': _dayName, 'day': enumToString(_day), 'isOpen': _isOpen, 'Shop': _Shop?.toJson()
   };
 
   static final QueryField ID = QueryField(fieldName: "day.id");
   static final QueryField HOUR_OPEN = QueryField(fieldName: "hour_open");
   static final QueryField HOUR_CLOSE = QueryField(fieldName: "hour_close");
+  static final QueryField DAYNAME = QueryField(fieldName: "dayName");
+  static final QueryField DAY = QueryField(fieldName: "day");
   static final QueryField ISOPEN = QueryField(fieldName: "isOpen");
+  static final QueryField SHOP = QueryField(
+    fieldName: "Shop",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Shop).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Day";
     modelSchemaDefinition.pluralName = "Days";
-    
-    modelSchemaDefinition.authRules = [
-      AuthRule(
-        authStrategy: AuthStrategy.PUBLIC,
-        operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
-        ])
-    ];
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
@@ -157,9 +196,28 @@ class Day extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Day.DAYNAME,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Day.DAY,
+      isRequired: true,
+      ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Day.ISOPEN,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.bool)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+      key: Day.SHOP,
+      isRequired: true,
+      targetName: "ShopID",
+      ofModelName: (Shop).toString()
     ));
   });
 }
