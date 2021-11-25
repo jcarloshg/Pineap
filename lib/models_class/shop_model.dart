@@ -45,7 +45,18 @@ class ShopModel extends ChangeNotifier {
 
   void setDays({required List<Day> days}) {
     this.days = days;
+
+    // this.days!.forEach((day) => print(day.toString()));
+
     notifyListeners();
+  }
+
+  @override
+  String toString() {
+    return "name = $name"
+        "idPhoto = $idPhoto"
+        "addres = $addres"
+        "typeShop = $typeShop ";
   }
 
   String get getName => name;

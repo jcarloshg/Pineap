@@ -1,6 +1,9 @@
 // ignore_for_file: file_names
 
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:amplify_datastore_plugin_interface/src/types/temporal/temporal_time.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/models/ModelProvider.dart';
 
@@ -27,7 +30,7 @@ class _BoxDayHourState extends State<BoxDayHour> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -75,12 +78,12 @@ class _BoxDayHourState extends State<BoxDayHour> {
                 const Icon(Icons.lock_clock),
                 Row(
                   children: <Widget>[
-                    Text(widget.day.hour_open.toString()),
+                    Text(_getFormatDateTime(widget.day.hour_open)),
                     IconButton(
                       onPressed: () => showPickSartTime(context),
                       icon: const Icon(Icons.arrow_drop_down),
                     ),
-                    Text(widget.day.hour_close.toString()),
+                    Text(_getFormatDateTime(widget.day.hour_close)),
                     IconButton(
                       onPressed: () => showPickSartTime(context),
                       icon: const Icon(Icons.arrow_drop_down),
@@ -117,5 +120,16 @@ class _BoxDayHourState extends State<BoxDayHour> {
 
     // hourEndController.text =
     //     '${timeSelected?.hour.toString()} : ${timeSelected?.minute.toString()}';
+  }
+
+  String _getFormatDateTime(TemporalTime? hour) {
+    String format = "";
+    format = hour.toString();
+
+    final dateTime = DateTime.parse('2021-08-11T$format');
+    final dateFormat = DateFormat('HH:mm');
+    format = "${dateFormat.format(dateTime)} hrs";
+
+    return format;
   }
 }

@@ -237,6 +237,9 @@ class _LoginScreenState extends State<LoginScreen> {
           where: Day.SHOP.eq(shop.getId()),
         );
         Provider.of<ShopModel>(context, listen: false).setDays(days: days);
+
+        
+
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomeManagerPage()),
         );
