@@ -246,7 +246,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final response =
         DynamoShop.plok(shopModel: shopModel, personModel: personModel);
-    // ignore: avoid_print
+
+    // ignore: avoid_print, unnecessary_null_comparison
     print(response == null ? "no se registro" : "si se hizo compa   ");
 
     // await Cognito.singOut(context: context);

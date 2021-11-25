@@ -83,6 +83,7 @@ class Shop extends Model {
     }
   }
   
+  // ignore: avoid_types_as_parameter_names
   const Shop._internal({required this.id, required Person, required name, required type, required address, required id_photo}): _Person = Person, _name = name, _type = type, _address = address, _id_photo = id_photo;
   
   factory Shop({String? id, required Person Person, required String name, required String type, required String address, required String id_photo}) {

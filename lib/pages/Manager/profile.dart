@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/info_box.dart';
-import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
