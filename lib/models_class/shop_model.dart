@@ -6,7 +6,7 @@ class ShopModel extends ChangeNotifier {
   String idPhoto = "";
   String addres = "";
   String typeShop = "";
-  List<Day>? _days;
+  List<Day>? days;
 
   ShopModel();
 
@@ -44,7 +44,7 @@ class ShopModel extends ChangeNotifier {
   }
 
   void setDays({required List<Day> days}) {
-    _days = days;
+    this.days = days;
     notifyListeners();
   }
 
@@ -52,4 +52,5 @@ class ShopModel extends ChangeNotifier {
   String get getIdPhoto => idPhoto;
   String get getAddress => addres;
   String get getTypeShop => typeShop;
+  List<Day>? get getDays => days;
 }

@@ -20,36 +20,36 @@ class _ScheduleState extends State<Schedule> {
     shopModel = Provider.of<ShopModel>(context);
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const TitleWidget(title: "Horas de citas"),
-                const SubTitle(subtitle: "Puedes ver y modificar tus horas de cita"),
-
-                TitleWidget(title: shopModel.addres),
-
-                SizedBox(height: 32),
-                BoxDayHour(),
-                SizedBox(height: 16),
-                BoxDayHour(),
-                SizedBox(height: 16),
-                BoxDayHour(),
-                SizedBox(height: 16),
-                BoxDayHour(),
-                SizedBox(height: 16),
-                BoxDayHour(),
-                SizedBox(height: 16),
-                BoxDayHour(),
-                SizedBox(height: 16),
-                BoxDayHour(),
-                SizedBox(height: 16),
-              ],
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: Column(
+                children: const <Widget>[
+                  TitleWidget(title: "Horas de citas"),
+                  SubTitle(
+                      subtitle: "Puedes ver y modificar tus horas de cita"),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(height: 32),
+            Expanded(
+              child: ListView.builder(
+                itemCount: shopModel.getDays?.length,
+                itemBuilder: (context, index) {
+                  return BoxDayHour(day: shopModel.getDays![index]);
+                },
+              ),
+            ),
+          ],
         ),
+        // Padding(
+        //   padding: const EdgeInsets.all(16.0),
+        //   child: SingleChildScrollView(
+        //     child:
+        //   ),
+        // ),
       ),
     );
   }

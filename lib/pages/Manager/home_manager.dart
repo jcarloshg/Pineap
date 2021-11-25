@@ -1,14 +1,7 @@
-import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
-import 'package:pineap/aws/cognito.dart';
-import 'package:pineap/aws/dynamo_person.dart';
-import 'package:pineap/models/ModelProvider.dart';
-import 'package:pineap/models_class/person_model.dart';
-import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Manager/profile.dart';
 import 'package:pineap/pages/Manager/reservations.dart';
 import 'package:pineap/pages/Manager/schedule.dart';
-import 'package:provider/provider.dart';
 
 class HomeManagerPage extends StatefulWidget {
   const HomeManagerPage({Key? key}) : super(key: key);
@@ -42,7 +35,7 @@ class _HomeManagerPageState extends State<HomeManagerPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.schedule),
-            label: "Resevraciones",
+            label: "Reservaciones",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
