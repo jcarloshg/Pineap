@@ -2,6 +2,7 @@
 
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_datastore_plugin_interface/src/types/temporal/temporal_time.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/helpers/constants.dart';
@@ -78,14 +79,18 @@ class _BoxDayHourState extends State<BoxDayHour> {
                 const Icon(Icons.lock_clock),
                 Row(
                   children: <Widget>[
-                    Text(_getFormatDateTime(widget.day.hour_open)),
+                    Text(_getFormatTemporalTime(widget.day.hour_open)),
                     IconButton(
-                      onPressed: () => showPickSartTime(context),
+                      onPressed: () => showPickSartTime(
+                          context: context,
+                          hourToChanged: widget.day.hour_open),
                       icon: const Icon(Icons.arrow_drop_down),
                     ),
-                    Text(_getFormatDateTime(widget.day.hour_close)),
+                    Text(_getFormatTemporalTime(widget.day.hour_close)),
                     IconButton(
-                      onPressed: () => showPickSartTime(context),
+                      onPressed: () => showPickSartTime(
+                          context: context,
+                          hourToChanged: widget.day.hour_close),
                       icon: const Icon(Icons.arrow_drop_down),
                     )
                   ],
@@ -98,10 +103,28 @@ class _BoxDayHourState extends State<BoxDayHour> {
     );
   }
 
-  Future<void> showPickSartTime(BuildContext context) async {
-    final timeSelected = await showTimePicker(
+  Future<void> showPickSartTime({
+    required BuildContext context,
+    TemporalTime? hourToChanged,
+  }) async {
+    showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 4, minute: 0),
+    ).then(
+      (value) => {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Cambiar horario"),
+            content: Text(
+                "¿Seguro que quiere actulizar su hora de ${_getFormatTemporalTime(hourToChanged)} a ${_getFormatTimeOfDay(timeOfDay: value)}?"),
+            actions: <Widget>[
+              TextButton(onPressed: () => print("si"), child: const Text("si")),
+              TextButton(onPressed: () => print("no"), child: const Text("no")),
+            ],
+          ),
+        )
+      },
     );
   }
 
@@ -122,13 +145,25 @@ class _BoxDayHourState extends State<BoxDayHour> {
     //     '${timeSelected?.hour.toString()} : ${timeSelected?.minute.toString()}';
   }
 
-  String _getFormatDateTime(TemporalTime? hour) {
+  String _getFormatTemporalTime(TemporalTime? temporalTime) {
     String format = "";
-    format = hour.toString();
+    format = temporalTime.toString();
 
     final dateTime = DateTime.parse('2021-08-11T$format');
     final dateFormat = DateFormat('HH:mm');
     format = "${dateFormat.format(dateTime)} hrs";
+
+    return format;
+  }
+
+  String _getFormatTimeOfDay({TimeOfDay? timeOfDay}) {
+    String format = "";
+
+    if (timeOfDay!.hour < 10) format += "0";
+    format += "${timeOfDay.hour}";
+    format += ":";
+    if (timeOfDay.minute < 10) format += "0";
+    format += "${timeOfDay.minute} hrs";
 
     return format;
   }
