@@ -13,9 +13,9 @@ class HomeManagerPage extends StatefulWidget {
 class _HomeManagerPageState extends State<HomeManagerPage> {
   int currentIndex = 0;
   final screens = [
-    const Schedule(),
-    const Reservations(),
-    const Profile(),
+    Schedule(),
+    Reservations(),
+    Profile(),
   ];
 
   @override

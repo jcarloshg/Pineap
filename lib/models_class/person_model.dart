@@ -9,6 +9,16 @@ class PersonModel extends ChangeNotifier {
   String email = "";
   String password = "";
 
+  Person? _person;
+
+  Person get getPerson {
+    return _person!;
+  }
+
+  set setPerson(Person person) {
+    _person = person;
+  }
+
   PersonModel();
 
   @override

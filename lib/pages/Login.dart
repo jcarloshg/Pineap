@@ -211,6 +211,9 @@ class _LoginScreenState extends State<LoginScreen> {
       Provider.of<PersonModel>(context, listen: false).setDataWithPerson(
         person: person,
       );
+      Provider.of<PersonModel>(context, listen: false).setPerson = person;
+
+      print(person.toString());
 
       if (person.role == Constants.client) {
         Navigator.of(context).push(
@@ -227,6 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (shop == null) return;
         Provider.of<ShopModel>(context, listen: false)
             .setDataWithShop(shop: shop);
+        Provider.of<ShopModel>(context, listen: false).setShop = shop;
         //
         //
         // set day
@@ -235,8 +239,6 @@ class _LoginScreenState extends State<LoginScreen> {
           where: Day.SHOP.eq(shop.getId()),
         );
         Provider.of<ShopModel>(context, listen: false).setDays(days: days);
-
-        
 
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomeManagerPage()),

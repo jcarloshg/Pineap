@@ -1,11 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:amplify_datastore/amplify_datastore.dart';
-import 'package:amplify_datastore_plugin_interface/src/types/temporal/temporal_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pineap/aws/dynamo_Shop.dart';
 import 'package:pineap/aws/dynamo_day.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/models/ModelProvider.dart';
@@ -23,8 +21,8 @@ class BoxDayHour extends StatefulWidget {
 }
 
 class _BoxDayHourState extends State<BoxDayHour> {
-  late ShopModel shopModel;
   String dropdownValue = "Abierto";
+  late ShopModel shopModel;
 
   @override
   Widget build(BuildContext context) {
@@ -183,8 +181,12 @@ class _BoxDayHourState extends State<BoxDayHour> {
         message: "Se actualizó la hora correctamente",
       );
 
-      List<Day> days = await DynamoDay.getDays(shopId: shopModel.getId);
-      shopModel.setDays(days: days);
+      setState(() async {
+        List<Day> days = await DynamoDay.getDays(shopId: shopModel.getId);
+        shopModel.setDays(days: days);
+
+        shopModel.setName = "TQUITOSasjdfhasjkd";
+      });
     } else {
       Messages.scaffoldMessengerWidget(
         context: context,

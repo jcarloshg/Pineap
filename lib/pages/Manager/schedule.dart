@@ -13,11 +13,12 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
-  late ShopModel shopModel;
+  // late ShopModel shopModel;
 
   @override
   Widget build(BuildContext context) {
-    shopModel = Provider.of<ShopModel>(context);
+    final shopModel = Provider.of<ShopModel>(context);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
