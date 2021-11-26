@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pineap/models/ModelProvider.dart';
 
 class ShopModel extends ChangeNotifier {
+  String id = "";
   String name = "";
   String idPhoto = "";
   String addres = "";
@@ -36,6 +37,7 @@ class ShopModel extends ChangeNotifier {
   }
 
   void setDataWithShop({required Shop shop}) {
+    id = shop.id;
     name = shop.name;
     idPhoto = shop.id_photo;
     addres = shop.address;
@@ -46,7 +48,7 @@ class ShopModel extends ChangeNotifier {
   void setDays({required List<Day> days}) {
     this.days = days;
 
-    // this.days!.forEach((day) => print(day.toString()));
+    this.days!.forEach((day) => print(day.toString()));
 
     notifyListeners();
   }
@@ -58,7 +60,7 @@ class ShopModel extends ChangeNotifier {
         "addres = $addres"
         "typeShop = $typeShop ";
   }
-
+  String get getId => id;
   String get getName => name;
   String get getIdPhoto => idPhoto;
   String get getAddress => addres;

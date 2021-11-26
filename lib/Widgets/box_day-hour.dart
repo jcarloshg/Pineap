@@ -5,8 +5,13 @@ import 'package:amplify_datastore_plugin_interface/src/types/temporal/temporal_t
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/aws/dynamo_day.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/models/ModelProvider.dart';
+import 'package:pineap/models_class/shop_model.dart';
+import 'package:pineap/styles/messages.dart';
+import 'package:provider/provider.dart';
 
 class BoxDayHour extends StatefulWidget {
   BoxDayHour({Key? key, required this.day}) : super(key: key);
@@ -18,18 +23,12 @@ class BoxDayHour extends StatefulWidget {
 }
 
 class _BoxDayHourState extends State<BoxDayHour> {
-  // initial times
-  late TimeOfDay startTime = const TimeOfDay(hour: 5, minute: 0);
-  late TimeOfDay endTime = const TimeOfDay(hour: 23, minute: 0);
-  // controllers
-  // final String hourStartController = '${startTime.hour.toString()} : ${startTime.minute.toString()}';
-  // final String hourEndController = '${endTime?.hour.toString()} : ${endTime?.minute.toString()}';
-  final String hourStartController = "";
-  final String hourEndController = "";
+  late ShopModel shopModel;
   String dropdownValue = "Abierto";
 
   @override
   Widget build(BuildContext context) {
+    shopModel = Provider.of<ShopModel>(context);
     return Padding(
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
       child: Column(
@@ -157,8 +156,8 @@ class _BoxDayHourState extends State<BoxDayHour> {
                     child: const Text("CANCELAR")),
                 TextButton(
                     onPressed: () async {
-                      await _updateDay(day: widget.day, timeOfDay: value);
                       Navigator.of(context).pop("ACTUALIZAR");
+                      await _updateDay(day: widget.day, timeOfDay: value);
                     },
                     child: const Text("ACTUALIZAR")),
               ],
@@ -169,19 +168,29 @@ class _BoxDayHourState extends State<BoxDayHour> {
   }
 
   _updateDay({required Day day, required TimeOfDay timeOfDay}) async {
-    // ignore: avoid_print
-    print(timeOfDay.hourOfPeriod);
-    // ignore: avoid_print
-    print(timeOfDay.hour);
-    // ignore: avoid_print
-    print(timeOfDay.minute);
+    // cremaos el día
     DateTime dateTime =
-        DateTime(2017, 9, 7, timeOfDay.hourOfPeriod, timeOfDay.minute);
-    // ignore: avoid_print
-    print(dateTime.toString());
-    Day dayAux = day.copyWith(hour_close: TemporalTime(dateTime));
+        DateTime(2017, 9, 7, timeOfDay.hour - 5, timeOfDay.minute, 0, 0, 0);
 
-    print(dayAux.toString());
+    // copiamos el dia con nuevos datos
+    Day dayAux = day.copyWith(hour_close: TemporalTime(dateTime));
+    // actulizamos el dia
+    final dayResponse = await DynamoDay.updateDay(day: dayAux);
+
+    if (dayResponse != null) {
+      Messages.alertDialog(
+        context: context,
+        message: "Se actualizó la hora correctamente",
+      );
+
+      List<Day> days = await DynamoDay.getDays(shopId: shopModel.getId);
+      shopModel.setDays(days: days);
+    } else {
+      Messages.scaffoldMessengerWidget(
+        context: context,
+        message: "algo salio mal...",
+      );
+    }
   }
 
   String _getFormatTemporalTime(TemporalTime? temporalTime) {
@@ -207,3 +216,5 @@ class _BoxDayHourState extends State<BoxDayHour> {
     return format;
   }
 }
+
+class Amplify {}

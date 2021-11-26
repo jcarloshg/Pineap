@@ -4,8 +4,6 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/aws/cognito.dart';
-import 'package:pineap/aws/dynamo_Shop.dart';
-import 'package:pineap/aws/dynamo_day.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';

@@ -12,7 +12,7 @@ class DynamoDay {
     }
     return day;
   }
-  
+
   static Future<Day?> updateDay({required Day day}) async {
     try {
       await Amplify.DataStore.save(day);
@@ -22,5 +22,14 @@ class DynamoDay {
       return null;
     }
     return day;
+  }
+
+  static Future<List<Day>> getDays({required String shopId}) async {
+    List<Day> days = await Amplify.DataStore.query(
+      Day.classType,
+      where: Day.SHOP.eq(shopId),
+    );
+
+    return days;
   }
 }
