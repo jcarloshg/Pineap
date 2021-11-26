@@ -88,7 +88,7 @@ class _BoxDayHourState extends State<BoxDayHour> {
                     ),
                     Text(_getFormatTemporalTime(widget.day.hour_close)),
                     IconButton(
-                      onPressed: () => showPickSartTime(
+                      onPressed: () => showPickEndTime(
                           context: context,
                           hourToChanged: widget.day.hour_close),
                       icon: const Icon(Icons.arrow_drop_down),
@@ -109,40 +109,79 @@ class _BoxDayHourState extends State<BoxDayHour> {
   }) async {
     showTimePicker(
       context: context,
-      initialTime: const TimeOfDay(hour: 4, minute: 0),
+      initialTime: const TimeOfDay(hour: 9, minute: 0),
     ).then(
       (value) => {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text("Cambiar horario"),
-            content: Text(
-                "¿Seguro que quiere actulizar su hora de ${_getFormatTemporalTime(hourToChanged)} a ${_getFormatTimeOfDay(timeOfDay: value)}?"),
-            actions: <Widget>[
-              TextButton(onPressed: () => print("si"), child: const Text("si")),
-              TextButton(onPressed: () => print("no"), child: const Text("no")),
-            ],
-          ),
-        )
+        if (value != null)
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: const Text("Cambiar horario para abrir"),
+              content: Text(
+                  "¿Seguro que quiere actulizar su hora de ${_getFormatTemporalTime(hourToChanged)} a ${_getFormatTimeOfDay(timeOfDay: value)}?"),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop("CANCELAR"),
+                    child: const Text("CANCELAR")),
+                TextButton(
+                    onPressed: () => print("si"),
+                    child: const Text("ACTUALIZAR")),
+              ],
+            ),
+          )
       },
     );
   }
 
   Future<void> showPickEndTime({
     required BuildContext context,
-    required TimeOfDay initialTime,
+    TemporalTime? hourToChanged,
   }) async {
-    final timeSelected = await showTimePicker(
+    showTimePicker(
       context: context,
-      initialTime: initialTime,
+      initialTime: const TimeOfDay(hour: 9, minute: 0),
+    ).then(
+      (value) => {
+        if (value != null)
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: const Text("Cambiar horario para cerrar"),
+              content: Text(
+                  "¿Seguro que quiere actulizar su hora de ${_getFormatTemporalTime(hourToChanged)} a ${_getFormatTimeOfDay(timeOfDay: value)}?"),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop("CANCELAR"),
+                    child: const Text("CANCELAR")),
+                TextButton(
+                    onPressed: () async {
+                      await _updateDay(day: widget.day, timeOfDay: value);
+                      Navigator.of(context).pop("ACTUALIZAR");
+                    },
+                    child: const Text("ACTUALIZAR")),
+              ],
+            ),
+          )
+      },
     );
+  }
 
-    setState(() {
-      startTime = timeSelected!;
-    });
+  _updateDay({required Day day, required TimeOfDay timeOfDay}) async {
+    // ignore: avoid_print
+    print(timeOfDay.hourOfPeriod);
+    // ignore: avoid_print
+    print(timeOfDay.hour);
+    // ignore: avoid_print
+    print(timeOfDay.minute);
+    DateTime dateTime =
+        DateTime(2017, 9, 7, timeOfDay.hourOfPeriod, timeOfDay.minute);
+    // ignore: avoid_print
+    print(dateTime.toString());
+    Day dayAux = day.copyWith(hour_close: TemporalTime(dateTime));
 
-    // hourEndController.text =
-    //     '${timeSelected?.hour.toString()} : ${timeSelected?.minute.toString()}';
+    print(dayAux.toString());
   }
 
   String _getFormatTemporalTime(TemporalTime? temporalTime) {

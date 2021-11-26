@@ -12,4 +12,15 @@ class DynamoDay {
     }
     return day;
   }
+  
+  static Future<Day?> updateDay({required Day day}) async {
+    try {
+      await Amplify.DataStore.save(day);
+    } catch (e) {
+      // ignore: avoid_print
+      print("[uploadDay] " + e.toString());
+      return null;
+    }
+    return day;
+  }
 }
