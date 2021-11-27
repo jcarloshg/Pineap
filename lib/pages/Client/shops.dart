@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/card_shop.dart';
 import 'package:pineap/Widgets/label_with_icon.dart';
+import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/models/ModelProvider.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
 
@@ -13,6 +16,7 @@ class Shops extends StatefulWidget {
 
 class _ShopsState extends State<Shops> {
   final searchShopController = TextEditingController();
+  List<Shop>? listShops;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +54,17 @@ class _ShopsState extends State<Shops> {
                 const SizedBox(height: 32),
                 TextField(
                   controller: searchShopController,
+                  // onChanged: (value) => _searchShops(
+                  //   name: value,
+                  //   context: context,
+                  // ),
                   decoration: InputDecoration(
                     labelText: "Busca tus negocios favoritos",
                     suffixIcon: IconButton(
-                      onPressed: () => print(searchShopController.text),
+                      onPressed: () => _searchShops(
+                        name: searchShopController.text,
+                        context: context,
+                      ),
                       icon: const Icon(Icons.search),
                     ),
                   ),
@@ -62,12 +73,19 @@ class _ShopsState extends State<Shops> {
                 //
                 // list seach
                 const SizedBox(height: 16),
-                const CardShopWidget(),
-                const CardShopWidget(),
-                const CardShopWidget(),
-                const CardShopWidget(),
-                const CardShopWidget(),
-                const CardShopWidget(),
+                (listShops == null)
+                    ? const Align(
+                        alignment: Alignment.center,
+                        child: Text("No existen coincidencias"),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: listShops!.length,
+                          itemBuilder: (context, index) {
+                            return const CardShopWidget();
+                          },
+                        ),
+                      ),
                 const CardShopWidget(),
               ],
             ),
@@ -75,5 +93,25 @@ class _ShopsState extends State<Shops> {
         ),
       ),
     );
+  }
+
+  void _searchShops({
+    required String name,
+    required BuildContext context,
+  }) async {
+    List<Shop>? shopsResponse = await DynamoShop.getShopsByName(name: name);
+
+    if (shopsResponse == null) {
+      Messages.scaffoldMessengerWidget(
+        context: context,
+        message: "No se encontraron coincidencias",
+      );
+    } else {
+      for (Shop element in shopsResponse) {
+        // ignore: avoid_print
+        print(element.toString());
+      }
+      // setState(() => listShops = shopsResponse);
+    }
   }
 }

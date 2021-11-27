@@ -28,15 +28,36 @@ class DynamoShop {
     }
 
     return shop;
+  }
 
-    // try {
-    //   await Amplify.DataStore.save(shop);
-    // } catch (e) {
-    //   // ignore: avoid_print
-    //   print("[uploadShop] " + e.toString());
-    //   return null;
-    // }
-    // return shopModel.toString();
+  static Future<List<Shop>?> getShopsByName({required String name}) async {
+    try {
+      List<Shop> shopsResponse = await Amplify.DataStore.query<Shop>(
+        Shop.classType,
+        where: Shop.NAME.eq(name),
+      );
+
+      return shopsResponse;
+    } catch (e) {
+      // ignore: avoid_print
+      print("[getShopsByName ] " + e.toString());
+    }
+
+    return null;
+  }
+
+  static Future<List<Shop>?> getShops() async {
+    try {
+      List<Shop> shopsResponse =
+          await Amplify.DataStore.query<Shop>(Shop.classType);
+
+      return shopsResponse;
+    } catch (e) {
+      // ignore: avoid_print
+      print("[getShopsByName ] " + e.toString());
+    }
+
+    return null;
   }
 
   static Future<String?> plok({
