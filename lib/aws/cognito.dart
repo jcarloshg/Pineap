@@ -25,7 +25,6 @@ class Cognito {
   }) async {
     bool isSignUpComplete = false;
     try {
-      print("asdfasdfasdfasd" + username);
       SignUpResult res = await Amplify.Auth.confirmSignUp(
         username: username,
         confirmationCode: codeVerification.toString(),

@@ -213,9 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       Provider.of<PersonModel>(context, listen: false).setPerson = person;
 
-      print(person.toString());
-
-      if (person.role == Constants.client) {
+      if (person.role.compareTo(Constants.client) == 0) {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HomePageClient()),
         );

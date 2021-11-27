@@ -27,12 +27,12 @@ class DynamoPerson {
 
   static Future<Person?> getPerson({required String userEmail}) async {
     try {
-      Person personResponse = (await Amplify.DataStore.query<Person>(
+      List<Person> personResponse = (await Amplify.DataStore.query<Person>(
         Person.classType,
         where: Person.EMAIL.eq(userEmail),
-      ))[0];
+      ));
 
-      return personResponse;
+      return personResponse[0];
     } catch (e) {
       // ignore: avoid_print
       print("[getPerson]" + e.toString());
