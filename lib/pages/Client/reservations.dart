@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/Widgets/card_date.dart';
 import 'package:pineap/Widgets/label_with_icon.dart';
+import 'package:pineap/aws/dynamo_reservation.dart';
 import 'package:pineap/helpers/constants.dart';
+import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
 
@@ -18,6 +20,18 @@ class _ReservationsState extends State<Reservations> {
   TextEditingController dateTimeSelectController = TextEditingController();
   DateTime dateTimeSelect = DateTime.now();
   String dayToSearch = "Hoy";
+
+  //
+  List<Reservation>? listReservationToday;
+  List<Reservation>? listReservationTomorrow;
+  List<Reservation>? listReservationNext;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getReservations();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,5 +151,14 @@ class _ReservationsState extends State<Reservations> {
       dateTimeSelectController.text = DateFormat('MMMM dd, yyyy').format(value);
       setState(() => dayToSearch = dateTimeSelectController.text);
     });
+  }
+
+  void _getReservations() async {
+    List<Reservation>? reservationResponse =
+        await DynamoReservation.getByDate(date: DateTime.now());
+
+    reservationResponse?.forEach((reser) => print(reser.toString()));
+
+    setState(() => listReservationToday = reservationResponse);
   }
 }

@@ -207,9 +207,9 @@ class _CreateReservationState extends State<CreateReservation> {
     }
 
     Reservation reservation = Reservation(
-      hour: TemporalDateTime(
-        DateTime.parse("2012-02-27 ${hour.hour}:${hour.minute}:00"),
-      ),
+      hour: TemporalDateTime(DateTime(2000, 1, 1, hour.hour, hour.minute)),
+      // DateTime.parse("2012-02-27 ${hour.hour}:${hour.minute}:00"),
+      // ),
       date: TemporalTime(date),
       description: controllerDescription.text,
       methodPayment: methodPayment,
