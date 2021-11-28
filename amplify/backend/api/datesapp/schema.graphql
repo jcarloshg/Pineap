@@ -1,4 +1,3 @@
-
 type Person @model {
   id: ID!
   last_name: String!
@@ -8,6 +7,8 @@ type Person @model {
   email: String!
   # New field with @connection
   shops: [Shop] @connection(keyName: "byPerson", fields: ["id"])
+  # New field with @connection
+  reservations: [Reservation] @connection(keyName: "byPerson", fields: ["id"])
 }
 
 # New model
@@ -21,6 +22,8 @@ type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
   id_photo: String!
   # New field with @connection
   days: [Day] @connection(keyName: "byShop", fields: ["id"])
+  # New field with @connection
+  reservations: [Reservation] @connection(keyName: "byPerson", fields: ["id"])
 }
 
 enum DaysName {
@@ -43,4 +46,32 @@ type Day @model @key(name: "byShop", fields: ["ShopID", "dayName"]) {
   # conection 1-1 with shop
   ShopID: ID!
   Shop: Shop! @connection(fields: ["ShopID"])
+}
+
+enum StatusReservation {
+  isComplete
+  isNext
+}
+
+enum MethodPayment {
+  isComplete
+  isNext
+}
+
+type Reservation
+  @model
+  @key(name: "byShop", fields: ["ShopID", "date"])
+  @key(name: "byPerson", fields: ["PersonID", "date"]) {
+  id: ID!
+  hour: AWSDateTime
+  date: AWSTime
+  description: String
+  methodPayment: MethodPayment!
+  status: StatusReservation!
+  # conection 1-1 with shop
+  ShopID: ID!
+  Shop: Shop! @connection(fields: ["ShopID"])
+  # conection 1-1 with person
+  PersonID: ID!
+  Person: Person! @connection(fields: ["PersonID"])
 }

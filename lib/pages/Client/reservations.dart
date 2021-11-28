@@ -85,6 +85,7 @@ class _ReservationsState extends State<Reservations> {
                     //
                     // hoy
                     SizedBox(height: 8),
+                    LabelWithIcon(iconData: Icons.calendar_today, info: "Hoy"),
                     CardDate(),
                     CardDate(),
                     CardDate(),

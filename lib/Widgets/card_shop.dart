@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/label_with_icon.dart';
 import 'package:pineap/models/Shop.dart';
+import 'package:pineap/pages/create_reservation.dart';
 
 class CardShopWidget extends StatefulWidget {
   CardShopWidget({Key? key, required this.shop}) : super(key: key);
@@ -18,6 +19,14 @@ class _CardShopWidgetState extends State<CardShopWidget> {
   //
   final String hour = "09:00 - 19:00 hrs";
   final String rating = "4.5";
+
+  void navigateToCreateReservation({required Shop shop}) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => CreateReservation(shop: shop)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -26,7 +35,7 @@ class _CardShopWidgetState extends State<CardShopWidget> {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           ListTile(
-            onTap: () {},
+            onTap: () => navigateToCreateReservation(shop: widget.shop),
             isThreeLine: true,
             leading: (widget.shop.id_photo == "")
                 ? const Icon(Icons.shopping_cart_outlined, size: 42)

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Constants {
   // rols from users
   static const String client = "CLIENT";
@@ -35,4 +37,20 @@ class Constants {
   // methods payment
   static String get cash => "Efectivo";
   static String get creditCard => "Tarjeta de credito";
+  static List<String> get typesMethodPayment => [
+        cash,
+        creditCard,
+      ];
+
+  static String getFormatTimeOfDay({TimeOfDay? timeOfDay}) {
+    String format = "";
+
+    if (timeOfDay!.hour < 10) format += "0";
+    format += "${timeOfDay.hour}";
+    format += ":";
+    if (timeOfDay.minute < 10) format += "0";
+    format += "${timeOfDay.minute} hrs";
+
+    return format;
+  }
 }

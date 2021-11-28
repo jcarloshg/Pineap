@@ -30,12 +30,7 @@ class InfoBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 if (title != null)
-                  Text(
-                    title!,
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
+                  Text(title!, style: const TextStyle(fontSize: 18.0)),
                 if (icon != null) icon!,
                 Text(info),
               ],
