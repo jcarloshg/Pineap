@@ -22,18 +22,22 @@
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'Day.dart';
 import 'Person.dart';
+import 'Reservation.dart';
 import 'Shop.dart';
 
 export 'Day.dart';
 export 'DaysName.dart';
+export 'MethodPayment.dart';
 export 'Person.dart';
+export 'Reservation.dart';
 export 'Shop.dart';
+export 'StatusReservation.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "99e0956ff25ae9cc45f5e725c31a00bb";
+  String version = "5afdec13d0b8363e19751196c0602326";
   @override
-  List<ModelSchema> modelSchemas = [Day.schema, Person.schema, Shop.schema];
+  List<ModelSchema> modelSchemas = [Day.schema, Person.schema, Reservation.schema, Shop.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
@@ -46,6 +50,10 @@ class ModelProvider implements ModelProviderInterface {
     break;
     case "Person": {
     return Person.classType;
+    }
+    break;
+    case "Reservation": {
+    return Reservation.classType;
     }
     break;
     case "Shop": {

@@ -36,6 +36,7 @@ class Shop extends Model {
   final String? _address;
   final String? _id_photo;
   final List<Day>? _days;
+  final List<Reservation>? _reservations;
 
   @override
   getInstanceType() => classType;
@@ -89,9 +90,13 @@ class Shop extends Model {
     return _days;
   }
   
-  const Shop._internal({required this.id, required Person, required name, required type, required address, required id_photo, days}): _Person = Person, _name = name, _type = type, _address = address, _id_photo = id_photo, _days = days;
+  List<Reservation>? get reservations {
+    return _reservations;
+  }
   
-  factory Shop({String? id, required Person Person, required String name, required String type, required String address, required String id_photo, List<Day>? days}) {
+  const Shop._internal({required this.id, required Person, required name, required type, required address, required id_photo, days, reservations}): _Person = Person, _name = name, _type = type, _address = address, _id_photo = id_photo, _days = days, _reservations = reservations;
+  
+  factory Shop({String? id, required Person Person, required String name, required String type, required String address, required String id_photo, List<Day>? days, List<Reservation>? reservations}) {
     return Shop._internal(
       id: id == null ? UUID.getUUID() : id,
       Person: Person,
@@ -99,7 +104,8 @@ class Shop extends Model {
       type: type,
       address: address,
       id_photo: id_photo,
-      days: days != null ? List<Day>.unmodifiable(days) : days);
+      days: days != null ? List<Day>.unmodifiable(days) : days,
+      reservations: reservations != null ? List<Reservation>.unmodifiable(reservations) : reservations);
   }
   
   bool equals(Object other) {
@@ -116,7 +122,8 @@ class Shop extends Model {
       _type == other._type &&
       _address == other._address &&
       _id_photo == other._id_photo &&
-      DeepCollectionEquality().equals(_days, other._days);
+      DeepCollectionEquality().equals(_days, other._days) &&
+      DeepCollectionEquality().equals(_reservations, other._reservations);
   }
   
   @override
@@ -138,7 +145,7 @@ class Shop extends Model {
     return buffer.toString();
   }
   
-  Shop copyWith({String? id, Person? Person, String? name, String? type, String? address, String? id_photo, List<Day>? days}) {
+  Shop copyWith({String? id, Person? Person, String? name, String? type, String? address, String? id_photo, List<Day>? days, List<Reservation>? reservations}) {
     return Shop(
       id: id ?? this.id,
       Person: Person ?? person,
@@ -146,7 +153,8 @@ class Shop extends Model {
       type: type ?? this.type,
       address: address ?? this.address,
       id_photo: id_photo ?? this.id_photo,
-      days: days ?? this.days);
+      days: days ?? this.days,
+      reservations: reservations ?? this.reservations);
   }
   
   Shop.fromJson(Map<String, dynamic> json)  
@@ -163,10 +171,16 @@ class Shop extends Model {
           .where((e) => e?['serializedData'] != null)
           .map((e) => Day.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
+        : null,
+      _reservations = json['reservations'] is List
+        ? (json['reservations'] as List)
+          .where((e) => e?['serializedData'] != null)
+          .map((e) => Reservation.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .toList()
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'Person': _Person?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'days': _days?.map((Day? e) => e?.toJson()).toList()
+    'id': id, 'Person': _Person?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'days': _days?.map((Day? e) => e?.toJson()).toList(), 'reservations': _reservations?.map((Reservation? e) => e?.toJson()).toList()
   };
 
   static final QueryField ID = QueryField(fieldName: "shop.id");
@@ -180,6 +194,9 @@ class Shop extends Model {
   static final QueryField DAYS = QueryField(
     fieldName: "days",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Day).toString()));
+  static final QueryField RESERVATIONS = QueryField(
+    fieldName: "reservations",
+    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Reservation).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Shop";
     modelSchemaDefinition.pluralName = "Shops";
@@ -222,6 +239,13 @@ class Shop extends Model {
       isRequired: false,
       ofModelName: (Day).toString(),
       associatedKey: Day.SHOP
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+      key: Shop.RESERVATIONS,
+      isRequired: false,
+      ofModelName: (Reservation).toString(),
+      associatedKey: Reservation.PERSON
     ));
   });
 }
