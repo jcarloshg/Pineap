@@ -21,6 +21,8 @@ class _ShopsState extends State<Shops> {
 
   @override
   Widget build(BuildContext context) {
+    _getAllShops();
+
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -73,7 +75,7 @@ class _ShopsState extends State<Shops> {
               // list seach
               const SizedBox(height: 16),
               Expanded(
-                child: (listShops == null)
+                child: (listShops == null || listShops!.isEmpty)
                     ? ImageMessages(message: "No se encontraron coincidencias")
                     : ListView.builder(
                         itemCount: listShops!.length,
@@ -89,6 +91,13 @@ class _ShopsState extends State<Shops> {
     );
   }
 
+  void _getAllShops() async {
+    if (searchShopController.text == "") {
+      List<Shop>? shopsResponse = await DynamoShop.getShops();
+      listShops = shopsResponse;
+    }
+  }
+
   void _searchShops({
     required String name,
     required BuildContext context,
@@ -100,6 +109,7 @@ class _ShopsState extends State<Shops> {
         context: context,
         message: "No se encontraron coincidencias",
       );
+      setState(() => listShops!.clear());
     } else {
       setState(() => listShops = shopsResponse);
     }
