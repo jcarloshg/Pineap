@@ -5,10 +5,10 @@ type Person @model {
   birthday: AWSDateTime
   role: String!
   email: String!
-  # conection 1-* with Shop
+  # New field with @connection
   shops: [Shop] @connection(keyName: "byPerson", fields: ["id"])
-  # conection 1-1 with Reservation
-  reservation: [Reservation] @manyToMany(relationName: "PersonReservation")
+  # New field with @connection
+  reservations: [Reservation] @connection(keyName: "byPersonReser", fields: ["id"])
 }
 
 # New model
@@ -22,8 +22,8 @@ type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
   id_photo: String!
   # New field with @connection
   days: [Day] @connection(keyName: "byDay", fields: ["id"])
-  # conection 1-1 with Reservation
-  reservation: [Reservation] @manyToMany(relationName: "ShopReservation")
+  # New field with @connection
+  reservations: [Reservation] @connection(keyName: "byShop", fields: ["id"])
 }
 
 enum DaysName {
@@ -59,7 +59,9 @@ enum MethodPayment {
 }
 
 type Reservation
-  @model{
+  @model
+  @key(name: "byShop", fields: ["ShopID", "date"])
+  @key(name: "byPersonReser", fields: ["PersonID", "date"]) {
   id: ID!
   hour: AWSTime
   date: AWSDate
@@ -67,7 +69,9 @@ type Reservation
   methodPayment: MethodPayment!
   status: StatusReservation!
   # conection 1-1 with shop
-  shop: [Shop] @manyToMany(relationName: "ShopReservation")
+  ShopID: ID!
+  Shop: Shop! @connection(fields: ["ShopID"])
   # conection 1-1 with person
-  person: [Person] @manyToMany(relationName: "PersonReservation")
+  PersonID: ID!
+  Person: Person! @connection(fields: ["PersonID"])
 }
