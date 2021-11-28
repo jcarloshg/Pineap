@@ -63,8 +63,8 @@ type Reservation
   @key(name: "byShop", fields: ["ShopID", "date"])
   @key(name: "byPerson", fields: ["PersonID", "date"]) {
   id: ID!
-  hour: AWSDateTime
-  date: AWSTime
+  hour: AWSTime
+  date: AWSDate
   description: String
   methodPayment: MethodPayment!
   status: StatusReservation!

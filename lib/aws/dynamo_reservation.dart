@@ -22,7 +22,7 @@ class DynamoReservation {
       List<Reservation> reservationList =
           (await Amplify.DataStore.query<Reservation>(
         Reservation.classType,
-        where: Reservation.DATE.contains(TemporalTime(date).toString()),
+        where: Reservation.DATE.eq(TemporalTime(date)),
       ));
 
       return reservationList;
