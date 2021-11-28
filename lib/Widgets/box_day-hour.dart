@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:amplify_datastore/amplify_datastore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/aws/dynamo_day.dart';

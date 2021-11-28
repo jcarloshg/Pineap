@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/card_shop.dart';
+import 'package:pineap/Widgets/image_messages.dart';
 import 'package:pineap/Widgets/label_with_icon.dart';
 import 'package:pineap/aws/dynamo_Shop.dart';
 import 'package:pineap/models/ModelProvider.dart';
@@ -22,73 +23,66 @@ class _ShopsState extends State<Shops> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                //
-                //
-                // header title
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
-                        TitleWidget(title: "Negocios"),
-                        SubTitle(
-                            subtitle: "Busca negocios y crea reservaciones"),
-                      ],
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              //
+              //
+              // header title
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const <Widget>[
+                      TitleWidget(title: "Negocios"),
+                      SubTitle(subtitle: "Busca negocios y crea reservaciones"),
+                    ],
+                  ),
+                  const LabelWithIcon(
+                    iconData: Icons.place,
+                    info: "Obtener ubucación actual",
+                    mainAxisAlignment: MainAxisAlignment.end,
+                  ),
+                ],
+              ),
+              //
+              //
+              // field to search reservations
+              const SizedBox(height: 32),
+              TextField(
+                controller: searchShopController,
+                // onChanged: (value) => _searchShops(
+                //   name: value,
+                //   context: context,
+                // ),
+                decoration: InputDecoration(
+                  labelText: "Busca tus negocios favoritos",
+                  suffixIcon: IconButton(
+                    onPressed: () => _searchShops(
+                      name: searchShopController.text,
+                      context: context,
                     ),
-                    const LabelWithIcon(
-                      iconData: Icons.place,
-                      info: "Obtener ubucación actual",
-                      mainAxisAlignment: MainAxisAlignment.end,
-                    ),
-                  ],
-                ),
-                //
-                //
-                // field to search reservations
-                const SizedBox(height: 32),
-                TextField(
-                  controller: searchShopController,
-                  // onChanged: (value) => _searchShops(
-                  //   name: value,
-                  //   context: context,
-                  // ),
-                  decoration: InputDecoration(
-                    labelText: "Busca tus negocios favoritos",
-                    suffixIcon: IconButton(
-                      onPressed: () => _searchShops(
-                        name: searchShopController.text,
-                        context: context,
-                      ),
-                      icon: const Icon(Icons.search),
-                    ),
+                    icon: const Icon(Icons.search),
                   ),
                 ),
-                //
-                //
-                // list seach
-                const SizedBox(height: 16),
-                (listShops == null)
-                    ? const Align(
-                        alignment: Alignment.center,
-                        child: Text("No existen coincidencias"),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: listShops!.length,
-                          itemBuilder: (context, index) {
-                            return const CardShopWidget();
-                          },
-                        ),
+              ),
+              //
+              //
+              // list seach
+              const SizedBox(height: 16),
+              Expanded(
+                child: (listShops == null)
+                    ? ImageMessages(message: "No se encontraron coincidencias")
+                    : ListView.builder(
+                        itemCount: listShops!.length,
+                        itemBuilder: (context, index) {
+                          return const CardShopWidget();
+                        },
                       ),
-                const CardShopWidget(),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -107,11 +101,7 @@ class _ShopsState extends State<Shops> {
         message: "No se encontraron coincidencias",
       );
     } else {
-      for (Shop element in shopsResponse) {
-        // ignore: avoid_print
-        print(element.toString());
-      }
-      // setState(() => listShops = shopsResponse);
+      setState(() => listShops = shopsResponse);
     }
   }
 }
