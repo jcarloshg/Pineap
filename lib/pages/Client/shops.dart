@@ -78,9 +78,9 @@ class _ShopsState extends State<Shops> {
                 child: (listShops == null || listShops!.isEmpty)
                     ? ImageMessages(message: "No se encontraron coincidencias")
                     : ListView.builder(
-                        itemCount: listShops!.length,
+                        itemCount: listShops?.length,
                         itemBuilder: (context, index) {
-                          return const CardShopWidget();
+                          return CardShopWidget(shop: listShops![index]);
                         },
                       ),
               ),

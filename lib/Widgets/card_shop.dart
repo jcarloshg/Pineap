@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/label_with_icon.dart';
+import 'package:pineap/models/Shop.dart';
 
 class CardShopWidget extends StatefulWidget {
-  const CardShopWidget({Key? key}) : super(key: key);
+  CardShopWidget({Key? key, required this.shop}) : super(key: key);
+
+  final Shop shop;
 
   @override
   _CardShopWidgetState createState() => _CardShopWidgetState();
@@ -25,14 +28,16 @@ class _CardShopWidgetState extends State<CardShopWidget> {
           ListTile(
             onTap: () {},
             isThreeLine: true,
-            leading: Image.asset(uriPhoto),
-            title: Text(titleShop),
+            leading: (widget.shop.id_photo == "")
+                ? const Icon(Icons.shopping_cart_outlined, size: 42)
+                : Image.asset(uriPhoto),
+            title: Text(widget.shop.name),
             subtitle: Column(
               children: <Widget>[
                 const SizedBox(height: 8),
                 LabelWithIcon(
-                  iconData: Icons.schedule,
-                  info: hour,
+                  iconData: Icons.place,
+                  info: widget.shop.address,
                   mainAxisAlignment: MainAxisAlignment.start,
                 ),
                 const SizedBox(height: 8),
