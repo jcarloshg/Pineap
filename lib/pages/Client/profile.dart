@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/info_box.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
+import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,7 @@ class _ProfileState extends State<Profile> {
               //
               // info shop
               const SizedBox(height: 32),
-              const SubTitle(subtitle: "Información personal"),
+              const TitleBlockForm(title_block_form: "Información del usuario"),
               InfoBox(info: birthday, icon: const Icon(Icons.person)),
               InfoBox(info: email, icon: const Icon(Icons.email)),
               InfoBox(info: pass, icon: const Icon(Icons.password)),

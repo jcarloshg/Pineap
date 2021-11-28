@@ -10,11 +10,14 @@ class TitleBlockForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title_block_form.toUpperCase(),
-      style: const TextStyle(
-        fontSize: 12.0,
-        fontWeight: FontWeight.bold,
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        title_block_form.toUpperCase(),
+        style: const TextStyle(
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

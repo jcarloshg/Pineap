@@ -20,9 +20,14 @@ class _ShopsState extends State<Shops> {
   List<Shop>? listShops;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     _getAllShops();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -92,10 +97,8 @@ class _ShopsState extends State<Shops> {
   }
 
   void _getAllShops() async {
-    if (searchShopController.text.isEmpty) {
-      List<Shop>? shopsResponse = await DynamoShop.getShops();
-      setState(() => listShops = shopsResponse);
-    }
+    List<Shop>? shopsResponse = await DynamoShop.getShops();
+    setState(() => listShops = shopsResponse);
   }
 
   void _searchShops({

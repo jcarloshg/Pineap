@@ -34,7 +34,7 @@ class DynamoShop {
     try {
       List<Shop> shopsResponse = await Amplify.DataStore.query<Shop>(
         Shop.classType,
-        where: Shop.NAME.eq(name),
+        where: Shop.NAME.contains(name),
       );
 
       return shopsResponse;

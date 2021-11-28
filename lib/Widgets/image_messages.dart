@@ -31,14 +31,14 @@ class _ImageMessagesState extends State<ImageMessages> {
             const SizedBox(height: 32),
             Image(
               image: AssetImage(urisImages[random.nextInt(3)]),
-              height: 300,
-              width: 300,
+              height: 250,
+              width: 250,
               fit: BoxFit.scaleDown,
             ),
             const SizedBox(height: 16),
             Text(
               widget.message,
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline5,
             ),
           ],
         ),
