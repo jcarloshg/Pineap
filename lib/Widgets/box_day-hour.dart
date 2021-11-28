@@ -11,7 +11,7 @@ import 'package:pineap/styles/messages.dart';
 import 'package:provider/provider.dart';
 
 class BoxDayHour extends StatefulWidget {
-  BoxDayHour({Key? key, required this.day}) : super(key: key);
+  const BoxDayHour({Key? key, required this.day}) : super(key: key);
 
   final Day day;
 

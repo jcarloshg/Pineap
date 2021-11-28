@@ -29,8 +29,8 @@ import 'package:flutter/foundation.dart';
 class Reservation extends Model {
   static const classType = const _ReservationModelType();
   final String id;
-  final TemporalDateTime? _hour;
-  final TemporalTime? _date;
+  final TemporalTime? _hour;
+  final TemporalDate? _date;
   final String? _description;
   final MethodPayment? _methodPayment;
   final StatusReservation? _status;
@@ -45,11 +45,11 @@ class Reservation extends Model {
     return id;
   }
   
-  TemporalDateTime? get hour {
+  TemporalTime? get hour {
     return _hour;
   }
   
-  TemporalTime? get date {
+  TemporalDate? get date {
     return _date;
   }
   
@@ -91,7 +91,7 @@ class Reservation extends Model {
   
   const Reservation._internal({required this.id, hour, date, description, required methodPayment, required status, required Shop, required Person}): _hour = hour, _date = date, _description = description, _methodPayment = methodPayment, _status = status, _Shop = Shop, _Person = Person;
   
-  factory Reservation({String? id, TemporalDateTime? hour, TemporalTime? date, String? description, required MethodPayment methodPayment, required StatusReservation status, required Shop Shop, required Person Person}) {
+  factory Reservation({String? id, TemporalTime? hour, TemporalDate? date, String? description, required MethodPayment methodPayment, required StatusReservation status, required Shop Shop, required Person Person}) {
     return Reservation._internal(
       id: id == null ? UUID.getUUID() : id,
       hour: hour,
@@ -142,7 +142,7 @@ class Reservation extends Model {
     return buffer.toString();
   }
   
-  Reservation copyWith({String? id, TemporalDateTime? hour, TemporalTime? date, String? description, MethodPayment? methodPayment, StatusReservation? status, Shop? Shop, Person? Person}) {
+  Reservation copyWith({String? id, TemporalTime? hour, TemporalDate? date, String? description, MethodPayment? methodPayment, StatusReservation? status, Shop? Shop, Person? Person}) {
     return Reservation(
       id: id ?? this.id,
       hour: hour ?? this.hour,
@@ -156,8 +156,8 @@ class Reservation extends Model {
   
   Reservation.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _hour = json['hour'] != null ? TemporalDateTime.fromString(json['hour']) : null,
-      _date = json['date'] != null ? TemporalTime.fromString(json['date']) : null,
+      _hour = json['hour'] != null ? TemporalTime.fromString(json['hour']) : null,
+      _date = json['date'] != null ? TemporalDate.fromString(json['date']) : null,
       _description = json['description'],
       _methodPayment = enumFromString<MethodPayment>(json['methodPayment'], MethodPayment.values),
       _status = enumFromString<StatusReservation>(json['status'], StatusReservation.values),
@@ -193,13 +193,13 @@ class Reservation extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Reservation.HOUR,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: ModelFieldType(ModelFieldTypeEnum.time)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Reservation.DATE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.time)
+      ofType: ModelFieldType(ModelFieldTypeEnum.date)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

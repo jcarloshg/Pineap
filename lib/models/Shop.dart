@@ -245,7 +245,7 @@ class Shop extends Model {
       key: Shop.RESERVATIONS,
       isRequired: false,
       ofModelName: (Reservation).toString(),
-      associatedKey: Reservation.PERSON
+      associatedKey: Reservation.SHOP
     ));
   });
 }
