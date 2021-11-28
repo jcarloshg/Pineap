@@ -1,12 +1,17 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pineap/Widgets/info_box.dart';
+import 'package:pineap/aws/dynamo_reservation.dart';
 import 'package:pineap/helpers/constants.dart';
-import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
+import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/pages/Client/home_page_client.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
+import 'package:provider/provider.dart';
 
 class CreateReservation extends StatefulWidget {
   const CreateReservation({Key? key, required this.shop}) : super(key: key);
@@ -18,15 +23,22 @@ class CreateReservation extends StatefulWidget {
 }
 
 class _CreateReservationState extends State<CreateReservation> {
+  // models
+  late PersonModel personModel;
+
   //
   // controles
   TextEditingController controllerDate = TextEditingController();
   TextEditingController controllerTime = TextEditingController();
-  TextEditingController controllerNote = TextEditingController();
+  TextEditingController controllerDescription = TextEditingController();
   TextEditingController methodPaymentController = TextEditingController();
+  late final TimeOfDay hour;
+  late final DateTime date;
 
   @override
   Widget build(BuildContext context) {
+    personModel = Provider.of<PersonModel>(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -92,17 +104,17 @@ class _CreateReservationState extends State<CreateReservation> {
                 TextField(
                   controller: controllerTime,
                   readOnly: true,
-                  onTap: () => _showPickSartTime(context: context),
+                  onTap: _showPickSartTime,
                   decoration: InputDecoration(
                     labelText: "Hora",
                     suffixIcon: IconButton(
-                      onPressed: () => _showPickSartTime(context: context),
+                      onPressed: _showPickSartTime,
                       icon: const Icon(Icons.schedule),
                     ),
                   ),
                 ),
                 TextField(
-                  controller: controllerNote,
+                  controller: controllerDescription,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: const InputDecoration(
@@ -151,17 +163,6 @@ class _CreateReservationState extends State<CreateReservation> {
     );
   }
 
-  Future<void> _showPickSartTime({required BuildContext context}) async {
-    showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 9, minute: 0),
-    ).then(
-      (value) => {
-        controllerTime.text = Constants.getFormatTimeOfDay(timeOfDay: value),
-      },
-    );
-  }
-
   _setTypePayment(String value) {
     String typeShop = "";
     if (Constants.cash == value) typeShop = Constants.cash;
@@ -169,18 +170,67 @@ class _CreateReservationState extends State<CreateReservation> {
     methodPaymentController.text = typeShop;
   }
 
+  _showPickSartTime() {
+    showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 9, minute: 0),
+    ).then(
+      (value) {
+        setState(() => hour = value!);
+        controllerTime.text = Constants.getFormatTimeOfDay(timeOfDay: value);
+      },
+    );
+  }
+
   _showDataPicker() {
     showDatePicker(
-            initialEntryMode: DatePickerEntryMode.calendarOnly,
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2222))
-        .then((value) {
-      DateTime dateTime = value!;
-      controllerDate.text = DateFormat('MMMM dd, yyyy').format(dateTime);
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2222),
+    ).then((value) {
+      setState(() => date = value!);
+      controllerDate.text = DateFormat('MMMM dd, yyyy').format(date);
     });
   }
 
-  void onPressedUploadReservation() {}
+  Future<void> onPressedUploadReservation() async {
+    MethodPayment methodPayment = MethodPayment.cash;
+
+    //check method payment
+    if (Constants.cash == methodPaymentController.text) {
+      methodPayment = MethodPayment.cash;
+    }
+    if (Constants.creditCard == methodPaymentController.text) {
+      methodPayment = MethodPayment.card;
+    }
+
+    Reservation reservation = Reservation(
+      hour: TemporalDateTime(
+        DateTime.parse("2012-02-27 ${hour.hour}:${hour.minute}:00"),
+      ),
+      date: TemporalTime(date),
+      description: controllerDescription.text,
+      methodPayment: methodPayment,
+      status: StatusReservation.isNext,
+      Shop: widget.shop,
+      Person: personModel.getPerson,
+    );
+
+    Reservation? reservationResponse =
+        await DynamoReservation.uploadReservation(
+      reservation: reservation,
+    );
+
+    if (reservationResponse != null) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HomePageClient()));
+    } else {
+      Messages.scaffoldMessengerWidget(
+        context: context,
+        message: "No se a podido registrar tu reservación",
+      );
+    }
+  }
 }
