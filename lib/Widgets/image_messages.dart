@@ -31,8 +31,8 @@ class _ImageMessagesState extends State<ImageMessages> {
             const SizedBox(height: 32),
             Image(
               image: AssetImage(urisImages[random.nextInt(3)]),
-              height: 250,
-              width: 250,
+              height: 300,
+              width: 300,
               fit: BoxFit.scaleDown,
             ),
             const SizedBox(height: 16),

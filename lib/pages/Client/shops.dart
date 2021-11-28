@@ -92,9 +92,9 @@ class _ShopsState extends State<Shops> {
   }
 
   void _getAllShops() async {
-    if (searchShopController.text == "") {
+    if (searchShopController.text.isEmpty) {
       List<Shop>? shopsResponse = await DynamoShop.getShops();
-      listShops = shopsResponse;
+      setState(() => listShops = shopsResponse);
     }
   }
 
