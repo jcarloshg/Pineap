@@ -8,14 +8,17 @@ type Person @model {
   # New field with @connection
   shops: [Shop] @connection(keyName: "byPersonToShop", fields: ["id"])
   # New field with @connection
-  reservations: [Reservation] @connection(keyName: "byPersonToReservation", fields: ["id"])
+  reservations: [Reservation]
+    @connection(keyName: "byPersonToReservation", fields: ["id"])
 }
 
 # New model
-type Shop @model @key(name: "byPersonToShop", fields: ["PersonID", "name"]) {
+type Shop
+  @model
+  @key(name: "byPersonToShop", fields: ["PersonShopID", "name"]) {
   id: ID!
-  PersonID: ID!
-  Person: Person! @connection(fields: ["PersonID"])
+  PersonShopID: ID!
+  PersonShop: Person! @connection(fields: ["PersonShopID"])
   name: String!
   type: String!
   address: String!
@@ -23,7 +26,8 @@ type Shop @model @key(name: "byPersonToShop", fields: ["PersonID", "name"]) {
   # New field with @connection
   days: [Day] @connection(keyName: "byDay", fields: ["id"])
   # New field with @connection
-  reservations: [Reservation] @connection(keyName: "byShopToReservation", fields: ["id"])
+  reservations: [Reservation]
+    @connection(keyName: "byShopToReservation", fields: ["id"])
 }
 
 enum DaysName {
@@ -36,7 +40,7 @@ enum DaysName {
   SABADO
 }
 
-type Day @model @key(name: "byDay", fields: ["ShopID", "dayName"]) {
+type Day @model @key(name: "byDay", fields: ["DayShopID", "dayName"]) {
   id: ID!
   hour_open: AWSTime
   hour_close: AWSTime
@@ -44,8 +48,8 @@ type Day @model @key(name: "byDay", fields: ["ShopID", "dayName"]) {
   day: DaysName!
   isOpen: Boolean!
   # conection 1-1 with shop
-  ShopID: ID!
-  Shop: Shop! @connection(fields: ["ShopID"])
+  DayShopID: ID!
+  DayShop: Shop! @connection(fields: ["DayShopID"])
 }
 
 enum StatusReservation {
@@ -60,8 +64,8 @@ enum MethodPayment {
 
 type Reservation
   @model
-  @key(name: "byShopToReservation", fields: ["ShopID", "date"])
-  @key(name: "byPersonToReservation", fields: ["PersonID", "date"]) {
+  @key(name: "byShopToReservation", fields: ["ShopReservationID", "date"])
+  @key(name: "byPersonToReservation", fields: ["PersonReservationID", "date"]) {
   id: ID!
   hour: AWSTime
   date: AWSDate
@@ -69,9 +73,9 @@ type Reservation
   methodPayment: MethodPayment!
   status: StatusReservation!
   # conection 1-1 with shop
-  ShopID: ID!
-  Shop: Shop! @connection(fields: ["ShopID"])
+  ShopReservationID: ID!
+  ShopReservation: Shop! @connection(fields: ["ShopReservationID"])
   # conection 1-1 with person
-  PersonID: ID!
-  Person: Person! @connection(fields: ["PersonID"])
+  PersonReservationID: ID!
+  PersonReservation: Person! @connection(fields: ["PersonReservationID"])
 }

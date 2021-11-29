@@ -76,7 +76,7 @@ class Day extends Model {
     }
   }
   
-  Shop get Shop {
+  Shop get shop {
     try {
       return _Shop!;
     } catch(e) {
@@ -142,7 +142,7 @@ class Day extends Model {
       dayName: dayName ?? this.dayName,
       day: day ?? this.day,
       isOpen: isOpen ?? this.isOpen,
-      Shop: Shop ?? this.Shop);
+      Shop: Shop ?? shop);
   }
   
   Day.fromJson(Map<String, dynamic> json)  

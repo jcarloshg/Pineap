@@ -46,7 +46,7 @@ class Shop extends Model {
     return id;
   }
   
-  Person get Person {
+  Person get person {
     try {
       return _Person!;
     } catch(e) {
@@ -148,7 +148,7 @@ class Shop extends Model {
   Shop copyWith({String? id, Person? Person, String? name, String? type, String? address, String? id_photo, List<Day>? days, List<Reservation>? reservations}) {
     return Shop(
       id: id ?? this.id,
-      Person: Person ?? this.Person,
+      Person: Person ?? person,
       name: name ?? this.name,
       type: type ?? this.type,
       address: address ?? this.address,

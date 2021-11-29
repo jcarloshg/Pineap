@@ -73,7 +73,7 @@ class Reservation extends Model {
     }
   }
   
-  Shop get Shop {
+  Shop get shop {
     try {
       return _Shop!;
     } catch(e) {
@@ -81,7 +81,7 @@ class Reservation extends Model {
     }
   }
   
-  Person get Person {
+  Person get person {
     try {
       return _Person!;
     } catch(e) {
@@ -150,8 +150,8 @@ class Reservation extends Model {
       description: description ?? this.description,
       methodPayment: methodPayment ?? this.methodPayment,
       status: status ?? this.status,
-      Shop: Shop ?? this.Shop,
-      Person: Person ?? this.Person);
+      Shop: Shop ?? shop,
+      Person: Person ?? person);
   }
   
   Reservation.fromJson(Map<String, dynamic> json)  
