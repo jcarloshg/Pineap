@@ -27,7 +27,7 @@ class DynamoDay {
   static Future<List<Day>> getDays({required String shopId}) async {
     List<Day> days = await Amplify.DataStore.query(
       Day.classType,
-      where: Day.SHOP.eq(shopId),
+      where: Day.DAYSHOP.eq(shopId),
     );
 
     return days;

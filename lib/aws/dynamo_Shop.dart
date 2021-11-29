@@ -12,7 +12,7 @@ class DynamoShop {
     required ShopModel shopModel,
   }) async {
     Shop shop = Shop(
-      Person: person,
+      PersonShop: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
@@ -73,7 +73,7 @@ class DynamoShop {
     );
 
     Shop shop = Shop(
-      Person: person,
+      PersonShop: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
@@ -81,11 +81,7 @@ class DynamoShop {
     );
 
     try {
-      // ignore: avoid_print
-      print("\n\n\n\n\n\n\n\n\n\n" + person.toString());
       await Amplify.DataStore.save(person);
-      // ignore: avoid_print
-      print("\n\n\n\n\n\n\n\n\n\n" + person.toString());
 
       await Amplify.DataStore.save(shop);
       // ignore: avoid_print

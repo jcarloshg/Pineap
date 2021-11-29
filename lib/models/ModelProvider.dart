@@ -35,7 +35,7 @@ export 'StatusReservation.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "aafdb8d49a0087dd4bf2f3e413d1a226";
+  String version = "b4ef495069a2efda722af418f5d16f2d";
   @override
   List<ModelSchema> modelSchemas = [Day.schema, Person.schema, Reservation.schema, Shop.schema];
   static final ModelProvider _instance = ModelProvider();

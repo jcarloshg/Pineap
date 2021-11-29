@@ -30,7 +30,7 @@ import 'package:flutter/foundation.dart';
 class Shop extends Model {
   static const classType = const _ShopModelType();
   final String id;
-  final Person? _Person;
+  final Person? _PersonShop;
   final String? _name;
   final String? _type;
   final String? _address;
@@ -46,9 +46,9 @@ class Shop extends Model {
     return id;
   }
   
-  Person get person {
+  Person get PersonShop {
     try {
-      return _Person!;
+      return _PersonShop!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
@@ -94,12 +94,12 @@ class Shop extends Model {
     return _reservations;
   }
   
-  const Shop._internal({required this.id, required Person, required name, required type, required address, required id_photo, days, reservations}): _Person = Person, _name = name, _type = type, _address = address, _id_photo = id_photo, _days = days, _reservations = reservations;
+  const Shop._internal({required this.id, required PersonShop, required name, required type, required address, required id_photo, days, reservations}): _PersonShop = PersonShop, _name = name, _type = type, _address = address, _id_photo = id_photo, _days = days, _reservations = reservations;
   
-  factory Shop({String? id, required Person Person, required String name, required String type, required String address, required String id_photo, List<Day>? days, List<Reservation>? reservations}) {
+  factory Shop({String? id, required Person PersonShop, required String name, required String type, required String address, required String id_photo, List<Day>? days, List<Reservation>? reservations}) {
     return Shop._internal(
       id: id == null ? UUID.getUUID() : id,
-      Person: Person,
+      PersonShop: PersonShop,
       name: name,
       type: type,
       address: address,
@@ -117,7 +117,7 @@ class Shop extends Model {
     if (identical(other, this)) return true;
     return other is Shop &&
       id == other.id &&
-      _Person == other._Person &&
+      _PersonShop == other._PersonShop &&
       _name == other._name &&
       _type == other._type &&
       _address == other._address &&
@@ -135,7 +135,7 @@ class Shop extends Model {
     
     buffer.write("Shop {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("Person=" + (_Person != null ? _Person!.toString() : "null") + ", ");
+    buffer.write("PersonShop=" + (_PersonShop != null ? _PersonShop!.toString() : "null") + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("type=" + "$_type" + ", ");
     buffer.write("address=" + "$_address" + ", ");
@@ -145,10 +145,10 @@ class Shop extends Model {
     return buffer.toString();
   }
   
-  Shop copyWith({String? id, Person? Person, String? name, String? type, String? address, String? id_photo, List<Day>? days, List<Reservation>? reservations}) {
+  Shop copyWith({String? id, Person? PersonShop, String? name, String? type, String? address, String? id_photo, List<Day>? days, List<Reservation>? reservations}) {
     return Shop(
       id: id ?? this.id,
-      Person: Person ?? person,
+      PersonShop: PersonShop ?? this.PersonShop,
       name: name ?? this.name,
       type: type ?? this.type,
       address: address ?? this.address,
@@ -159,8 +159,8 @@ class Shop extends Model {
   
   Shop.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _Person = json['Person']?['serializedData'] != null
-        ? Person.fromJson(new Map<String, dynamic>.from(json['Person']['serializedData']))
+      _PersonShop = json['PersonShop']?['serializedData'] != null
+        ? Person.fromJson(new Map<String, dynamic>.from(json['PersonShop']['serializedData']))
         : null,
       _name = json['name'],
       _type = json['type'],
@@ -180,12 +180,12 @@ class Shop extends Model {
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'Person': _Person?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'days': _days?.map((Day? e) => e?.toJson()).toList(), 'reservations': _reservations?.map((Reservation? e) => e?.toJson()).toList()
+    'id': id, 'PersonShop': _PersonShop?.toJson(), 'name': _name, 'type': _type, 'address': _address, 'id_photo': _id_photo, 'days': _days?.map((Day? e) => e?.toJson()).toList(), 'reservations': _reservations?.map((Reservation? e) => e?.toJson()).toList()
   };
 
   static final QueryField ID = QueryField(fieldName: "shop.id");
-  static final QueryField PERSON = QueryField(
-    fieldName: "Person",
+  static final QueryField PERSONSHOP = QueryField(
+    fieldName: "PersonShop",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Person).toString()));
   static final QueryField NAME = QueryField(fieldName: "name");
   static final QueryField TYPE = QueryField(fieldName: "type");
@@ -204,9 +204,9 @@ class Shop extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-      key: Shop.PERSON,
+      key: Shop.PERSONSHOP,
       isRequired: true,
-      targetName: "PersonID",
+      targetName: "PersonShopID",
       ofModelName: (Person).toString()
     ));
     
@@ -238,14 +238,14 @@ class Shop extends Model {
       key: Shop.DAYS,
       isRequired: false,
       ofModelName: (Day).toString(),
-      associatedKey: Day.SHOP
+      associatedKey: Day.DAYSHOP
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Shop.RESERVATIONS,
       isRequired: false,
       ofModelName: (Reservation).toString(),
-      associatedKey: Reservation.SHOP
+      associatedKey: Reservation.SHOPRESERVATION
     ));
   });
 }
