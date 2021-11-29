@@ -154,10 +154,10 @@ class _ReservationsState extends State<Reservations> {
   }
 
   void _getReservations() async {
-    // List<Reservation>? reservationResponse =
-    //     await DynamoReservation.getByDate(date: DateTime.now());
+    List<Reservation>? reservationResponse =
+        await DynamoReservation.getByDate(date: DateTime.now());
 
-    List<Reservation>? reservationResponse = await DynamoReservation.getall();
+    // List<Reservation>? reservationResponse = await DynamoReservation.getall();
 
     reservationResponse?.forEach((reser) => print(reser.toString()));
 
