@@ -52,11 +52,9 @@ class ShopModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setDays({required List<Day> days}) {
+  void setDays({required List<Day>? days}) {
     this.days = days;
-
-    // this.days!.forEach((day) => print(day.toString()));
-
+    this.days?.forEach((item) => print(item.toString()));
     notifyListeners();
   }
 

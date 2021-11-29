@@ -9,6 +9,7 @@ import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
+import 'package:pineap/pages/Login.dart';
 import 'package:pineap/pages/Manager/home_manager.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
@@ -37,7 +38,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
   @override
   Widget build(BuildContext context) {
     personModel = Provider.of<PersonModel>(context);
-    shopModel = Provider.of<ShopModel>(context);
+    shopModel = Provider.of<ShopModel>(context);  
 
     return isSignUpComplete
         ? ShowLoading(
@@ -95,7 +96,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                     ),
                   ),
                   onPressed: () => Cognito.resentCode(
-                    username: personModel.getPerson.email,
+                    username: personModel.email,
                     context: context,
                   ),
                   child: const Text("Reenvia tu codigo"),
@@ -131,7 +132,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       //
       // send code verfication
       bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
-        username: personModel.getPerson.email,
+        username: personModel.email,
         codeVerification: codeVerification,
         context: context,
       );
@@ -176,71 +177,72 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       //
       // upload info days
       Day DOMINGO = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "DOMINGO",
-      day: DaysName.DOMINGO,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day LUNES = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "LUNES",
-      day: DaysName.LUNES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day MARTES = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "MARTES",
-      day: DaysName.MARTES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day MIERCOLES = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "MIERCOLES",
-      day: DaysName.MIERCOLES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day JUEVES = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "JUEVES",
-      day: DaysName.JUEVES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day VIERNES = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "VIERNES",
-      day: DaysName.VIERNES,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    Day SABADO = Day(
-      hour_open: TemporalTime.now(),
-      hour_close: TemporalTime.now(),
-      dayName: "SABADO",
-      day: DaysName.SABADO,
-      isOpen: true,
-      Shop: uploadShopResponse,
-    );
-    if (DynamoDay.uploadDay(day: DOMINGO) == null) return;
-    if (DynamoDay.uploadDay(day: LUNES) == null) return;
-    if (DynamoDay.uploadDay(day: MARTES) == null) return;
-    if (DynamoDay.uploadDay(day: MIERCOLES) == null) return;
-    if (DynamoDay.uploadDay(day: JUEVES) == null) return;
-    if (DynamoDay.uploadDay(day: VIERNES) == null) return;
-    if (DynamoDay.uploadDay(day: SABADO) == null) return;
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "DOMINGO",
+        day: DaysName.DOMINGO,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      Day LUNES = Day(
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "LUNES",
+        day: DaysName.LUNES,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      Day MARTES = Day(
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "MARTES",
+        day: DaysName.MARTES,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      Day MIERCOLES = Day(
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "MIERCOLES",
+        day: DaysName.MIERCOLES,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      Day JUEVES = Day(
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "JUEVES",
+        day: DaysName.JUEVES,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      Day VIERNES = Day(
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "VIERNES",
+        day: DaysName.VIERNES,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      Day SABADO = Day(
+        hour_open: TemporalTime.now(),
+        hour_close: TemporalTime.now(),
+        dayName: "SABADO",
+        day: DaysName.SABADO,
+        isOpen: true,
+        Shop: uploadShopResponse,
+      );
+      if (DynamoDay.uploadDay(day: DOMINGO) == null) return;
+      if (DynamoDay.uploadDay(day: LUNES) == null) return;
+      if (DynamoDay.uploadDay(day: MARTES) == null) return;
+      if (DynamoDay.uploadDay(day: MIERCOLES) == null) return;
+      if (DynamoDay.uploadDay(day: JUEVES) == null) return;
+      if (DynamoDay.uploadDay(day: VIERNES) == null) return;
+      if (DynamoDay.uploadDay(day: SABADO) == null) return;
 
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomeManagerPage()));
+      Cognito.singOut();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
     }
 
     setState(() => isSignUpComplete = false);

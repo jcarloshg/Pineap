@@ -4,6 +4,7 @@ import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/amplifyconfiguration.dart';
 import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/aws/dynamo_day.dart';
 import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/helpers/validator.dart';
@@ -241,19 +242,17 @@ class _LoginScreenState extends State<LoginScreen> {
       if (shop == null) {
         return;
       }
-      Provider.of<ShopModel>(context, listen: false)
-          .setDataWithShop(shop: shop);
       Provider.of<ShopModel>(context, listen: false).setShop = shop;
 
       //
       //
       // set day
-      List<Day> days = await Amplify.DataStore.query(
-        Day.classType,
-        where: Day.SHOP.eq(shop.getId()),
-      );
+      print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + shop.getId());
+      List<Day>? days = await DynamoDay.getDays(shopid: shop.getId());
+      if (days == null) {
+        return;
+      }
       Provider.of<ShopModel>(context, listen: false).setDays(days: days);
-
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const HomeManagerPage()),
       );
@@ -261,8 +260,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedCerrarSesion() async {
-    await Cognito.singOut();
-
     // ========================================================
     // ========================================================
     // ========================================================

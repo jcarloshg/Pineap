@@ -24,12 +24,23 @@ class DynamoDay {
     return day;
   }
 
-  static Future<List<Day>> getDays({required String shopId}) async {
-    List<Day> days = await Amplify.DataStore.query(
-      Day.classType,
-      where: Day.SHOP.eq(shopId),
-    );
-
-    return days;
+  static Future<List<Day>?> getDays({required String shopid}) async {
+    try {
+      List<Day> days = await Amplify.DataStore.query(
+        Day.classType,
+        where: Day.SHOP.eq(shopid),
+      );
+      for (var element in days) {
+        // ignore: avoid_print
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+            element.toString());
+      }
+      return days;
+    } catch (e) {
+      // ignore: avoid_print
+      print(
+          "[getDays                                        ] " + e.toString());
+      return null;
+    }
   }
 }

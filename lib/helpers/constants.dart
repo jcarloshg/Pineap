@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Constants {
   // rols from users
@@ -52,5 +53,10 @@ class Constants {
     format += "${timeOfDay.minute} hrs";
 
     return format;
+  }
+
+  // get format date like << November 22, 2021 >>
+  static String getFormatDateTime({required DateTime dateTime}) {
+    return DateFormat('MMMM dd, yyyy').format(dateTime);
   }
 }

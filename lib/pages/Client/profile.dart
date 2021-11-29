@@ -2,6 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/info_box.dart';
 import 'package:pineap/aws/cognito.dart';
+import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/pages/Login.dart';
 import 'package:pineap/styles/messages.dart';
@@ -58,7 +59,9 @@ class _ProfileState extends State<Profile> {
               const SizedBox(height: 32),
               const TitleBlockForm(title_block_form: "Información del usuario"),
               InfoBox(
-                info: personModel.getPerson.birthday.toString(),
+                info: Constants.getFormatDateTime(
+                    dateTime: DateTime.parse(
+                        personModel.getPerson.birthday.toString())),
                 icon: const Icon(Icons.person),
               ),
               InfoBox(

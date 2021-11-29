@@ -4,6 +4,7 @@ import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/helpers/validator.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
+import 'package:pineap/pages/Login.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -77,7 +78,7 @@ class _CodeVerificationState extends State<CodeVerification> {
                         ),
                       ),
                       onPressed: () => Cognito.resentCode(
-                        username: personModel.getPerson.email,
+                        username: personModel.email,
                         context: context,
                       ),
                       child: const Text("Reenvia tu codigo"),
@@ -115,7 +116,7 @@ class _CodeVerificationState extends State<CodeVerification> {
       //
       // send code verfication
       bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
-        username: personModel.getPerson.email,
+        username: personModel.email,
         codeVerification: codeVerification,
         context: context,
       );
@@ -141,8 +142,9 @@ class _CodeVerificationState extends State<CodeVerification> {
         return;
       }
 
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomePageClient()));
+      Cognito.singOut();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
     }
 
     setState(() => showLoading = false);

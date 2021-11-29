@@ -61,8 +61,8 @@ enum MethodPayment {
 
 type Reservation
   @model
-  @key(name: "byShop", fields: ["ShopReservationID", "date"])
-  @key(name: "byPerson", fields: ["PersonReservationID", "date"]) {
+  @key(name: "byShop", fields: ["ShopID", "date"])
+  @key(name: "byPerson", fields: ["PersonID", "date"]) {
   id: ID!
   hour: AWSTime
   date: AWSDate
@@ -70,9 +70,9 @@ type Reservation
   methodPayment: MethodPayment!
   status: StatusReservation!
   # conection 1-1 with shop
-  ShopReservationID: ID!
-  Shop: Shop! @connection(fields: ["ShopReservationID"])
+  ShopID: ID!
+  Shop: Shop! @connection(fields: ["ShopID"])
   # conection 1-1 with person
-  PersonReservationID: ID!
-  Person: Person! @connection(fields: ["PersonReservationID"])
+  PersonID: ID!
+  Person: Person! @connection(fields: ["PersonID"])
 }

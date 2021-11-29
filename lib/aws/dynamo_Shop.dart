@@ -30,7 +30,9 @@ class DynamoShop {
     return shop;
   }
 
-  static Future<List<Shop>?> getShopsByName({required String name}) async {
+  static Future<List<Shop>?> getShopsByName({
+    required String name,
+  }) async {
     try {
       List<Shop> shopsResponse = await Amplify.DataStore.query<Shop>(
         Shop.classType,
@@ -51,17 +53,12 @@ class DynamoShop {
       List<Shop> shopsResponse =
           await Amplify.DataStore.query<Shop>(Shop.classType);
 
-      shopsResponse.forEach((element) {
-        print(element.toString());
-      });
-
       return shopsResponse;
     } catch (e) {
       // ignore: avoid_print
       print("[getShopsByName ] " + e.toString());
+      return null;
     }
-
-    return null;
   }
 
   static Future<String?> plok({

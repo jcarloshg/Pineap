@@ -180,12 +180,10 @@ class _BoxDayHourState extends State<BoxDayHour> {
         message: "Se actualizó la hora correctamente",
       );
 
-      setState(() async {
-        List<Day> days = await DynamoDay.getDays(shopId: shopModel.getId);
-        shopModel.setDays(days: days);
-
-        shopModel.setName = "TQUITOSasjdfhasjkd";
-      });
+      // setState(() async {
+      //   List<Day>? days = await DynamoDay.getDays(shop: shopModel.getShop!);
+      //   shopModel.setDays(days: days);
+      // });
     } else {
       Messages.scaffoldMessengerWidget(
         context: context,
