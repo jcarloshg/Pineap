@@ -30,13 +30,13 @@ class DynamoReservation {
   }
 
   static Future<List<Reservation>?> getByDate({required DateTime date}) async {
+    print(TemporalDate(date));
     try {
-      List<Reservation> reservationList =
-          (await Amplify.DataStore.query<Reservation>(
-        Reservation.classType,
-        where: Reservation.DATE.eq(TemporalDate(date)) 
-        // QueryField(fieldName: "Reservation_date").eq(TemporalDate(date)),
-      ));
+      List<Reservation> reservationList = (await Amplify.DataStore.query<
+              Reservation>(Reservation.classType,
+          where: Reservation.METHODPAYMENT.eq(MethodPayment.card)
+          // QueryField(fieldName: "Reservation_date").eq(TemporalDate(date)),
+          ));
 
       return reservationList;
     } catch (e) {

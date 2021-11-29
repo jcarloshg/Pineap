@@ -6,13 +6,13 @@ type Person @model {
   role: String!
   email: String!
   # New field with @connection
-  shops: [Shop] @connection(keyName: "byPerson", fields: ["id"])
+  shops: [Shop] @connection(keyName: "byPersonShop", fields: ["id"])
   # New field with @connection
-  reservations: [Reservation] @connection(keyName: "byPerson", fields: ["id"])
+  reservations: [Reservation] @connection(keyName: "byPersonReservation", fields: ["id"])
 }
 
 # New model
-type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
+type Shop @model @key(name: "byPersonShop", fields: ["PersonID", "name"]) {
   id: ID!
   name: String!
   type: String!
@@ -22,9 +22,9 @@ type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
   PersonID: ID!
   Person: Person! @connection(fields: ["PersonID"])
   # New field with @connection
-  days: [Day] @connection(keyName: "byShop", fields: ["id"])
+  days: [Day] @connection(keyName: "byShopDay", fields: ["id"])
   # New field with @connection
-  reservations: [Reservation] @connection(keyName: "byPerson", fields: ["id"])
+  reservations: [Reservation] @connection(keyName: "byShopReservation", fields: ["id"])
 }
 
 enum DaysName {
@@ -37,7 +37,7 @@ enum DaysName {
   SABADO
 }
 
-type Day @model @key(name: "byShop", fields: ["ShopID", "dayName"]) {
+type Day @model @key(name: "byShopDay", fields: ["ShopID", "dayName"]) {
   id: ID!
   hour_open: AWSTime
   hour_close: AWSTime
@@ -61,8 +61,8 @@ enum MethodPayment {
 
 type Reservation
   @model
-  @key(name: "byShop", fields: ["ShopID", "date"])
-  @key(name: "byPerson", fields: ["PersonID", "date"]) {
+  @key(name: "byShopReservation", fields: ["ShopID", "date"])
+  @key(name: "byPersonReservation", fields: ["PersonID", "date"]) {
   id: ID!
   hour: AWSTime
   date: AWSDate
