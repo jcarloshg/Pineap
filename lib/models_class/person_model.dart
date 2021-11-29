@@ -20,17 +20,7 @@ class PersonModel extends ChangeNotifier {
   }
 
   PersonModel();
-
-  @override
-  String toString() {
-    return " lastName : $lastName"
-        " firstName : $firstName"
-        " birthday : $birthday"
-        " role : $role"
-        " email : $email"
-        " password : $password";
-  }
-
+  
   void setData({
     required String lastName,
     required String firstName,
@@ -65,21 +55,5 @@ class PersonModel extends ChangeNotifier {
     this.password = password;
   }
 
-  void setDataWithPerson({required Person person}) {
-    lastName = person.last_name;
-    firstName = person.first_name;
-    birthday = person.birthday!.getDateTimeInUtc();
-    role = person.role;
-    email = person.email;
-    password = "";
 
-    notifyListeners();
-  }
-
-  String get getLastName => lastName;
-  String get getFirstName => firstName;
-  DateTime get getBirthday => birthday;
-  String get getRole => role;
-  String get getEmail => email;
-  String get getPassword => password;
 }

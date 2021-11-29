@@ -95,7 +95,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
                     ),
                   ),
                   onPressed: () => Cognito.resentCode(
-                    username: personModel.getEmail,
+                    username: personModel.getPerson.email,
                     context: context,
                   ),
                   child: const Text("Reenvia tu codigo"),
@@ -131,7 +131,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       //
       // send code verfication
       bool isSignUpCompleteResponse = await Cognito.sendCodeAWS(
-        username: personModel.getEmail,
+        username: personModel.getPerson.email,
         codeVerification: codeVerification,
         context: context,
       );

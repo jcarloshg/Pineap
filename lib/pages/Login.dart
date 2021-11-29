@@ -234,11 +234,11 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context, message: "error al obtener info user");
       return;
     }
-    Provider.of<PersonModel>(context, listen: false).setDataWithPerson(
-      person: person,
-    );
     Provider.of<PersonModel>(context, listen: false).setPerson = person;
 
+    //
+    //
+    // check the role to navigate you correct screen
     if (person.role.compareTo(Constants.client) == 0) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const HomePageClient()),
@@ -255,6 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Provider.of<ShopModel>(context, listen: false)
           .setDataWithShop(shop: shop);
       Provider.of<ShopModel>(context, listen: false).setShop = shop;
+      
       //
       //
       // set day
