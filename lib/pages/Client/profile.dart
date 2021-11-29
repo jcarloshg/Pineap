@@ -40,11 +40,18 @@ class _ProfileState extends State<Profile> {
               //
               // info person
               const SizedBox(height: 32),
-              Image(
-                image: AssetImage(uriPhoto),
-                height: 200,
-                width: 200,
-                fit: BoxFit.cover,
+              // const Icon(
+              //   Icons.person,
+              //   size: 64,
+              // ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: Image(
+                  image: AssetImage(uriPhoto),
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
               const SizedBox(height: 16),
               Align(
