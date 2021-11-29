@@ -12,7 +12,7 @@ class DynamoShop {
     required ShopModel shopModel,
   }) async {
     Shop shop = Shop(
-      PersonShop: person,
+      Person: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
@@ -77,7 +77,7 @@ class DynamoShop {
     );
 
     Shop shop = Shop(
-      PersonShop: person,
+      Person: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,

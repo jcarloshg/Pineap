@@ -181,7 +181,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "DOMINGO",
       day: DaysName.DOMINGO,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     Day LUNES = Day(
       hour_open: TemporalTime.now(),
@@ -189,7 +189,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "LUNES",
       day: DaysName.LUNES,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     Day MARTES = Day(
       hour_open: TemporalTime.now(),
@@ -197,7 +197,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "MARTES",
       day: DaysName.MARTES,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     Day MIERCOLES = Day(
       hour_open: TemporalTime.now(),
@@ -205,7 +205,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "MIERCOLES",
       day: DaysName.MIERCOLES,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     Day JUEVES = Day(
       hour_open: TemporalTime.now(),
@@ -213,7 +213,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "JUEVES",
       day: DaysName.JUEVES,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     Day VIERNES = Day(
       hour_open: TemporalTime.now(),
@@ -221,7 +221,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "VIERNES",
       day: DaysName.VIERNES,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     Day SABADO = Day(
       hour_open: TemporalTime.now(),
@@ -229,7 +229,7 @@ class _CodeVerificationShopState extends State<CodeVerificationShop> {
       dayName: "SABADO",
       day: DaysName.SABADO,
       isOpen: true,
-      ShopDay: uploadShopResponse,
+      Shop: uploadShopResponse,
     );
     if (DynamoDay.uploadDay(day: DOMINGO) == null) return;
     if (DynamoDay.uploadDay(day: LUNES) == null) return;

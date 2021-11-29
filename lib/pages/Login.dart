@@ -223,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // set data shop
         Shop? shop = (await Amplify.DataStore.query(
           Shop.classType,
-          where: Shop.PERSONSHOP.eq(person.id),
+          where: Shop.PERSON.eq(person.id),
         ))[0];
         if (shop == null) return;
         Provider.of<ShopModel>(context, listen: false)
@@ -234,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // set day
         List<Day> days = await Amplify.DataStore.query(
           Day.classType,
-          where: Day.SHOPDAY.eq(shop.getId()),
+          where: Day.SHOP.eq(shop.getId()),
         );
         Provider.of<ShopModel>(context, listen: false).setDays(days: days);
 
