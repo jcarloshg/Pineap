@@ -34,7 +34,7 @@ class DynamoReservation {
     try {
       List<Reservation> reservationList = (await Amplify.DataStore.query<
               Reservation>(Reservation.classType,
-          where: Reservation.METHODPAYMENT.eq(MethodPayment.card)
+          where: Reservation.METHODPAYMENT.eq(MethodPayment.card.toString())
           // QueryField(fieldName: "Reservation_date").eq(TemporalDate(date)),
           ));
 
