@@ -34,7 +34,7 @@ class Day extends Model {
   final String? _dayName;
   final DaysName? _day;
   final bool? _isOpen;
-  final Shop? _Shop;
+  final Shop? _ShopDay;
 
   @override
   getInstanceType() => classType;
@@ -76,17 +76,17 @@ class Day extends Model {
     }
   }
   
-  Shop get shop {
+  Shop get ShopDay {
     try {
-      return _Shop!;
+      return _ShopDay!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
   }
   
-  const Day._internal({required this.id, hour_open, hour_close, required dayName, required day, required isOpen, required Shop}): _hour_open = hour_open, _hour_close = hour_close, _dayName = dayName, _day = day, _isOpen = isOpen, _Shop = Shop;
+  const Day._internal({required this.id, hour_open, hour_close, required dayName, required day, required isOpen, required ShopDay}): _hour_open = hour_open, _hour_close = hour_close, _dayName = dayName, _day = day, _isOpen = isOpen, _ShopDay = ShopDay;
   
-  factory Day({String? id, TemporalTime? hour_open, TemporalTime? hour_close, required String dayName, required DaysName day, required bool isOpen, required Shop Shop}) {
+  factory Day({String? id, TemporalTime? hour_open, TemporalTime? hour_close, required String dayName, required DaysName day, required bool isOpen, required Shop ShopDay}) {
     return Day._internal(
       id: id == null ? UUID.getUUID() : id,
       hour_open: hour_open,
@@ -94,7 +94,7 @@ class Day extends Model {
       dayName: dayName,
       day: day,
       isOpen: isOpen,
-      Shop: Shop);
+      ShopDay: ShopDay);
   }
   
   bool equals(Object other) {
@@ -111,7 +111,7 @@ class Day extends Model {
       _dayName == other._dayName &&
       _day == other._day &&
       _isOpen == other._isOpen &&
-      _Shop == other._Shop;
+      _ShopDay == other._ShopDay;
   }
   
   @override
@@ -128,13 +128,13 @@ class Day extends Model {
     buffer.write("dayName=" + "$_dayName" + ", ");
     buffer.write("day=" + (_day != null ? enumToString(_day)! : "null") + ", ");
     buffer.write("isOpen=" + (_isOpen != null ? _isOpen!.toString() : "null") + ", ");
-    buffer.write("Shop=" + (_Shop != null ? _Shop!.toString() : "null"));
+    buffer.write("ShopDay=" + (_ShopDay != null ? _ShopDay!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Day copyWith({String? id, TemporalTime? hour_open, TemporalTime? hour_close, String? dayName, DaysName? day, bool? isOpen, Shop? Shop}) {
+  Day copyWith({String? id, TemporalTime? hour_open, TemporalTime? hour_close, String? dayName, DaysName? day, bool? isOpen, Shop? ShopDay}) {
     return Day(
       id: id ?? this.id,
       hour_open: hour_open ?? this.hour_open,
@@ -142,7 +142,7 @@ class Day extends Model {
       dayName: dayName ?? this.dayName,
       day: day ?? this.day,
       isOpen: isOpen ?? this.isOpen,
-      Shop: Shop ?? shop);
+      ShopDay: ShopDay ?? this.ShopDay);
   }
   
   Day.fromJson(Map<String, dynamic> json)  
@@ -152,12 +152,12 @@ class Day extends Model {
       _dayName = json['dayName'],
       _day = enumFromString<DaysName>(json['day'], DaysName.values),
       _isOpen = json['isOpen'],
-      _Shop = json['Shop']?['serializedData'] != null
-        ? Shop.fromJson(new Map<String, dynamic>.from(json['Shop']['serializedData']))
+      _ShopDay = json['ShopDay']?['serializedData'] != null
+        ? Shop.fromJson(new Map<String, dynamic>.from(json['ShopDay']['serializedData']))
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'hour_open': _hour_open?.format(), 'hour_close': _hour_close?.format(), 'dayName': _dayName, 'day': enumToString(_day), 'isOpen': _isOpen, 'Shop': _Shop?.toJson()
+    'id': id, 'hour_open': _hour_open?.format(), 'hour_close': _hour_close?.format(), 'dayName': _dayName, 'day': enumToString(_day), 'isOpen': _isOpen, 'ShopDay': _ShopDay?.toJson()
   };
 
   static final QueryField ID = QueryField(fieldName: "day.id");
@@ -166,8 +166,8 @@ class Day extends Model {
   static final QueryField DAYNAME = QueryField(fieldName: "dayName");
   static final QueryField DAY = QueryField(fieldName: "day");
   static final QueryField ISOPEN = QueryField(fieldName: "isOpen");
-  static final QueryField SHOP = QueryField(
-    fieldName: "Shop",
+  static final QueryField SHOPDAY = QueryField(
+    fieldName: "ShopDay",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Shop).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Day";
@@ -206,7 +206,7 @@ class Day extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-      key: Day.SHOP,
+      key: Day.SHOPDAY,
       isRequired: true,
       targetName: "ShopID",
       ofModelName: (Shop).toString()

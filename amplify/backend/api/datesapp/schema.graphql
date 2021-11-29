@@ -20,7 +20,7 @@ type Shop @model @key(name: "byPersonShop", fields: ["PersonID", "name"]) {
   id_photo: String!
   # 1-1 with person 
   PersonID: ID!
-  Person: Person! @connection(fields: ["PersonID"])
+  PersonShop: Person! @connection(fields: ["PersonID"])
   # New field with @connection
   days: [Day] @connection(keyName: "byShopDay", fields: ["id"])
   # New field with @connection
@@ -46,7 +46,7 @@ type Day @model @key(name: "byShopDay", fields: ["ShopID", "dayName"]) {
   isOpen: Boolean!
   # conection 1-1 with shop
   ShopID: ID!
-  Shop: Shop! @connection(fields: ["ShopID"])
+  ShopDay: Shop! @connection(fields: ["ShopID"])
 }
 
 enum StatusReservation {
@@ -71,8 +71,8 @@ type Reservation
   status: StatusReservation!
   # conection 1-1 with shop
   ShopID: ID!
-  Shop: Shop! @connection(fields: ["ShopID"])
+  ShopReservation: Shop! @connection(fields: ["ShopID"])
   # conection 1-1 with person
   PersonID: ID!
-  Person: Person! @connection(fields: ["PersonID"])
+  PersonReservation: Person! @connection(fields: ["PersonID"])
 }
