@@ -124,15 +124,16 @@ class Cognito {
     return userEmail;
   }
 
-  static Future<void> singOut({required BuildContext context}) async {
+  static Future<SignOutResult?> singOut() async {
     try {
-      await Amplify.Auth.signOut();
+      SignOutResult signOutResult = await Amplify.Auth.signOut();
+      // ignore: avoid_print
+      print(signOutResult.toString());
+      return signOutResult;
     } on AuthException catch (e) {
       // ignore: avoid_print
       print("[singOut] " + e.message);
-
-      Messages.scaffoldMessengerWidget(
-          context: context, message: "[singOut] " + e.message);
+      return null;
     }
   }
 

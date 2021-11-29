@@ -1,8 +1,12 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/info_box.dart';
+import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/models_class/person_model.dart';
 import 'package:pineap/models_class/shop_model.dart';
+import 'package:pineap/pages/Login.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_widget.dart';
 import 'package:provider/provider.dart';
@@ -93,7 +97,7 @@ class _ProfileState extends State<Profile> {
                         color: Colors.brown,
                       ),
                     ),
-                    onPressed: onPressedCerrarSesion,
+                    onPressed: () => _singOut(),
                     child: const Text("Cerrar sesión"),
                   ),
                   alignment: Alignment.bottomCenter,
@@ -106,7 +110,18 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void onPressedCerrarSesion() async {
-    // await Cognito.singOut(context: context);
+  _singOut() async {
+    SignOutResult? signOutResult = await Cognito.singOut();
+
+    if (signOutResult == null) {
+      Messages.scaffoldMessengerWidget(
+        context: context,
+        message: "Error al cerrar sesión",
+      );
+      return;
+    }
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 }

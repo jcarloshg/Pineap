@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.center,
           child: Container(
             padding: const EdgeInsets.all(16.0),
-            height: 500,
+            height: 375,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
               color: Colors.white70,
@@ -159,16 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text("Crear una cuenta como negocio"),
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.brown,
-                      ),
-                    ),
-                    onPressed: onPressedCerrarSesion,
-                    child: const Text("Cerrar sesión"),
-                  )
                 ],
               ),
             ),
@@ -201,10 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
       AuthUser? authUser = await Cognito.getCurrentUser();
 
       if (authUser == null) {
-        Messages.scaffoldMessengerWidget(
-          context: context,
-          message: "Err al obtener la info del usuario",
-        );
+        return;
       }
 
       getInfoUser();
@@ -251,11 +238,13 @@ class _LoginScreenState extends State<LoginScreen> {
         Shop.classType,
         where: Shop.PERSON.eq(person.id),
       ))[0];
-      if (shop == null) return;
+      if (shop == null) {
+        return;
+      }
       Provider.of<ShopModel>(context, listen: false)
           .setDataWithShop(shop: shop);
       Provider.of<ShopModel>(context, listen: false).setShop = shop;
-      
+
       //
       //
       // set day
@@ -272,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onPressedCerrarSesion() async {
-    await Cognito.singOut(context: context);
+    await Cognito.singOut();
 
     // ========================================================
     // ========================================================

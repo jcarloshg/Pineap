@@ -1,6 +1,10 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/info_box.dart';
+import 'package:pineap/aws/cognito.dart';
 import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/pages/Login.dart';
+import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
@@ -14,13 +18,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  late PersonModel personModel;
-
   // info user
-  final String firstName = "Jose Carlos";
-  final String lastName = "Huerta";
-  final String birthday = DateTime.now().toIso8601String();
-  final String email = "carlosj12336@gmail.com";
+  late PersonModel personModel;
   final String pass = "........";
   final String uriPhoto = "assets/images/backgorundlogin.jpg";
 
@@ -38,7 +37,7 @@ class _ProfileState extends State<Profile> {
               const TitleWidget(title: "Perfil del cliente"),
               const SubTitle(subtitle: "Esta es toda tu información"),
               //
-              // info shop
+              // info person
               const SizedBox(height: 32),
               Image(
                 image: AssetImage(uriPhoto),
@@ -49,26 +48,53 @@ class _ProfileState extends State<Profile> {
               const SizedBox(height: 16),
               Align(
                 child: Text(
-                  '$firstName $lastName',
+                  '${personModel.getPerson.first_name} ${personModel.getPerson.last_name}',
                   style: const TextStyle(fontSize: 18),
                 ),
                 alignment: Alignment.bottomCenter,
               ),
               //
-              // info shop
+              // info user
               const SizedBox(height: 32),
               const TitleBlockForm(title_block_form: "Información del usuario"),
-              InfoBox(info: birthday, icon: const Icon(Icons.person)),
-              InfoBox(info: email, icon: const Icon(Icons.email)),
-              InfoBox(info: pass, icon: const Icon(Icons.password)),
+              InfoBox(
+                info: personModel.getPerson.birthday.toString(),
+                icon: const Icon(Icons.person),
+              ),
+              InfoBox(
+                info: personModel.getPerson.email,
+                icon: const Icon(Icons.email),
+              ),
+              InfoBox(
+                info: pass,
+                icon: const Icon(Icons.password),
+              ),
               //
               // info shop
               const SizedBox(height: 32),
-              TextButton(onPressed: () {}, child: const Text("Cerrar sesion")),
+              TextButton(
+                onPressed: () async => await _singOut(),
+                child: const Text("Cerrar sesion"),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  _singOut() async {
+    SignOutResult? signOutResult = await Cognito.singOut();
+
+    if (signOutResult == null) {
+      Messages.scaffoldMessengerWidget(
+        context: context,
+        message: "Error al cerrar sesión",
+      );
+      return;
+    }
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 }
