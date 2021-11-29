@@ -61,6 +61,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 alignment: Alignment.bottomCenter,
               ),
+
               //
               // info user
               const SizedBox(height: 32),
@@ -79,8 +80,10 @@ class _ProfileState extends State<Profile> {
                 info: pass,
                 icon: const Icon(Icons.password),
               ),
+
               //
-              // info shop
+              //
+              // info TextButton
               const SizedBox(height: 32),
               TextButton(
                 onPressed: () async => await _singOut(),
