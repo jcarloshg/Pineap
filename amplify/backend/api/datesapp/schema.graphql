@@ -6,13 +6,13 @@ type Person @model {
   role: String!
   email: String!
   # New field with @connection
-  shops: [Shop] @connection(keyName: "byPerson", fields: ["id"])
+  shops: [Shop] @connection(keyName: "byPersonToShop", fields: ["id"])
   # New field with @connection
-  reservations: [Reservation] @connection(keyName: "byPersonReser", fields: ["id"])
+  reservations: [Reservation] @connection(keyName: "byPersonToReservation", fields: ["id"])
 }
 
 # New model
-type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
+type Shop @model @key(name: "byPersonToShop", fields: ["PersonID", "name"]) {
   id: ID!
   PersonID: ID!
   Person: Person! @connection(fields: ["PersonID"])
@@ -23,7 +23,7 @@ type Shop @model @key(name: "byPerson", fields: ["PersonID", "name"]) {
   # New field with @connection
   days: [Day] @connection(keyName: "byDay", fields: ["id"])
   # New field with @connection
-  reservations: [Reservation] @connection(keyName: "byShop", fields: ["id"])
+  reservations: [Reservation] @connection(keyName: "byShopToReservation", fields: ["id"])
 }
 
 enum DaysName {
@@ -60,8 +60,8 @@ enum MethodPayment {
 
 type Reservation
   @model
-  @key(name: "byShop", fields: ["ShopID", "date"])
-  @key(name: "byPersonReser", fields: ["PersonID", "date"]) {
+  @key(name: "byShopToReservation", fields: ["ShopID", "date"])
+  @key(name: "byPersonToReservation", fields: ["PersonID", "date"]) {
   id: ID!
   hour: AWSTime
   date: AWSDate

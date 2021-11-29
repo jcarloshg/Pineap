@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<PersonModel>(create: (_) => PersonModel()),
-        Provider<ShopModel>(create: (_) => ShopModel()),
+        Provider<PersonModel>(create: (context) => PersonModel()),
+        Provider<ShopModel>(create: (context) => ShopModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
