@@ -135,4 +135,15 @@ class Cognito {
           context: context, message: "[singOut] " + e.message);
     }
   }
+
+  static Future<AuthUser?> getCurrentUser() async {
+    try {
+      AuthUser authUserResponse = await Amplify.Auth.getCurrentUser();
+      return authUserResponse;
+    } on AuthException catch (e) {
+      // ignore: avoid_print
+      print("[getCurrentUser ] " + e.message);
+      return null;
+    }
+  }
 }

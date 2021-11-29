@@ -54,6 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
       await Amplify.addPlugin(AmplifyAuthCognito());
       // configure Amplify - note that Amplify cannot be configured more than once!
       await Amplify.configure(amplifyconfig);
+
+      // get infor from user
+      await _isLogged();
     } catch (e) {
       // ignore: avoid_print
       print('[_configureAmplify] + $e');
@@ -185,63 +188,85 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!isSignedIn) {
         Messages.scaffoldMessengerWidget(
-            context: context, message: "Usuario o contraseña equivocadors.");
+            context: context, message: "Usuario o contraseña equivocadoss.");
         return;
       }
 
-      //
-      //
-      // get email from current user
-      String? userEmail = await Cognito.getCurrentUserEmail(context: context);
-      if (userEmail == null) {
+      getInfoUser();
+    }
+  }
+
+  Future<void> _isLogged() async {
+    try {
+      AuthUser? authUser = await Cognito.getCurrentUser();
+
+      if (authUser == null) {
         Messages.scaffoldMessengerWidget(
-            context: context, message: "error al obtener info user");
-        return;
+          context: context,
+          message: "Err al obtener la info del usuario",
+        );
       }
 
-      //
-      //
-      // set data person
-      Person? person = await DynamoPerson.getPerson(userEmail: userEmail);
-      if (person == null) {
-        Messages.scaffoldMessengerWidget(
-            context: context, message: "error al obtener info user");
-        return;
-      }
-      Provider.of<PersonModel>(context, listen: false).setDataWithPerson(
-        person: person,
+      getInfoUser();
+    } catch (e) {
+      // ignore: avoid_print
+      print("[_isLogged] " + e.toString());
+    }
+  }
+
+  void getInfoUser() async {
+    //
+    //
+    // get email from current user
+    String? userEmail = await Cognito.getCurrentUserEmail(context: context);
+    if (userEmail == null) {
+      Messages.scaffoldMessengerWidget(
+          context: context, message: "error al obtener info user");
+      return;
+    }
+
+    //
+    //
+    // set data person
+    Person? person = await DynamoPerson.getPerson(userEmail: userEmail);
+    if (person == null) {
+      Messages.scaffoldMessengerWidget(
+          context: context, message: "error al obtener info user");
+      return;
+    }
+    Provider.of<PersonModel>(context, listen: false).setDataWithPerson(
+      person: person,
+    );
+    Provider.of<PersonModel>(context, listen: false).setPerson = person;
+
+    if (person.role.compareTo(Constants.client) == 0) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const HomePageClient()),
       );
-      Provider.of<PersonModel>(context, listen: false).setPerson = person;
+    } else {
+      //
+      //
+      // set data shop
+      Shop? shop = (await Amplify.DataStore.query(
+        Shop.classType,
+        where: Shop.PERSON.eq(person.id),
+      ))[0];
+      if (shop == null) return;
+      Provider.of<ShopModel>(context, listen: false)
+          .setDataWithShop(shop: shop);
+      Provider.of<ShopModel>(context, listen: false).setShop = shop;
+      //
+      //
+      // set day
+      List<Day> days = await Amplify.DataStore.query(
+        Day.classType,
+        where: Day.SHOP.eq(shop.getId()),
+      );
+      Provider.of<ShopModel>(context, listen: false).setDays(days: days);
 
-      if (person.role.compareTo(Constants.client) == 0) {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomePageClient()),
-        );
-      } else {
-        //
-        //
-        // set data shop
-        Shop? shop = (await Amplify.DataStore.query(
-          Shop.classType,
-          where: Shop.PERSON.eq(person.id),
-        ))[0];
-        if (shop == null) return;
-        Provider.of<ShopModel>(context, listen: false)
-            .setDataWithShop(shop: shop);
-        Provider.of<ShopModel>(context, listen: false).setShop = shop;
-        //
-        //
-        // set day
-        List<Day> days = await Amplify.DataStore.query(
-          Day.classType,
-          where: Day.SHOP.eq(shop.getId()),
-        );
-        Provider.of<ShopModel>(context, listen: false).setDays(days: days);
-
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomeManagerPage()),
-        );
-      }
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const HomeManagerPage()),
+      );
     }
   }
 
