@@ -229,14 +229,14 @@ class Person extends Model {
       key: Person.SHOPS,
       isRequired: false,
       ofModelName: (Shop).toString(),
-      associatedKey: Shop.PERSONSHOP
+      associatedKey: Shop.PERSON
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
       key: Person.RESERVATIONS,
       isRequired: false,
       ofModelName: (Reservation).toString(),
-      associatedKey: Reservation.PERSONRESERVATION
+      associatedKey: Reservation.PERSON
     ));
   });
 }

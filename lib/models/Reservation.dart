@@ -34,8 +34,8 @@ class Reservation extends Model {
   final String? _description;
   final MethodPayment? _methodPayment;
   final StatusReservation? _status;
-  final Shop? _ShopReservation;
-  final Person? _PersonReservation;
+  final Shop? _Shop;
+  final Person? _Person;
 
   @override
   getInstanceType() => classType;
@@ -73,25 +73,25 @@ class Reservation extends Model {
     }
   }
   
-  Shop get ShopReservation {
+  Shop get shop {
     try {
-      return _ShopReservation!;
+      return _Shop!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
   }
   
-  Person get PersonReservation {
+  Person get person {
     try {
-      return _PersonReservation!;
+      return _Person!;
     } catch(e) {
       throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
     }
   }
   
-  const Reservation._internal({required this.id, hour, date, description, required methodPayment, required status, required ShopReservation, required PersonReservation}): _hour = hour, _date = date, _description = description, _methodPayment = methodPayment, _status = status, _ShopReservation = ShopReservation, _PersonReservation = PersonReservation;
+  const Reservation._internal({required this.id, hour, date, description, required methodPayment, required status, required Shop, required Person}): _hour = hour, _date = date, _description = description, _methodPayment = methodPayment, _status = status, _Shop = Shop, _Person = Person;
   
-  factory Reservation({String? id, TemporalTime? hour, TemporalDate? date, String? description, required MethodPayment methodPayment, required StatusReservation status, required Shop ShopReservation, required Person PersonReservation}) {
+  factory Reservation({String? id, TemporalTime? hour, TemporalDate? date, String? description, required MethodPayment methodPayment, required StatusReservation status, required Shop Shop, required Person Person}) {
     return Reservation._internal(
       id: id == null ? UUID.getUUID() : id,
       hour: hour,
@@ -99,8 +99,8 @@ class Reservation extends Model {
       description: description,
       methodPayment: methodPayment,
       status: status,
-      ShopReservation: ShopReservation,
-      PersonReservation: PersonReservation);
+      Shop: Shop,
+      Person: Person);
   }
   
   bool equals(Object other) {
@@ -117,8 +117,8 @@ class Reservation extends Model {
       _description == other._description &&
       _methodPayment == other._methodPayment &&
       _status == other._status &&
-      _ShopReservation == other._ShopReservation &&
-      _PersonReservation == other._PersonReservation;
+      _Shop == other._Shop &&
+      _Person == other._Person;
   }
   
   @override
@@ -135,14 +135,14 @@ class Reservation extends Model {
     buffer.write("description=" + "$_description" + ", ");
     buffer.write("methodPayment=" + (_methodPayment != null ? enumToString(_methodPayment)! : "null") + ", ");
     buffer.write("status=" + (_status != null ? enumToString(_status)! : "null") + ", ");
-    buffer.write("ShopReservation=" + (_ShopReservation != null ? _ShopReservation!.toString() : "null") + ", ");
-    buffer.write("PersonReservation=" + (_PersonReservation != null ? _PersonReservation!.toString() : "null"));
+    buffer.write("Shop=" + (_Shop != null ? _Shop!.toString() : "null") + ", ");
+    buffer.write("Person=" + (_Person != null ? _Person!.toString() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Reservation copyWith({String? id, TemporalTime? hour, TemporalDate? date, String? description, MethodPayment? methodPayment, StatusReservation? status, Shop? ShopReservation, Person? PersonReservation}) {
+  Reservation copyWith({String? id, TemporalTime? hour, TemporalDate? date, String? description, MethodPayment? methodPayment, StatusReservation? status, Shop? Shop, Person? Person}) {
     return Reservation(
       id: id ?? this.id,
       hour: hour ?? this.hour,
@@ -150,8 +150,8 @@ class Reservation extends Model {
       description: description ?? this.description,
       methodPayment: methodPayment ?? this.methodPayment,
       status: status ?? this.status,
-      ShopReservation: ShopReservation ?? this.ShopReservation,
-      PersonReservation: PersonReservation ?? this.PersonReservation);
+      Shop: Shop ?? shop,
+      Person: Person ?? person);
   }
   
   Reservation.fromJson(Map<String, dynamic> json)  
@@ -161,15 +161,15 @@ class Reservation extends Model {
       _description = json['description'],
       _methodPayment = enumFromString<MethodPayment>(json['methodPayment'], MethodPayment.values),
       _status = enumFromString<StatusReservation>(json['status'], StatusReservation.values),
-      _ShopReservation = json['ShopReservation']?['serializedData'] != null
-        ? Shop.fromJson(new Map<String, dynamic>.from(json['ShopReservation']['serializedData']))
+      _Shop = json['Shop']?['serializedData'] != null
+        ? Shop.fromJson(new Map<String, dynamic>.from(json['Shop']['serializedData']))
         : null,
-      _PersonReservation = json['PersonReservation']?['serializedData'] != null
-        ? Person.fromJson(new Map<String, dynamic>.from(json['PersonReservation']['serializedData']))
+      _Person = json['Person']?['serializedData'] != null
+        ? Person.fromJson(new Map<String, dynamic>.from(json['Person']['serializedData']))
         : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'hour': _hour?.format(), 'date': _date?.format(), 'description': _description, 'methodPayment': enumToString(_methodPayment), 'status': enumToString(_status), 'ShopReservation': _ShopReservation?.toJson(), 'PersonReservation': _PersonReservation?.toJson()
+    'id': id, 'hour': _hour?.format(), 'date': _date?.format(), 'description': _description, 'methodPayment': enumToString(_methodPayment), 'status': enumToString(_status), 'Shop': _Shop?.toJson(), 'Person': _Person?.toJson()
   };
 
   static final QueryField ID = QueryField(fieldName: "reservation.id");
@@ -178,11 +178,11 @@ class Reservation extends Model {
   static final QueryField DESCRIPTION = QueryField(fieldName: "description");
   static final QueryField METHODPAYMENT = QueryField(fieldName: "methodPayment");
   static final QueryField STATUS = QueryField(fieldName: "status");
-  static final QueryField SHOPRESERVATION = QueryField(
-    fieldName: "ShopReservation",
+  static final QueryField SHOP = QueryField(
+    fieldName: "Shop",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Shop).toString()));
-  static final QueryField PERSONRESERVATION = QueryField(
-    fieldName: "PersonReservation",
+  static final QueryField PERSON = QueryField(
+    fieldName: "Person",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Person).toString()));
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Reservation";
@@ -221,16 +221,16 @@ class Reservation extends Model {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-      key: Reservation.SHOPRESERVATION,
+      key: Reservation.SHOP,
       isRequired: true,
-      targetName: "ShopReservationID",
+      targetName: "ShopID",
       ofModelName: (Shop).toString()
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-      key: Reservation.PERSONRESERVATION,
+      key: Reservation.PERSON,
       isRequired: true,
-      targetName: "PersonReservationID",
+      targetName: "PersonID",
       ofModelName: (Person).toString()
     ));
   });

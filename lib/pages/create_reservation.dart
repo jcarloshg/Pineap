@@ -212,8 +212,8 @@ class _CreateReservationState extends State<CreateReservation> {
       description: controllerDescription.text,
       methodPayment: methodPayment,
       status: StatusReservation.isNext,
-      ShopReservation: widget.shop,
-      PersonReservation: personModel.getPerson,
+      Shop: widget.shop,
+      Person: personModel.getPerson,
     );
 
     Reservation? reservationResponse =

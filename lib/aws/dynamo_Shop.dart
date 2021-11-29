@@ -12,7 +12,7 @@ class DynamoShop {
     required ShopModel shopModel,
   }) async {
     Shop shop = Shop(
-      PersonShop: person,
+      Person: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
@@ -51,6 +51,10 @@ class DynamoShop {
       List<Shop> shopsResponse =
           await Amplify.DataStore.query<Shop>(Shop.classType);
 
+      shopsResponse.forEach((element) {
+        print(element.toString());
+      });
+
       return shopsResponse;
     } catch (e) {
       // ignore: avoid_print
@@ -73,7 +77,7 @@ class DynamoShop {
     );
 
     Shop shop = Shop(
-      PersonShop: person,
+      Person: person,
       name: shopModel.name,
       type: shopModel.typeShop,
       address: shopModel.addres,
