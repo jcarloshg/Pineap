@@ -36,9 +36,6 @@ class DynamoReservation {
     required DateTime date,
   }) async {
     String stringDate = TemporalDate(date).toString();
-
-    // ignore: unnecessary_string_escapes, avoid_print
-
     try {
       String graphQLDocument = '''
       query MyQuery(\$date: String = "$stringDate") {
@@ -61,8 +58,6 @@ class DynamoReservation {
         }
       }
       ''';
-
-      print(graphQLDocument);
 
       var operation = Amplify.API.query(
         request: GraphQLRequest<String>(

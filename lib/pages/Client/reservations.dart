@@ -21,14 +21,12 @@ class _ReservationsState extends State<Reservations> {
   DateTime dateTimeSelect = DateTime.now();
   String dayToSearch = "Mostrar todas";
 
-  //
-  List<Reservation>? listReservationToday;
-  List<Reservation>? listReservationTomorrow;
-  List<Reservation>? listReservationNext;
+  List<Reservation>? listReservationToday = [];
+  List<Reservation>? listReservationTomorrow = [];
+  List<Reservation>? listReservationNext = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getReservations();
   }
@@ -37,94 +35,101 @@ class _ReservationsState extends State<Reservations> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const TitleWidget(title: "Reservaciones"),
-                const SubTitle(subtitle: "Puedes ver y crear reservaciones"),
-                //
-                //
-                // filtro de busqueda
-                const SizedBox(height: 32),
-                Container(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    // border: Border.all(color: Colors.black87),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(5.0),
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const SubTitle(subtitle: "Buscar por"),
-                          Row(
-                            children: <Widget>[
-                              SubTitle(subtitle: dayToSearch),
-                              PopupMenuButton(
-                                onSelected: _setTypeShop,
-                                icon: const Icon(Icons.arrow_drop_down),
-                                itemBuilder: (context) {
-                                  return Constants.typesDayToSearch.map(
-                                    (String _selectvalue) {
-                                      return PopupMenuItem<String>(
-                                        value: _selectvalue,
-                                        child: Text(_selectvalue),
-                                      );
-                                    },
-                                  ).toList();
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              const TitleWidget(title: "Reservaciones"),
+              const SubTitle(subtitle: "Puedes ver y crear reservaciones"),
+              //
+              //
+              // filtro de busqueda
+              const SizedBox(height: 32),
+              Container(
+                padding: const EdgeInsets.only(left: 8, right: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  // border: Border.all(color: Colors.black87),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(5.0),
                   ),
                 ),
-                //
-                //
-                // list reservations
-                const SizedBox(height: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: const <Widget>[
-                    //
-                    //
-                    // hoy
-                    SizedBox(height: 8),
-                    LabelWithIcon(iconData: Icons.calendar_today, info: "Hoy"),
-                    CardDate(),
-                    CardDate(),
-                    CardDate(),
-                    //
-                    //
-                    // ma;ana
-                    SizedBox(height: 32),
-                    LabelWithIcon(
-                        iconData: Icons.calendar_today, info: "Mañana"),
-                    CardDate(),
-                    CardDate(),
-                    CardDate(),
-                    //
-                    //
-                    // Todas
-                    SizedBox(height: 32),
-                    LabelWithIcon(
-                        iconData: Icons.calendar_today, info: "Proximas"),
-                    CardDate(),
-                    CardDate(),
-                    CardDate(),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        const SubTitle(subtitle: "Buscar por"),
+                        Row(
+                          children: <Widget>[
+                            SubTitle(subtitle: dayToSearch),
+                            PopupMenuButton(
+                              onSelected: _setTypeShop,
+                              icon: const Icon(Icons.arrow_drop_down),
+                              itemBuilder: (context) {
+                                return Constants.typesDayToSearch.map(
+                                  (String _selectvalue) {
+                                    return PopupMenuItem<String>(
+                                      value: _selectvalue,
+                                      child: Text(_selectvalue),
+                                    );
+                                  },
+                                ).toList();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+
+              //
+              //
+              // hoy
+              const SizedBox(height: 8),
+              const LabelWithIcon(iconData: Icons.calendar_today, info: "Hoy"),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: listReservationToday?.length,
+                  itemBuilder: (context, index) {
+                    return CardDate(reservation: listReservationToday![index]);
+                  },
+                ),
+              ),
+
+              //
+              //
+              // tomorrow
+              const SizedBox(height: 8),
+              const LabelWithIcon(
+                  iconData: Icons.calendar_today, info: "Tomorrow"),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: listReservationTomorrow?.length,
+                  itemBuilder: (context, index) {
+                    return CardDate(
+                        reservation: listReservationTomorrow![index]);
+                  },
+                ),
+              ),
+
+              //
+              //
+              // listReservationNext
+              const SizedBox(height: 8),
+              const LabelWithIcon(
+                  iconData: Icons.calendar_today, info: "Proximas"),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: listReservationNext?.length,
+                  itemBuilder: (context, index) {
+                    return CardDate(reservation: listReservationNext![index]);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -154,16 +159,29 @@ class _ReservationsState extends State<Reservations> {
   }
 
   void _getReservations() async {
-    List<Reservation>? listReservation = await DynamoReservation.getAllQuery();
-    setState(() => listReservationToday = listReservation);
-
-    List<Reservation>? listReservationByDate =
+    //
+    //
+    // get list Reservation Today
+    List<Reservation>? reservationToday =
         await DynamoReservation.getByDateQuery(date: DateTime.now());
+    setState(() => listReservationToday = reservationToday);
 
-    for (var item in listReservationByDate!) {
-      print(item.toString());
-    }
+    //
+    //
+    // get list Reservation Tomorrow
+    DateTime today = DateTime.now();
+    DateTime tomorrow = DateTime(today.year, today.month, today.day + 1);
+    List<Reservation>? reservationTomorrow =
+        await DynamoReservation.getByDateQuery(date: tomorrow);
+    setState(() => listReservationTomorrow = reservationTomorrow);
 
-    setState(() => listReservationToday = listReservationByDate);
+    //
+    //
+    // get list Reservation proximas
+    DateTime proximas =
+        DateTime(tomorrow.year, tomorrow.month, tomorrow.day + 1);
+    List<Reservation>? reservationProxima =
+        await DynamoReservation.getByDateQuery(date: proximas);
+    setState(() => listReservationNext = reservationProxima);
   }
 }

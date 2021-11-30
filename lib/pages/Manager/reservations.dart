@@ -31,7 +31,7 @@ class _ReservationsState extends State<Reservations> {
               const SubTitle(
                   subtitle: "Pueder ver y crear nuevas reservaciones"),
               //
-              // 
+              //
               // button to create new resevacion
               const SizedBox(height: 32),
               ElevatedButton(
@@ -39,7 +39,7 @@ class _ReservationsState extends State<Reservations> {
                 child: const Text('Crear una nueva reservación'),
               ),
               //
-              // 
+              //
               // filtro de busqueda
               const SizedBox(height: 32),
               Container(
@@ -87,11 +87,11 @@ class _ReservationsState extends State<Reservations> {
 
               // add to list ------------ >
               const SizedBox(height: 8),
-              const CardDate(),
+              // const CardDate(),
               const SizedBox(height: 8),
-              const CardDate(),
+              // const CardDate(),
               const SizedBox(height: 8),
-              const CardDate(),
+              // const CardDate(),
             ],
           ),
         ),
