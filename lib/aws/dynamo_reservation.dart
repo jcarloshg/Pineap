@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:pineap/aws/dynamo_Shop.dart';
 import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models/Reservation.dart';
 import 'package:amplify_flutter/amplify.dart';
@@ -137,6 +138,39 @@ query MyQuery {
     } catch (e) {
       // ignore: avoid_print
       print("[uploadReservation]" + e.toString());
+      return null;
+    }
+  }
+
+  static Future<String?> getShopId({required String id}) async {
+    try {
+      String graphQLDocument = '''
+        query MyQuery(\$id: ID = "$id") {
+          getReservation(id: \$id) {
+            PersonID
+            ShopID
+            date
+          }
+        }
+        ''';
+
+      var operation = Amplify.API.query(
+        request: GraphQLRequest<String>(
+          document: graphQLDocument,
+        ),
+      );
+
+      var response = await operation.response;
+      var data = response.data;
+
+      final otraData = json.decode(data);
+
+      String shopId = otraData["getReservation"]["ShopID"];
+
+      return shopId;
+    } catch (e) {
+      // ignore: avoid_print
+      print("[getByIdReservation] " + e.toString());
       return null;
     }
   }

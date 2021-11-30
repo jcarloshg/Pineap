@@ -40,4 +40,5 @@ class DynamoPerson {
 
     return null;
   }
+
 }

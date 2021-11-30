@@ -41,6 +41,7 @@ class _ReservationsState extends State<Reservations> {
             children: <Widget>[
               const TitleWidget(title: "Reservaciones"),
               const SubTitle(subtitle: "Puedes ver y crear reservaciones"),
+
               //
               //
               // filtro de busqueda
@@ -88,47 +89,33 @@ class _ReservationsState extends State<Reservations> {
               //
               //
               // hoy
-              const SizedBox(height: 8),
-              const LabelWithIcon(iconData: Icons.calendar_today, info: "Hoy"),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: listReservationToday?.length,
-                  itemBuilder: (context, index) {
-                    return CardDate(reservation: listReservationToday![index]);
-                  },
+              if (dayToSearch == Constants.today ||
+                  dayToSearch == Constants.showAlls)
+                Expanded(
+                  child: _showBoxDate(
+                      tile: "hoy", listReservation: listReservationToday!),
                 ),
-              ),
 
               //
               //
               // tomorrow
-              const SizedBox(height: 8),
-              const LabelWithIcon(
-                  iconData: Icons.calendar_today, info: "Tomorrow"),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: listReservationTomorrow?.length,
-                  itemBuilder: (context, index) {
-                    return CardDate(
-                        reservation: listReservationTomorrow![index]);
-                  },
+              if (dayToSearch == Constants.tomorrow ||
+                  dayToSearch == Constants.showAlls)
+                Expanded(
+                  child: _showBoxDate(
+                      tile: "Mañana",
+                      listReservation: listReservationTomorrow!),
                 ),
-              ),
 
               //
               //
-              // listReservationNext
-              const SizedBox(height: 8),
-              const LabelWithIcon(
-                  iconData: Icons.calendar_today, info: "Proximas"),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: listReservationNext?.length,
-                  itemBuilder: (context, index) {
-                    return CardDate(reservation: listReservationNext![index]);
-                  },
+              // next
+              if (dayToSearch == Constants.dateEspecific ||
+                  dayToSearch == Constants.showAlls)
+                Expanded(
+                  child: _showBoxDate(
+                      tile: "proximas", listReservation: listReservationNext!),
                 ),
-              ),
             ],
           ),
         ),
@@ -151,10 +138,15 @@ class _ReservationsState extends State<Reservations> {
             initialDate: DateTime.now(),
             firstDate: DateTime(1900),
             lastDate: DateTime(2222))
-        .then((value) {
+        .then((value) async {
       dateTimeSelect = value!;
       dateTimeSelectController.text = DateFormat('MMMM dd, yyyy').format(value);
       setState(() => dayToSearch = dateTimeSelectController.text);
+
+      // get the next reservation
+      List<Reservation>? reservationProxima =
+          await DynamoReservation.getByDateQuery(date: value);
+      setState(() => listReservationNext = reservationProxima);
     });
   }
 
@@ -183,5 +175,25 @@ class _ReservationsState extends State<Reservations> {
     List<Reservation>? reservationProxima =
         await DynamoReservation.getByDateQuery(date: proximas);
     setState(() => listReservationNext = reservationProxima);
+  }
+
+  Widget _showBoxDate({
+    required String tile,
+    required List<Reservation> listReservation,
+  }) {
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 16),
+        LabelWithIcon(iconData: Icons.calendar_today, info: tile),
+        Expanded(
+          child: ListView.builder(
+            itemCount: listReservation.length,
+            itemBuilder: (context, index) {
+              return CardDate(reservation: listReservation[index]);
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
