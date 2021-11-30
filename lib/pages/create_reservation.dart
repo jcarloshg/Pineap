@@ -322,7 +322,7 @@ class _CreateReservationState extends State<CreateReservation> {
     }
 
     Reservation reservation = Reservation(
-      hour: TemporalTime(DateTime(2000, 1, 1, hour.hour, hour.minute)),
+      hour: TemporalTime(DateTime(2000, 1, 1, hour.hour - 5, hour.minute)),
       date: TemporalDate(date),
       description: controllerDescription.text,
       methodPayment: methodPayment,
@@ -335,8 +335,6 @@ class _CreateReservationState extends State<CreateReservation> {
         await DynamoReservation.uploadReservation(
       reservation: reservation,
     );
-
-    print("asdfasdfasdfasdfasdfasdfasd" + reservationResponse.toString());
 
     if (reservationResponse != null) {
       Navigator.of(context).push(
