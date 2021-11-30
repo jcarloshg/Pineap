@@ -87,15 +87,28 @@ class _CreateReservationState extends State<CreateReservation> {
                         //
                         //
                         // info negocio
-                        const TitleBlockForm(
-                            title_block_form: "Infomación de negocio"),
+                        const TitleBlockForm(title_block_form: "Negocio"),
                         InfoBox(
                           icon: const Icon(Icons.home),
                           info: widget.shop.name,
                         ),
+                        //
+                        //
+                        // info negocio
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(
+                            title_block_form: "Infomación de la cita"),
                         InfoBox(
                           icon: const Icon(Icons.place),
                           info: widget.shop.address,
+                        ),
+                        // const TitleBlockForm(title_block_form: "Fecha/Hora"),
+                        InfoBox(
+                            icon: const Icon(Icons.calendar_today),
+                            info: Constants.getFormatDateTime(dateTime: date)),
+                        InfoBox(
+                          icon: const Icon(Icons.schedule),
+                          info: Constants.getFormatTimeOfDay(timeOfDay: hour),
                         ),
 
                         //
@@ -111,19 +124,6 @@ class _CreateReservationState extends State<CreateReservation> {
                         InfoBox(
                           icon: const Icon(Icons.email),
                           info: personModel.getPerson.email,
-                        ),
-
-                        //
-                        //
-                        // info reservación
-                        const SizedBox(height: 32),
-                        const TitleBlockForm(title_block_form: "Fecha/Hora"),
-                        InfoBox(
-                            icon: const Icon(Icons.calendar_today),
-                            info: Constants.getFormatDateTime(dateTime: date)),
-                        InfoBox(
-                          icon: const Icon(Icons.schedule),
-                          info: Constants.getFormatTimeOfDay(timeOfDay: hour),
                         ),
 
                         //

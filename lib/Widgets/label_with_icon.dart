@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/styles/title_block_form.dart';
 
 class LabelWithIcon extends StatelessWidget {
   const LabelWithIcon(
@@ -21,7 +22,8 @@ class LabelWithIcon extends StatelessWidget {
       children: <Widget>[
         Icon(iconData, size: 12),
         const SizedBox(width: 4),
-        Text(info)
+        TitleBlockForm(title_block_form: info),
+        // Text(info)
       ],
     );
   }

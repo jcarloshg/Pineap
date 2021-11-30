@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/pages/Manager/info_reservation.dart';
 
 class CardDate extends StatefulWidget {
@@ -9,8 +10,8 @@ class CardDate extends StatefulWidget {
 }
 
 class _CardDateState extends State<CardDate> {
-  final String titleShop = "Barber shops";
-  final String date = "November 21, 2021";
+  final String titleShop = "Tacos el patrón";
+  final String date = Constants.getFormatDateTime(dateTime: DateTime.now());
   final String dateTime = "10:00 pm";
 
   @override

@@ -22,7 +22,7 @@ class _ProfileState extends State<Profile> {
   // info user
   late PersonModel personModel;
   final String pass = "........";
-  final String uriPhoto = "assets/images/backgorundlogin.jpg";
+  final String uriPhoto = "assets/images/photo_profile.jpeg";
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,10 @@ class _ProfileState extends State<Profile> {
               //
               // info person
               const SizedBox(height: 32),
-              // const Icon(
-              //   Icons.person,
-              //   size: 64,
-              // ),
+
+              //
+              //
+              // photo
               ClipRRect(
                 borderRadius: BorderRadius.circular(100.0),
                 child: Image(

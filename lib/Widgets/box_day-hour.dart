@@ -77,7 +77,7 @@ class _BoxDayHourState extends State<BoxDayHour> {
                   children: <Widget>[
                     Text(_getFormatTemporalTime(widget.day.hour_open)),
                     IconButton(
-                      onPressed: () => showPickSartTime(
+                      onPressed: () => showPickEndTime(
                           context: context,
                           hourToChanged: widget.day.hour_open),
                       icon: const Icon(Icons.arrow_drop_down),
@@ -113,7 +113,7 @@ class _BoxDayHourState extends State<BoxDayHour> {
             context: context,
             barrierDismissible: false,
             builder: (context) => AlertDialog(
-              title: const Text("Cambiar horario para abrir"),
+              title: const Text("Cambio de hora"),
               content: Text(
                   "¿Seguro que quiere actulizar su hora de ${_getFormatTemporalTime(hourToChanged)} a ${_getFormatTimeOfDay(timeOfDay: value)}?"),
               actions: <Widget>[
@@ -121,7 +121,10 @@ class _BoxDayHourState extends State<BoxDayHour> {
                     onPressed: () => Navigator.of(context).pop("CANCELAR"),
                     child: const Text("CANCELAR")),
                 TextButton(
-                    onPressed: () => print("si"),
+                    onPressed: () async {
+                      Navigator.of(context).pop("ACTUALIZAR");
+                      await _updateDay(day: widget.day, timeOfDay: value);
+                    },
                     child: const Text("ACTUALIZAR")),
               ],
             ),
@@ -144,7 +147,7 @@ class _BoxDayHourState extends State<BoxDayHour> {
             context: context,
             barrierDismissible: false,
             builder: (context) => AlertDialog(
-              title: const Text("Cambiar horario para cerrar"),
+              title: const Text("Cambio de hora"),
               content: Text(
                   "¿Seguro que quiere actulizar su hora de ${_getFormatTemporalTime(hourToChanged)} a ${_getFormatTimeOfDay(timeOfDay: value)}?"),
               actions: <Widget>[
@@ -152,11 +155,12 @@ class _BoxDayHourState extends State<BoxDayHour> {
                     onPressed: () => Navigator.of(context).pop("CANCELAR"),
                     child: const Text("CANCELAR")),
                 TextButton(
-                    onPressed: () async {
-                      Navigator.of(context).pop("ACTUALIZAR");
-                      await _updateDay(day: widget.day, timeOfDay: value);
-                    },
-                    child: const Text("ACTUALIZAR")),
+                  onPressed: () async {
+                    Navigator.of(context).pop("ACTUALIZAR");
+                    await _updateDay(day: widget.day, timeOfDay: value);
+                  },
+                  child: const Text("ACTUALIZAR"),
+                ),
               ],
             ),
           )
@@ -180,10 +184,11 @@ class _BoxDayHourState extends State<BoxDayHour> {
         message: "Se actualizó la hora correctamente",
       );
 
-      // setState(() async {
-      //   List<Day>? days = await DynamoDay.getDays(shop: shopModel.getShop!);
-      //   shopModel.setDays(days: days);
-      // });
+      setState(() async {
+        List<Day>? days =
+            await DynamoDay.getDays(shopid: shopModel.getShop!.getId());
+        shopModel.setDays(days: days);
+      });
     } else {
       Messages.scaffoldMessengerWidget(
         context: context,

@@ -8,6 +8,7 @@ import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Login.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
+import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +46,6 @@ class _ProfileState extends State<Profile> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const TitleWidget(title: "Perfil del negocio"),
                 const SubTitle(
@@ -54,11 +54,18 @@ class _ProfileState extends State<Profile> {
                 //
                 // info shop
                 const SizedBox(height: 32),
-                Image(
-                  image: AssetImage(uriPhoto),
-                  height: 200,
-                  width: 200,
-                  fit: BoxFit.cover,
+
+                //
+                //
+                // photo
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100.0),
+                  child: Image(
+                    image: AssetImage(uriPhoto),
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Align(
@@ -71,17 +78,27 @@ class _ProfileState extends State<Profile> {
                 InfoBox(
                     icon: const Icon(Icons.place),
                     info: shopModel.getShop!.address),
+
                 //
                 // info cliente
                 const SizedBox(height: 32),
-                const SubTitle(subtitle: "Información del gerente"),
+                const TitleBlockForm(
+                    title_block_form: "Información del gerente"),
                 InfoBox(
                     icon: const Icon(Icons.person),
                     info:
                         '${personModel.getPerson.first_name} ${personModel.getPerson.last_name}'),
                 InfoBox(
                     icon: const Icon(Icons.view_day),
-                    info: personModel.getPerson.email),
+                    info: Constants.getFormatDateTime(
+                        dateTime: DateTime.parse(
+                            personModel.getPerson.birthday.toString()))),
+
+                //
+                // info user
+                const SizedBox(height: 32),
+                const TitleBlockForm(
+                    title_block_form: "Información del usuario"),
                 InfoBox(
                     icon: const Icon(Icons.email),
                     info: personModel.getPerson.email),
