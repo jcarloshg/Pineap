@@ -6,6 +6,7 @@ import 'package:pineap/aws/dynamo_reservation.dart';
 import 'package:pineap/helpers/constants.dart';
 import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models_class/person_model.dart';
+import 'package:pineap/models_class/shop_model.dart';
 import 'package:pineap/pages/Client/home_page_client.dart';
 import 'package:pineap/styles/messages.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
@@ -25,6 +26,9 @@ class CreateReservation extends StatefulWidget {
 class _CreateReservationState extends State<CreateReservation> {
   // models
   late PersonModel personModel;
+  late ShopModel shopModel;
+  //
+  int _currentStep = 0;
 
   //
   // controles
@@ -32,135 +36,246 @@ class _CreateReservationState extends State<CreateReservation> {
   TextEditingController controllerTime = TextEditingController();
   TextEditingController controllerDescription = TextEditingController();
   TextEditingController methodPaymentController = TextEditingController();
-  late final TimeOfDay hour;
-  late final DateTime date;
+
+  late TimeOfDay hour = TimeOfDay.now();
+  late DateTime date = DateTime.now();
+
+  bool isFormComplete = false;
 
   @override
   Widget build(BuildContext context) {
     personModel = Provider.of<PersonModel>(context);
+    shopModel = Provider.of<ShopModel>(context);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.brown,
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const TitleWidget(title: "Crear nueva resevación"),
-                const SubTitle(subtitle: "Llena todos los campos"),
-
-                //
-                //
-                // info shop
-                const SizedBox(height: 32),
-                const TitleBlockForm(title_block_form: "Información negocio"),
-                InfoBox(icon: const Icon(Icons.house), info: widget.shop.name),
-                InfoBox(
-                    icon: const Icon(Icons.place), info: widget.shop.address),
-
-                //
-                //
-                // info client
-                const SizedBox(height: 32),
-                const TitleBlockForm(
-                    title_block_form: "Información del cliente"),
-                InfoBox(icon: const Icon(Icons.person), info: widget.shop.name),
-                InfoBox(
-                    icon: const Icon(Icons.email), info: widget.shop.address),
-
-                //
-                //
-                // info shop
-                const SizedBox(height: 32),
-                const TitleBlockForm(
-                    title_block_form: "Información de la reservación"),
-                TextField(
-                  controller: controllerDate,
-                  readOnly: true,
-                  onTap: _showDataPicker,
-                  decoration: InputDecoration(
-                    labelText: "Fecha",
-                    suffixIcon: IconButton(
-                      onPressed: _showDataPicker,
-                      icon: const Icon(Icons.calendar_today),
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: controllerTime,
-                  readOnly: true,
-                  onTap: _showPickSartTime,
-                  decoration: InputDecoration(
-                    labelText: "Hora",
-                    suffixIcon: IconButton(
-                      onPressed: _showPickSartTime,
-                      icon: const Icon(Icons.schedule),
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: controllerDescription,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    labelText: "Nota",
-                    suffixIcon: Icon(Icons.note),
-                  ),
-                ),
-                TextField(
-                  controller: methodPaymentController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: "Tipo de pago",
-                    suffixIcon: PopupMenuButton(
-                      onSelected: _setTypePayment,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      itemBuilder: (context) {
-                        return Constants.typesMethodPayment.map(
-                          (String _selectvalue) {
-                            return PopupMenuItem<String>(
-                              value: _selectvalue,
-                              child: Text(_selectvalue),
-                            );
-                          },
-                        ).toList();
-                      },
-                    ),
-                  ),
-                ),
-
-                //
-                //
-                // button
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 20),
-                  ),
-                  onPressed: onPressedUploadReservation,
-                  child: const Text('Registrar reservacion'),
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.brown,
           ),
         ),
       ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: const <Widget>[
+                TitleWidget(title: "Crear nueva resevación"),
+                SubTitle(subtitle: "Llena todos los campos"),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          (isFormComplete)
+
+              //
+              //
+              // resumen
+              ? Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        //
+                        //
+                        // info negocio
+                        const TitleBlockForm(
+                            title_block_form: "Infomación de negocio"),
+                        InfoBox(
+                          icon: const Icon(Icons.home),
+                          info: widget.shop.name,
+                        ),
+                        InfoBox(
+                          icon: const Icon(Icons.place),
+                          info: widget.shop.address,
+                        ),
+
+                        //
+                        //
+                        // info cliente
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(
+                            title_block_form: "Infomación del cliente"),
+                        InfoBox(
+                            icon: const Icon(Icons.person),
+                            info:
+                                '${personModel.getPerson.first_name} ${personModel.getPerson.last_name}'),
+                        InfoBox(
+                          icon: const Icon(Icons.email),
+                          info: personModel.getPerson.email,
+                        ),
+
+                        //
+                        //
+                        // info reservación
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(title_block_form: "Fecha/Hora"),
+                        InfoBox(
+                            icon: const Icon(Icons.calendar_today),
+                            info: Constants.getFormatDateTime(dateTime: date)),
+                        InfoBox(
+                          icon: const Icon(Icons.schedule),
+                          info: Constants.getFormatTimeOfDay(timeOfDay: hour),
+                        ),
+
+                        //
+                        //
+                        // info reservación
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(title_block_form: "Descripción"),
+                        InfoBox(
+                          icon: const Icon(Icons.note),
+                          info: controllerDescription.text,
+                        ),
+
+                        //
+                        //
+                        // info reservación
+                        const SizedBox(height: 32),
+                        const TitleBlockForm(
+                            title_block_form: "Método de pago"),
+                        InfoBox(
+                          icon: const Icon(Icons.credit_card),
+                          info: methodPaymentController.text,
+                        ),
+
+                        //
+                        //
+                        // button
+                        const SizedBox(height: 32),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            textStyle: const TextStyle(fontSize: 20),
+                          ),
+                          onPressed: onPressedUploadReservation,
+                          child: const Text('Registrar reservacion'),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+
+              //
+              //
+              // Stepper
+              : Flexible(
+                  child: Stepper(
+                    // type: StepperType.horizontal,
+                    currentStep: _currentStep,
+                    steps: _steps(),
+                    onStepContinue: () {
+                      bool isLastStep = (_currentStep == _steps().length - 1);
+                      if (isLastStep) {
+                        // ignore: avoid_print
+                        print("complete!!!!");
+                        setState(() => isFormComplete = !isFormComplete);
+                      } else {
+                        setState(() => _currentStep += 1);
+                      }
+                    },
+                    onStepCancel: () {
+                      _currentStep == 0
+                          ? null
+                          : setState(() => _currentStep -= 1);
+                    },
+                  ),
+                ),
+        ],
+      ),
     );
+  }
+
+  List<Step> _steps() {
+    List<Step> listSteps = [
+      Step(
+        isActive: _currentStep >= 0,
+        title: const TitleBlockForm(title_block_form: "Fecha & Hora"),
+        content: Column(
+          children: <Widget>[
+            TextField(
+              controller: controllerDate,
+              readOnly: true,
+              onTap: _showDataPicker,
+              decoration: InputDecoration(
+                labelText: "Fecha",
+                suffixIcon: IconButton(
+                  onPressed: _showDataPicker,
+                  icon: const Icon(Icons.calendar_today),
+                ),
+              ),
+            ),
+            TextField(
+              controller: controllerTime,
+              readOnly: true,
+              onTap: _showPickSartTime,
+              decoration: InputDecoration(
+                labelText: "Hora",
+                suffixIcon: IconButton(
+                  onPressed: _showPickSartTime,
+                  icon: const Icon(Icons.schedule),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Step(
+        isActive: _currentStep >= 1,
+        title: const TitleBlockForm(title_block_form: "Descripción"),
+        content: Column(
+          children: <Widget>[
+            TextField(
+              controller: controllerDescription,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: const InputDecoration(
+                labelText: "Descripción (puede ir vacía)",
+                suffixIcon: Icon(Icons.note),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Step(
+        isActive: _currentStep >= 2,
+        title: const TitleBlockForm(title_block_form: "Método de pago"),
+        content: Column(
+          children: <Widget>[
+            TextField(
+              controller: methodPaymentController,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: "Tipo de pago",
+                suffixIcon: PopupMenuButton(
+                  onSelected: _setTypePayment,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  itemBuilder: (context) {
+                    return Constants.typesMethodPayment.map(
+                      (String _selectvalue) {
+                        return PopupMenuItem<String>(
+                          value: _selectvalue,
+                          child: Text(_selectvalue),
+                        );
+                      },
+                    ).toList();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+
+    return listSteps;
   }
 
   _setTypePayment(String value) {
@@ -207,7 +322,7 @@ class _CreateReservationState extends State<CreateReservation> {
     }
 
     Reservation reservation = Reservation(
-      hour: TemporalTime(DateTime(2000, 1, 1, hour.hour, hour.minute)), 
+      hour: TemporalTime(DateTime(2000, 1, 1, hour.hour, hour.minute)),
       date: TemporalDate(date),
       description: controllerDescription.text,
       methodPayment: methodPayment,
@@ -220,6 +335,8 @@ class _CreateReservationState extends State<CreateReservation> {
         await DynamoReservation.uploadReservation(
       reservation: reservation,
     );
+
+    print("asdfasdfasdfasdfasdfasdfasd" + reservationResponse.toString());
 
     if (reservationResponse != null) {
       Navigator.of(context).push(

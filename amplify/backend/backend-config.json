@@ -53,5 +53,12 @@
         }
       }
     }
+  },
+  "storage": {
+    "PineappS3": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }

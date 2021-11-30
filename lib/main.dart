@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Pineap',
         theme: ThemeData(
-          primarySwatch: Colors.brown,
+          primarySwatch: Colors.brown
         ),
         home: const LoginScreen(),
       ),

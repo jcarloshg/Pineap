@@ -66,6 +66,7 @@ class _ShopsState extends State<Shops> {
                 // ),
                 decoration: InputDecoration(
                   labelText: "Busca tus negocios favoritos",
+                  fillColor: Colors.brown,
                   suffixIcon: IconButton(
                     onPressed: () => _searchShops(
                       name: searchShopController.text,
