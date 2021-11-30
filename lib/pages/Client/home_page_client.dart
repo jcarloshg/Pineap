@@ -14,7 +14,7 @@ class HomePageClient extends StatefulWidget {
 }
 
 class _HomePageClientState extends State<HomePageClient> {
-  int currentIndex = 0;
+  int currentIndex = 1;
   final screens = [
     const Shops(),
     const Reservations(),

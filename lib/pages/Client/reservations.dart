@@ -19,7 +19,7 @@ class _ReservationsState extends State<Reservations> {
   // data to filter
   TextEditingController dateTimeSelectController = TextEditingController();
   DateTime dateTimeSelect = DateTime.now();
-  String dayToSearch = "Hoy";
+  String dayToSearch = "Mostrar todas";
 
   //
   List<Reservation>? listReservationToday;
@@ -154,11 +154,16 @@ class _ReservationsState extends State<Reservations> {
   }
 
   void _getReservations() async {
-    List<Reservation>? reservationResponse =
-        await DynamoReservation.getAllQuery();
+    List<Reservation>? listReservation = await DynamoReservation.getAllQuery();
+    setState(() => listReservationToday = listReservation);
 
-    reservationResponse?.forEach((reser) => print(reser.toString()));
+    List<Reservation>? listReservationByDate =
+        await DynamoReservation.getByDateQuery(date: DateTime.now());
 
-    setState(() => listReservationToday = reservationResponse);
+    for (var item in listReservationByDate!) {
+      print(item.toString());
+    }
+
+    setState(() => listReservationToday = listReservationByDate);
   }
 }

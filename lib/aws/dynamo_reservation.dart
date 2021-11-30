@@ -32,16 +32,60 @@ class DynamoReservation {
     }
   }
 
-  static Future<List<Reservation>?> getByDate({required DateTime date}) async {
-    print(TemporalDate(date));
-    try {
-      List<Reservation> reservationList = (await Amplify.DataStore.query<
-              Reservation>(Reservation.classType,
-          where: Reservation.METHODPAYMENT.eq(MethodPayment.card.toString())
-          // QueryField(fieldName: "Reservation_date").eq(TemporalDate(date)),
-          ));
+  static Future<List<Reservation>?> getByDateQuery({
+    required DateTime date,
+  }) async {
+    String stringDate = TemporalDate(date).toString();
 
-      return reservationList;
+    // ignore: unnecessary_string_escapes, avoid_print
+
+    try {
+      String graphQLDocument = '''
+      query MyQuery(\$date: String = "$stringDate") {
+        listReservations(filter: {date: {eq: \$date}}) {
+          items {
+            id
+            updatedAt
+            status
+            methodPayment
+            hour
+            description
+            date
+            createdAt
+            PersonID
+            ShopID
+            _deleted
+            _lastChangedAt
+            _version
+          }
+        }
+      }
+      ''';
+
+      print(graphQLDocument);
+
+      var operation = Amplify.API.query(
+        request: GraphQLRequest<String>(
+          document: graphQLDocument,
+        ),
+      );
+
+      var response = await operation.response;
+      var data = response.data;
+
+      final otraData = json.decode(data);
+
+      List items = otraData["listReservations"]["items"];
+
+      List<Reservation> listReservation = [];
+
+      for (var element in items) {
+        // print(element);
+        listReservation.add(Reservation.fromJson(element));
+        // print(reservation.toString());
+      }
+
+      return listReservation;
     } catch (e) {
       // ignore: avoid_print
       print("[uploadReservation]" + e.toString());

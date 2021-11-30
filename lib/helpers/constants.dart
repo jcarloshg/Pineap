@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Constants {
+  // signo de pesos
+  static String get signoPesos => "\$";
+
   // rols from users
   static const String client = "CLIENT";
   static const String manager = "MANAGER";
@@ -26,10 +29,12 @@ class Constants {
   static List<String> get stateDay => [isOpen, isClose];
 
   // days
+  static String get showAlls => "Mostrar todas";
   static String get today => "Hoy";
   static String get tomorrow => "Mañana";
   static String get dateEspecific => "Fecha especifico";
   static List<String> get typesDayToSearch => [
+        showAlls,
         today,
         tomorrow,
         dateEspecific,
