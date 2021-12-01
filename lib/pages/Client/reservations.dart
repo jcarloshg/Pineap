@@ -160,7 +160,8 @@ class _ReservationsState extends State<Reservations> {
     // get list Reservation Today
     List<Reservation>? reservationToday =
         await DynamoReservation.getByDateQuery(date: DateTime.now());
-    setState(() => listReservationToday = reservationToday);
+
+    reservationToday!.forEach((element) => print(element.toString()));
 
     //
     //
@@ -169,7 +170,6 @@ class _ReservationsState extends State<Reservations> {
     DateTime tomorrow = DateTime(today.year, today.month, today.day + 1);
     List<Reservation>? reservationTomorrow =
         await DynamoReservation.getByDateQuery(date: tomorrow);
-    setState(() => listReservationTomorrow = reservationTomorrow);
 
     //
     //
@@ -178,7 +178,12 @@ class _ReservationsState extends State<Reservations> {
         DateTime(tomorrow.year, tomorrow.month, tomorrow.day + 1);
     List<Reservation>? reservationProxima =
         await DynamoReservation.getByDateQuery(date: proximas);
-    setState(() => listReservationNext = reservationProxima);
+
+    setState(() {
+      listReservationToday = reservationToday;
+      listReservationTomorrow = reservationTomorrow;
+      listReservationNext = reservationProxima;
+    });
   }
 
   Widget _showBoxDate({

@@ -76,7 +76,6 @@ class DynamoReservation {
       List<Reservation> listReservation = [];
 
       for (var element in items) {
-        // print(element);
         listReservation.add(Reservation.fromJson(element));
         // print(reservation.toString());
       }

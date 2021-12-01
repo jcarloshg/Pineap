@@ -152,6 +152,9 @@ class _InfoReservationState extends State<InfoReservation> {
         firstName = person!.first_name;
         lastName = person.last_name;
         email = person.email;
+
+        // method payment
+        methodPayment = widget.reservation.methodPayment.toString();
       });
     } catch (e) {
       // ignore: avoid_print
