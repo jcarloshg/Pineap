@@ -37,7 +37,7 @@ class DynamoReservation {
     required DateTime date,
   }) async {
     String stringDate = TemporalDate(date).toString();
-    print(stringDate);
+    // print(stringDate);
     try {
       String graphQLDocument = '''
       query MyQuery(\$date: String = "$stringDate") {
@@ -204,6 +204,55 @@ query MyQuery {
     } catch (e) {
       // ignore: avoid_print
       print("[getPersonId] " + e.toString());
+      return null;
+    }
+  }
+
+  static Future<List<Reservation>?> getGEDate({
+    required DateTime date,
+  }) async {
+    String stringDate = TemporalDate(date).toString();
+    try {
+      String graphQLDocument = '''
+        query MyQuery(\$ge: String = "$stringDate") {
+          listReservations(filter: {date: {ge: \$ge}}) {
+            items {
+              date
+              id
+              methodPayment
+              updatedAt
+              status
+              hour
+              description
+            }
+          }
+        }
+        ''';
+
+      var operation = Amplify.API.query(
+        request: GraphQLRequest<String>(
+          document: graphQLDocument,
+        ),
+      );
+
+      var response = await operation.response;
+      var data = response.data;
+
+      final jsonResponse = json.decode(data);
+
+      List items = jsonResponse["listReservations"]["items"];
+
+      List<Reservation> listReservation = [];
+
+      for (var element in items) {
+        listReservation.add(Reservation.fromJson(element));
+        // print(reservation.toString());
+      }
+
+      return listReservation;
+    } catch (e) {
+      // ignore: avoid_print
+      print('object' + e.toString());
       return null;
     }
   }

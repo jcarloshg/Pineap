@@ -53,5 +53,12 @@
         }
       }
     }
+  },
+  "storage": {
+    "s3ddc9521f": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }

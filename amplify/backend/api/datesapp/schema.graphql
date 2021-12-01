@@ -76,3 +76,4 @@ type Reservation
   PersonID: ID!
   Person: Person! @connection(fields: ["PersonID"])
 }
+

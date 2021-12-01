@@ -1,0 +1,14 @@
+{
+  "resourceName": "s3ddc9521f",
+  "policyUUID": "ddc9521f",
+  "bucketName": "datesapp56af40116cca4c8b9e23be3dea760fad",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

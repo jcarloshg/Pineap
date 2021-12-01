@@ -155,17 +155,19 @@ class _ReservationsState extends State<Reservations> {
   }
 
   void _getReservations() async {
+    DateTime today = DateTime.now();
     //
     //
     // get list Reservation Today
     List<Reservation>? reservationToday =
-        await DynamoReservation.getByDateQuery(date: DateTime.now());
+        await DynamoReservation.getByDateQuery(date: today);
+    print(DateTime.now().toString());
 
     //
     //
     // get list Reservation Tomorrow
-    DateTime today = DateTime.now();
     DateTime tomorrow = DateTime(today.year, today.month, today.day + 1);
+    print(tomorrow.toString());
     List<Reservation>? reservationTomorrow =
         await DynamoReservation.getByDateQuery(date: tomorrow);
 
@@ -175,7 +177,7 @@ class _ReservationsState extends State<Reservations> {
     DateTime proximas =
         DateTime(tomorrow.year, tomorrow.month, tomorrow.day + 1);
     List<Reservation>? reservationProxima =
-        await DynamoReservation.getByDateQuery(date: proximas);
+        await DynamoReservation.getGEDate(date: proximas);
 
     setState(() {
       listReservationToday = reservationToday;
