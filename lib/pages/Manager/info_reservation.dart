@@ -34,6 +34,8 @@ class _InfoReservationState extends State<InfoReservation> {
   late String firstName = "Jose Carlos";
   late String lastName = "Huerta";
   late String email = "carlosj12336@gmail.com";
+  // description
+  late String description = "";
   // method payment
   late String methodPayment = Constants.cash;
 
@@ -97,6 +99,7 @@ class _InfoReservationState extends State<InfoReservation> {
               InfoBox(icon: const Icon(Icons.place), info: address),
               InfoBox(icon: const Icon(Icons.calendar_today), info: date),
               InfoBox(icon: const Icon(Icons.schedule), info: dateTime),
+
               //
               // info cliente
               const SizedBox(height: 16),
@@ -104,6 +107,16 @@ class _InfoReservationState extends State<InfoReservation> {
               InfoBox(
                   icon: const Icon(Icons.person), info: '$firstName $lastName'),
               InfoBox(icon: const Icon(Icons.email), info: email),
+
+              //
+              // info cliente
+              const SizedBox(height: 16),
+              const TitleBlockForm(title_block_form: "Descripción"),
+              InfoBox(
+                icon: const Icon(Icons.note),
+                info: description,
+              ),
+
               //
               // info general
               const SizedBox(height: 16),
@@ -140,7 +153,8 @@ class _InfoReservationState extends State<InfoReservation> {
 
         //
         // set reservation
-        address = shop!.address;
+        titleShop = shop!.name;
+        address = shop.address;
         date = Constants.getFormatDateTime(
             dateTime: widget.reservation.date!.getDateTime());
         dateTime = Constants.getFormatTimeOfDay(
@@ -152,6 +166,10 @@ class _InfoReservationState extends State<InfoReservation> {
         firstName = person!.first_name;
         lastName = person.last_name;
         email = person.email;
+
+        //
+        // description
+        description = widget.reservation.description!;
 
         // method payment
         methodPayment = widget.reservation.methodPayment.toString();

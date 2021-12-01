@@ -37,6 +37,7 @@ class DynamoReservation {
     required DateTime date,
   }) async {
     String stringDate = TemporalDate(date).toString();
+    print(stringDate);
     try {
       String graphQLDocument = '''
       query MyQuery(\$date: String = "$stringDate") {

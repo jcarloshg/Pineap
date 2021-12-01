@@ -161,8 +161,6 @@ class _ReservationsState extends State<Reservations> {
     List<Reservation>? reservationToday =
         await DynamoReservation.getByDateQuery(date: DateTime.now());
 
-    reservationToday!.forEach((element) => print(element.toString()));
-
     //
     //
     // get list Reservation Tomorrow

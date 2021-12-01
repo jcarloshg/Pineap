@@ -101,18 +101,18 @@ class _CardDateState extends State<CardDate> {
           await DynamoReservation.getShopId(id: widget.reservation.getId());
       Shop? shop = await DynamoShop.getByID(id: shopId!);
 
-      //
-      //
-      // set info shop
-      String? personId =
-          await DynamoReservation.getPersonId(id: widget.reservation.getId());
-      Person? person = await DynamoPerson.getByID(id: personId!);
+      // //
+      // //
+      // // set info shop
+      // String? personId =
+      //     await DynamoReservation.getPersonId(id: widget.reservation.getId());
+      // Person? person = await DynamoPerson.getByID(id: personId!);
 
       setState(() {
         titleShop = shop!.name;
-        this.shop = shop;
-        this.person = person;
-        // here get id:photo
+        // this.shop = shop;
+        // this.person = person;
+        // // here get id:photo
       });
     } catch (e) {
       // ignore: avoid_print
