@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/aws/dynamo_person.dart';
 import 'package:pineap/aws/dynamo_reservation.dart';
 import 'package:pineap/helpers/constants.dart';
+import 'package:pineap/models/ModelProvider.dart';
 import 'package:pineap/models/Reservation.dart';
 import 'package:pineap/models/Shop.dart';
 import 'package:pineap/pages/Manager/info_reservation.dart';
@@ -17,10 +19,14 @@ class CardDate extends StatefulWidget {
 }
 
 class _CardDateState extends State<CardDate> {
-  late String titleShop = "Tacos el patrón";
+  late String titleShop = "";
   late String date = Constants.getFormatDateTime(dateTime: DateTime.now());
-  late String hour = "10:00 pm";
+  late String hour = "";
   late String uriPhotoShop = "assets/images/backgorundlogin.jpg";
+
+  // entities
+  late Shop? shop;
+  late Person? person;
 
   @override
   void initState() {
@@ -80,25 +86,32 @@ class _CardDateState extends State<CardDate> {
 
   void navigateToInfoReservation() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const InfoReservation()),
+      MaterialPageRoute(
+        builder: (context) => InfoReservation(reservation: widget.reservation),
+      ),
     );
   }
 
   Future<void> _setInfoShop() async {
     try {
       //
+      //
       // set info shop
       String? shopId =
           await DynamoReservation.getShopId(id: widget.reservation.getId());
-      // ignore: avoid_print
-      //print(shopId);
-
       Shop? shop = await DynamoShop.getByID(id: shopId!);
-      // ignore: avoid_print
-      //print(shop.toString());
+
+      //
+      //
+      // set info shop
+      String? personId =
+          await DynamoReservation.getPersonId(id: widget.reservation.getId());
+      Person? person = await DynamoPerson.getByID(id: personId!);
 
       setState(() {
         titleShop = shop!.name;
+        this.shop = shop;
+        this.person = person;
         // here get id:photo
       });
     } catch (e) {

@@ -139,14 +139,18 @@ class _ReservationsState extends State<Reservations> {
             firstDate: DateTime(1900),
             lastDate: DateTime(2222))
         .then((value) async {
+      // set format to datetime
       dateTimeSelect = value!;
       dateTimeSelectController.text = DateFormat('MMMM dd, yyyy').format(value);
-      setState(() => dayToSearch = dateTimeSelectController.text);
 
       // get the next reservation
       List<Reservation>? reservationProxima =
           await DynamoReservation.getByDateQuery(date: value);
-      setState(() => listReservationNext = reservationProxima);
+
+      setState(() {
+        dayToSearch = dateTimeSelectController.text;
+        listReservationNext = reservationProxima;
+      });
     });
   }
 

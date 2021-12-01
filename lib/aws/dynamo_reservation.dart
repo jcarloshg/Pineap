@@ -170,7 +170,40 @@ query MyQuery {
       return shopId;
     } catch (e) {
       // ignore: avoid_print
-      print("[getByIdReservation] " + e.toString());
+      print("[getShopId] " + e.toString());
+      return null;
+    }
+  }
+
+  static Future<String?> getPersonId({required String id}) async {
+    try {
+      String graphQLDocument = '''
+        query MyQuery(\$id: ID = "$id") {
+          getReservation(id: \$id) {
+            PersonID
+            ShopID
+            date
+          }
+        }
+        ''';
+
+      var operation = Amplify.API.query(
+        request: GraphQLRequest<String>(
+          document: graphQLDocument,
+        ),
+      );
+
+      var response = await operation.response;
+      var data = response.data;
+
+      final otraData = json.decode(data);
+
+      String personID = otraData["getReservation"]["PersonID"];
+
+      return personID;
+    } catch (e) {
+      // ignore: avoid_print
+      print("[getPersonId] " + e.toString());
       return null;
     }
   }

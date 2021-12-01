@@ -41,4 +41,20 @@ class DynamoPerson {
     return null;
   }
 
+  static Future<Person?> getByID({required String id}) async {
+    try {
+      List<Person> personResponse = (await Amplify.DataStore.query<Person>(
+        Person.classType,
+        where: Person.ID.eq(id),
+      ));
+
+      return personResponse[0];
+    } catch (e) {
+      // ignore: avoid_print
+      print("[getPerson]" + e.toString());
+    }
+
+    return null;
+  }
+
 }

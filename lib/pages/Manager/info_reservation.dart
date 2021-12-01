@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pineap/Widgets/info_box.dart';
+import 'package:pineap/aws/dynamo_Shop.dart';
+import 'package:pineap/aws/dynamo_person.dart';
+import 'package:pineap/aws/dynamo_reservation.dart';
 import 'package:pineap/helpers/constants.dart';
+import 'package:pineap/models/ModelProvider.dart';
+import 'package:pineap/models/Reservation.dart';
 import 'package:pineap/styles/sub_title_widget.dart';
 import 'package:pineap/styles/title_block_form.dart';
 import 'package:pineap/styles/title_widget.dart';
 
 class InfoReservation extends StatefulWidget {
-  const InfoReservation({Key? key}) : super(key: key);
+  const InfoReservation({Key? key, required this.reservation})
+      : super(key: key);
+
+  final Reservation reservation;
 
   @override
   _InfoReservationState createState() => _InfoReservationState();
@@ -14,20 +22,30 @@ class InfoReservation extends StatefulWidget {
 
 class _InfoReservationState extends State<InfoReservation> {
   // info shop
-  final String titleShop = "Barber shops";
-  final bool isOpen = true;
-  final String isOpenString = Constants.isOpen;
-  final String uriPhoto = "assets/images/backgorundlogin.jpg";
+  late String titleShop = "";
+  late bool isOpen = true;
+  late String isOpenString = Constants.isOpen;
+  late String uriPhoto = "assets/images/backgorundlogin.jpg";
   // info reservation
-  final String address = "C. Vicente Guerrero #40, Col. Rosas del Tepeyac ";
-  final String date = "November 21, 2021";
-  final String dateTime = "10:00 pm";
+  late String address = "";
+  late String date = "";
+  late String dateTime = "";
   // info user
-  final String firstName = "Jose Carlos";
-  final String lastName = "Huerta";
-  final String email = "carlosj12336@gmail.com";
+  late String firstName = "Jose Carlos";
+  late String lastName = "Huerta";
+  late String email = "carlosj12336@gmail.com";
   // method payment
-  final String methodPayment = Constants.cash;
+  late String methodPayment = Constants.cash;
+
+  // entities
+  late Shop? shop;
+  late Person? person;
+
+  @override
+  initState() {
+    super.initState();
+    _getInfoPersonAndShop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,5 +114,48 @@ class _InfoReservationState extends State<InfoReservation> {
         ),
       ),
     );
+  }
+
+  Future<void> _getInfoPersonAndShop() async {
+    try {
+      //
+      //
+      // set info shop
+      String? shopId =
+          await DynamoReservation.getShopId(id: widget.reservation.getId());
+      Shop? shop = await DynamoShop.getByID(id: shopId!);
+
+      //
+      //
+      // set info shop
+      String? personId =
+          await DynamoReservation.getPersonId(id: widget.reservation.getId());
+      Person? person = await DynamoPerson.getByID(id: personId!);
+
+      setState(() {
+        //
+        // set models
+        this.shop = shop;
+        this.person = person;
+
+        //
+        // set reservation
+        address = shop!.address;
+        date = Constants.getFormatDateTime(
+            dateTime: widget.reservation.date!.getDateTime());
+        dateTime = Constants.getFormatTimeOfDay(
+            timeOfDay:
+                TimeOfDay.fromDateTime(widget.reservation.hour!.getDateTime()));
+
+        //
+        // set info user
+        firstName = person!.first_name;
+        lastName = person.last_name;
+        email = person.email;
+      });
+    } catch (e) {
+      // ignore: avoid_print
+      print("[_getInfoPersonAndShop ]" + e.toString());
+    }
   }
 }
